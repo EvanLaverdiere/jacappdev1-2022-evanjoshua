@@ -17,7 +17,8 @@ namespace Budget
     // ====================================================================
 
     /// <summary>
-    /// Class representing a single item within a budget. Each BudgetItem is a combination of a <see cref="Budget.Category"/> and an <see cref="Expense"/>.
+    /// Class representing a single item within a budget. Each BudgetItem is a combination of a <see cref="Budget.Category"/> and an <see cref="Expense"/>. 
+    /// They are typically created by the <see cref="HomeBudget"/> class.
     /// </summary>
     /// <seealso cref="Budget.Category"/>
     /// <seealso cref="Budget.Expense"/>
