@@ -23,6 +23,38 @@ namespace Budget
     /// <summary>
     /// Class representing the core of a budget-tracking project. Has functionality to produce a collection of <see cref="BudgetItem"/> objects by combining <see cref="Categories"/> and <see cref="Expenses"/> objects; to group these BudgetItems by common <see cref="Category"/>, by month, or by category and month; to save the budget to a series of files; to create this collection by reading from a file; and to save the budget to a series of files.
     /// </summary>
+    /// <example>
+    /// In this example, a HomeBudget object is created. Its Categories have a list of default values, while its Expenses are blank.
+    /// 
+    /// One new Category and one new Expense are then created. They are added to the HomeBudget's Categories and Expenses properties.
+    /// 
+    /// The modified budget is then saved to a file. In the process, files for categories and expenses are created in the same directory.
+    /// <code>
+    /// <![CDATA[
+    /// try
+    /// {
+    ///     String filename = "./test.budget";
+    ///     HomeBudget homeBudget = new HomeBudget();
+    ///
+    ///     // Initial list will be empty because there are no Expenses to combine with Categories.
+    ///     List<BudgetItem> budgetItems = homeBudget.GetBudgetItems(null, null, false, 0);
+    ///
+    ///     homeBudget.categories.Add("Legal Fees", Category.CategoryType.Expense);
+    ///     homeBudget.expenses.Add(DateTime.Now, 17, 100, "Lawyer consultation");
+    ///
+    ///     // The new list will include a new BudgetItem with an Amount of -100, a Balance of -100, a Category of "Legal Fees", a CategoryID of 17, an ExpenseID of 1, and a ShortDescription of "Lawyer consultation".
+    ///     List<BudgetItem> revisedItems = homeBudget.GetBudgetItems(null, null, false, 0);
+    ///
+    ///     // Save the budget to a file. Files for expenses and categories will be created at the same time.
+    ///     homeBudget.SaveToFile(filename);
+    /// }
+    /// catch (Exception e)
+    /// {
+    ///     Console.WriteLine("ERROR: " + e.Message);
+    /// }
+    /// ]]>
+    /// </code>
+    /// </example>
     /// <seealso cref="BudgetItem"/>
     /// <seealso cref="Expenses"/>
     /// <seealso cref="Categories"/>
@@ -114,6 +146,9 @@ namespace Budget
         /// }
         /// </code>
         /// </example>
+        /// <exception cref="Exception">Thrown when the method fails to read the passed file or its referenced files.</exception>
+        /// <exception cref="FileNotFoundException">Thrown when the passed file does not exist, or when its referenced files do not exist.</exception>
+        /// <seealso cref="ReadFromFile(string)"/>
         public HomeBudget(String budgetFileName)
         {
             _categories = new Categories();
@@ -734,13 +769,205 @@ namespace Budget
         //     category, and the name of the "Month" property will be "Totals"
         // ============================================================================
         /// <summary>
-        /// Gets a dictionary containing detailed information about the budget. At its highest level the dictionary has one "branch" for each month in which there was budget activity, and a single branch for total expenses by category. Each month branch contains fields for the month itself, the total money spent or earned during that month, each Category represented within that month (including all BudgetItems which fall under that Category), and a brief summation of that Category. The Totals branch contains fields representing the sub-totals for each Category found within the entire budget.
+        /// Gets a list of dictionaries containing detailed information about the budget. Each dictionary covers one month of the budget, and has both in-depth and summary information on each category represented within that month. The last dictionary in the collection instead contains sub-totals for each category represented in the budget as a whole. 
         /// </summary>
         /// <param name="Start">The beginning of the desired time frame. Can be null.</param>
         /// <param name="End">The end of the desired time frame. Can be null.</param>
         /// <param name="FilterFlag">True if the dictionary will filter out unwanted categories; false otherwise.</param>
         /// <param name="CategoryID">The ID number of the desired Category. Must be included even if the dictonary will not be filtered.</param>
-        /// <returns></returns>
+        /// <returns>The list of dictionaries.</returns>
+        /// <example>
+        /// For the examples below, assume the budget file contains the
+        /// following elements:
+        /// 
+        /// <code>
+        /// Cat_ID  Expense_ID  Date                    Description                    Cost     Balance
+        ///    10       1       1/10/2018 12:00:00 AM   Clothes hat (on credit)         10      -10
+        ///     9       2       1/11/2018 12:00:00 AM   Credit Card hat                -10      10
+        ///    10       3       1/10/2019 12:00:00 AM   Clothes scarf(on credit)        15      -15
+        ///     9       4       1/10/2020 12:00:00 AM   Credit Card scarf              -15      0
+        ///    14       5       1/11/2020 12:00:00 AM   Eating Out McDonalds            45      -45
+        ///    14       7       1/12/2020 12:00:00 AM   Eating Out Wendys               25      -70
+        ///    14      10       2/1/2020 12:00:00 AM    Eating Out Pizza                33.33   -103.33
+        ///     9      13       2/10/2020 12:00:00 AM   Credit Card mittens            -15      -88.33
+        ///     9      12       2/25/2020 12:00:00 AM   Credit Card Hat                -25      -63.33
+        ///    14      11       2/27/2020 12:00:00 AM   Eating Out Pizza                33.33   -96.66
+        ///    14       9       7/11/2020 12:00:00 AM   Eating Out Cafeteria            11.11   -107.77
+        /// </code>
+        /// 
+        /// <b>Getting a dictionary of ALL budget items, organized by month and category.</b>
+        /// 
+        /// Note that the dictionary's key-value pairs can have the following keys, in descending order:
+        /// - "Month": Top-level. Value is a specific month of a specific year, or the word "Totals".
+        /// - "Total": Value is the total earnings for the specified month. Equivalent to <see cref="Budget.BudgetItemsByMonth.Total"/>.
+        /// - "details:[Category name]": Value is a list of BudgetItems which fall under the named category for this month. Repeats for each category which is represented in the current month.
+        /// - "[Category name]": Value is the sum of the amounts of the above list of BudgetItems. Always comes after the corresponding "details:[Category name]" key-value pair.
+        ///         - If the top-level "Month" key's value is "Totals", the value of "[Category name]" is instead the sum of all BudgetItems which match the corresponding category. Its value is equivalent to <see cref="Budget.BudgetItemsByCategory.Total"/>.
+        /// 
+        /// <code>
+        /// <![CDATA[
+        /// HomeBudget budget = new HomeBudget();
+        /// budget.ReadFromFile(filename);
+        /// 
+        /// // Get a list of dictionaries
+        /// var budgetDictionaries = budget.GetBudgetDictionaryByCategoryAndMonth(null, null, false, 0);
+        /// 
+        /// // Print important information
+        /// foreach(var dictionary in budgetDictionaries)
+        /// {
+        ///     // Pass over each key-value pair in the current dictionary.
+        ///     foreach(KeyValuePair<string,object> valuePair in dictionary)
+        ///     {
+        ///         // If the key is "Month", treat it as a subheader.
+        ///         if (valuePair.Key.Contains("Month"))
+        ///         {
+        ///             Console.WriteLine("====" + valuePair.Value + "====");
+        ///         }
+        ///         else if (valuePair.Key.Contains("details"))
+        ///         {
+        ///             // If the key contains any variation of the word "details", its value is a list of BudgetItems. Cast it as such.
+        ///             Console.WriteLine(valuePair.Key);
+        ///             List<BudgetItem> budgets = (List<BudgetItem>)valuePair.Value;
+        ///             
+        ///             // Loop over each BudgetItem in the list and print out its relevant information.
+        ///             foreach(BudgetItem budgetItem in budgets)
+        ///             {
+        ///                 Console.WriteLine(String.Format("\t{0,-12} {1,10:C}", budgetItem.ShortDescription, budgetItem.Amount));
+        ///             }
+        ///         }
+        ///         else if (valuePair.Key.Contains("Total"))
+        ///         {
+        ///             // If the key is "Total", its value is a monetary sub-total for the current month.
+        ///             Console.WriteLine(string.Format("TOTAL: {0,10:C}", valuePair.Value));
+        ///         }
+        ///         else
+        ///         {
+        ///             // Treat any other key as having a sub-total for a specific category as a value. Said sub-total will either be for the current month or for the entire budget.
+        ///             Console.WriteLine(string.Format("{0,-20}:{1,10:C}", valuePair.Key, valuePair.Value));
+        ///         }
+        ///     }
+        /// }
+        /// ]]>
+        /// </code>
+        /// 
+        /// Sample output: 
+        /// 
+        /// <code>
+        /// ====2018/01====
+        /// TOTAL:      $0.00
+        /// details:Clothes
+        ///        hat(on credit)    -$10.00
+        /// Clothes             :   -$10.00
+        /// details:Credit Card
+        ///         hat              $10.00
+        /// Credit Card         :    $10.00
+        /// ====2019/01====
+        /// TOTAL:    -$15.00
+        /// details:Clothes
+        ///        scarf(on credit)    -$15.00
+        /// Clothes             :   -$15.00
+        /// ====2020/01====
+        /// TOTAL:    -$55.00
+        /// details:Credit Card
+        ///         scarf            $15.00
+        /// Credit Card         :    $15.00
+        /// details:Eating Out
+        ///         McDonalds       -$45.00
+        ///         Wendys          -$25.00
+        /// Eating Out          :   -$70.00
+        /// ====2020/02====
+        /// TOTAL:    -$26.66
+        /// details:Credit Card
+        ///         mittens          $15.00
+        ///         Hat              $25.00
+        /// Credit Card         :    $40.00
+        /// details:Eating Out
+        ///         Pizza           -$33.33
+        ///         Pizza           -$33.33
+        /// Eating Out          :   -$66.66
+        /// ====2020/07====
+        /// TOTAL:    -$11.11
+        /// details:Eating Out
+        ///         Cafeteria       -$11.11
+        /// Eating Out          :   -$11.11
+        /// ====TOTALS====
+        /// Credit Card         :    $65.00
+        /// Clothes             :   -$25.00
+        /// Eating Out          :  -$147.77
+        /// </code>
+        /// 
+        /// <b>Getting a FILTERED list of dictionaries.</b>
+        /// 
+        /// For this example, the value of FilterFlag is set to true, and the category ID is set to 9 ("Credit").
+        /// <code>
+        /// <![CDATA[
+        /// HomeBudget budget = new HomeBudget();
+        /// budget.ReadFromFile(filename);
+        /// 
+        /// // Get a list of dictionaries
+        /// var budgetDictionaries = budget.GetBudgetDictionaryByCategoryAndMonth(null, null, true, 9);
+        /// 
+        /// // Print important information
+        /// foreach(var dictionary in budgetDictionaries)
+        /// {
+        ///     // Pass over each key-value pair in the current dictionary.
+        ///     foreach(KeyValuePair<string,object> valuePair in dictionary)
+        ///     {
+        ///         // If the key is "Month", treat it as a subheader.
+        ///         if (valuePair.Key.Contains("Month"))
+        ///         {
+        ///             Console.WriteLine("====" + valuePair.Value + "====");
+        ///         }
+        ///         else if (valuePair.Key.Contains("details"))
+        ///         {
+        ///             // If the key contains any variation of the word "details", its value is a list of BudgetItems. Cast it as such.
+        ///             Console.WriteLine(valuePair.Key);
+        ///             List<BudgetItem> budgets = (List<BudgetItem>)valuePair.Value;
+        ///             
+        ///             // Loop over each BudgetItem in the list and print out its relevant information.
+        ///             foreach(BudgetItem budgetItem in budgets)
+        ///             {
+        ///                 Console.WriteLine(String.Format("\t{0,-12} {1,10:C}", budgetItem.ShortDescription, budgetItem.Amount));
+        ///             }
+        ///         }
+        ///         else if (valuePair.Key.Contains("Total"))
+        ///         {
+        ///             // If the key is "Total", its value is a monetary sub-total for the current month.
+        ///             Console.WriteLine(string.Format("TOTAL: {0,10:C}", valuePair.Value));
+        ///         }
+        ///         else
+        ///         {
+        ///             // Treat any other key as having a sub-total for a specific category as a value. Said sub-total will either be for the current month or for the entire budget.
+        ///             Console.WriteLine(string.Format("{0,-20}:{1,10:C}", valuePair.Key, valuePair.Value));
+        ///         }
+        ///     }
+        /// }
+        /// ]]>
+        /// </code>
+        /// 
+        /// Sample output:
+        /// 
+        /// <code>
+        /// ====2018/01====
+        /// TOTAL:     $10.00
+        /// details:Credit Card
+        ///         hat              $10.00
+        /// Credit Card         :    $10.00
+        /// ====2020/01====
+        /// TOTAL:     $15.00
+        /// details:Credit Card
+        ///         scarf            $15.00
+        /// Credit Card         :    $15.00
+        /// ====2020/02====
+        /// TOTAL:     $40.00
+        /// details:Credit Card
+        ///         mittens          $15.00
+        ///         Hat              $25.00
+        /// Credit Card         :    $40.00
+        /// ====TOTALS====
+        /// Credit Card         :    $65.00
+        /// </code>
+        /// </example>
         public List<Dictionary<string,object>> GetBudgetDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // -----------------------------------------------------------------------
