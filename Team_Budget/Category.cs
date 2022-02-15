@@ -29,11 +29,11 @@ namespace Budget
         /// <summary>
         /// Gets or sets the ID number of the category.
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get; private set; }
         /// <summary>
         /// Gets or sets the description of the category.
         /// </summary>
-        public String Description { get; set; }
+        public String Description { get; private set; }
         /// <summary>
         /// Gets or sets the type of the category.
         /// </summary>
