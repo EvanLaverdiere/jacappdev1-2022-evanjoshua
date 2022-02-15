@@ -4,20 +4,10 @@ using Budget;
 
 namespace BudgetCodeTests
 {
+    [Collection("Sequential")]
     public class TestExpense
     {
         // ========================================================================
-        [Fact]
-        public void TryingTest_Addition()
-        {
-            int expected = 4;
-            int actual = 3;
-
-            actual += 1;
-
-            Assert.Equal(expected, actual);
-        }
-
 
         [Fact]
         public void ExpenseObject_New()
