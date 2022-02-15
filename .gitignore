@@ -349,3 +349,11 @@ output_test_categories.cats
 output_test_expenses.exps
 test_output.exps
 log.txt
+
+# other stuff to ignore
+newDB.db
+messyDB
+messy.db
+output_test.budget
+output_test_expenses.exps
+log.txt
