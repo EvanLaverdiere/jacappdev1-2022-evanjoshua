@@ -6,7 +6,6 @@ using Budget;
 
 namespace BudgetCodeTests
 {
-    [Collection("Sequential")]
     public class TestExpenses
     {
         int numberOfExpensesInFile = TestConstants.numberOfExpensesInFile;
