@@ -36,15 +36,15 @@ namespace Budget
         /// <summary>
         /// Gets or sets the ID number of the category.
         /// </summary>
-        public int Id { get; private set; }
+        public int Id { get { return id; } }
         /// <summary>
         /// Gets or sets the description of the category.
         /// </summary>
-        public String Description { get; private set; }
+        public String Description { get { return description; } }
         /// <summary>
         /// Gets or sets the type of the category.
         /// </summary>
-        public CategoryType Type { get; set; }
+        public CategoryType Type { get { return type; } }
         /// <summary>
         /// A list of valid options for the category's type. Available options are Income (0), Expense (1), Credit (2), and Savings (3).
         /// </summary>
