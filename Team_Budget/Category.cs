@@ -23,6 +23,13 @@ namespace Budget
     /// <seealso cref="Categories"/>
     public class Category
     {
+        // ====
+        // Backing Fields
+        // ====
+        private int id;
+        private string description;
+        private CategoryType type;
+        
         // ====================================================================
         // Properties
         // ====================================================================
@@ -82,9 +89,9 @@ namespace Budget
         /// </example>
         public Category(int id, String description, CategoryType type = CategoryType.Expense)
         {
-            this.Id = id;
-            this.Description = description;
-            this.Type = type;
+            this.id = id;
+            this.description = description;
+            this.type = type;
         }
 
         // ====================================================================
