@@ -114,9 +114,9 @@ namespace Budget
         /// </example>
         public Category(Category category)
         {
-            this.Id = category.Id;;
-            this.Description = category.Description;
-            this.Type = category.Type;
+            this.id = category.Id;
+            this.description = category.Description;
+            this.type = category.Type;
         }
         // ====================================================================
         // String version of object
