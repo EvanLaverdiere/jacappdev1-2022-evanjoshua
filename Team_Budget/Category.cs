@@ -34,15 +34,15 @@ namespace Budget
         // Properties
         // ====================================================================
         /// <summary>
-        /// Gets or sets the ID number of the category.
+        /// Gets the ID number of the category.
         /// </summary>
         public int Id { get { return id; } }
         /// <summary>
-        /// Gets or sets the description of the category.
+        /// Gets the description of the category.
         /// </summary>
         public String Description { get { return description; } }
         /// <summary>
-        /// Gets or sets the type of the category.
+        /// Gets the type of the category.
         /// </summary>
         public CategoryType Type { get { return type; } }
         /// <summary>
