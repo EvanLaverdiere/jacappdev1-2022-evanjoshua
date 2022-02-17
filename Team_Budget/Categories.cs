@@ -65,6 +65,9 @@ namespace Budget
         public Categories(SQLiteConnection conn, bool newDB = false)
         {
             _connection = conn;
+            // fill the categoryTypes table.
+            SetCategoryTypes();
+
             // if user specified they want a new database, set the list of categories to defaults.
             if (newDB)
             {
@@ -495,6 +498,28 @@ namespace Budget
         public void UpdateProperties(int id, string newDescription, Category.CategoryType newType)
         {
             // To be filled
+        }
+
+        private void SetCategoryTypes()
+        {
+            // Remove values from table.
+            using SQLiteCommand cmd = new SQLiteCommand(_connection);
+            cmd.CommandText = "DELETE FROM categoryTypes";
+            cmd.ExecuteNonQuery();
+
+            // Insert default category types.
+            cmd.CommandText = "INSERT INTO categoryTypes (Id, Description) VALUES (0, \"Income\")";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "INSERT INTO categoryTypes (Id, Description) VALUES (1, \"Expense\")";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "INSERT INTO categoryTypes (Id, Description) VALUES (2, \"Credit\")";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "INSERT INTO categoryTypes (Id, Description) VALUES (3, \"Savings\")";
+            cmd.ExecuteNonQuery();
+
         }
 
     }
