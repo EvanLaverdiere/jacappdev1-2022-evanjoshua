@@ -23,21 +23,28 @@ namespace Budget
     /// <seealso cref="Categories"/>
     public class Category
     {
+        // ====
+        // Backing Fields
+        // ====
+        private int id;
+        private string description;
+        private CategoryType type;
+        
         // ====================================================================
         // Properties
         // ====================================================================
         /// <summary>
-        /// Gets or sets the ID number of the category.
+        /// Gets the ID number of the category.
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get { return id; } }
         /// <summary>
-        /// Gets or sets the description of the category.
+        /// Gets the description of the category.
         /// </summary>
-        public String Description { get; set; }
+        public String Description { get { return description; } }
         /// <summary>
-        /// Gets or sets the type of the category.
+        /// Gets the type of the category.
         /// </summary>
-        public CategoryType Type { get; set; }
+        public CategoryType Type { get { return type; } }
         /// <summary>
         /// A list of valid options for the category's type. Available options are Income (0), Expense (1), Credit (2), and Savings (3).
         /// </summary>
@@ -82,9 +89,9 @@ namespace Budget
         /// </example>
         public Category(int id, String description, CategoryType type = CategoryType.Expense)
         {
-            this.Id = id;
-            this.Description = description;
-            this.Type = type;
+            this.id = id;
+            this.description = description;
+            this.type = type;
         }
 
         // ====================================================================
@@ -107,9 +114,9 @@ namespace Budget
         /// </example>
         public Category(Category category)
         {
-            this.Id = category.Id;;
-            this.Description = category.Description;
-            this.Type = category.Type;
+            this.id = category.Id;
+            this.description = category.Description;
+            this.type = category.Type;
         }
         // ====================================================================
         // String version of object

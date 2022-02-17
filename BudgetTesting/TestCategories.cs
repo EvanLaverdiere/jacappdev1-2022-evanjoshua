@@ -138,7 +138,7 @@ namespace BudgetCodeTests
             List<Category> list = categories.List();
 
             // Act
-            list[0].Type = Category.CategoryType.Credit;
+            //list[0].Type = Category.CategoryType.Credit;
 
             // Assert
             Assert.NotEqual(list[0].Type, categories.List()[0].Type);
