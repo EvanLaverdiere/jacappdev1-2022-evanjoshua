@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
+using System.Data.SQLite;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -58,6 +59,11 @@ namespace Budget
         public Categories()
         {
             SetCategoriesToDefaults();
+        }
+
+        public Categories(SQLiteConnection conn, bool newDB = false)
+        {
+
         }
 
         // ====================================================================
