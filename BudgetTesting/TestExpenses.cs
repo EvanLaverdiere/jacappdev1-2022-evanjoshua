@@ -105,7 +105,7 @@ namespace BudgetCodeTests
             List<Expense> list = expenses.List();
 
             // Act
-            list[0].Amount = list[0].Amount + 21.03; 
+            //list[0].Amount = list[0].Amount + 21.03; 
 
             // Assert
             Assert.NotEqual(list[0].Amount, expenses.List()[0].Amount);
