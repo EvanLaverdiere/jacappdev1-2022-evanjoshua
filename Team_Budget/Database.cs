@@ -62,7 +62,7 @@ namespace Budget
                 Description TEXT)";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "DROP TABLE IF EXISTS categories";
+            cmd.CommandText = "PRAGMA foreign_keys = OFF; DROP TABLE IF EXISTS categories; PRAGMA foreign_keys = ON";
             cmd.ExecuteNonQuery();
 
             cmd.CommandText = @"CREATE TABLE categories(Id INTEGER PRIMARY KEY,
@@ -71,7 +71,7 @@ namespace Budget
             )";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "DROP TABLE IF EXISTS expenses";
+            cmd.CommandText = "PRAGMA foreign_keys = OFF; DROP TABLE IF EXISTS expenses; PRAGMA foreign_keys = ON";
             cmd.ExecuteNonQuery();
 
             cmd.CommandText = @"CREATE TABLE expenses(Id INTEGER PRIMARY KEY,
