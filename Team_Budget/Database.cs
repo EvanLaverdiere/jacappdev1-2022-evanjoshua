@@ -55,7 +55,7 @@ namespace Budget
 
             using SQLiteCommand cmd = new SQLiteCommand(_connection);
 
-            cmd.CommandText = "DROP TABLE IF EXISTS categoryTypes";
+            cmd.CommandText = "PRAGMA foreign_keys = OFF; DROP TABLE IF EXISTS categoryTypes; PRAGMA foreign_keys = ON";
             cmd.ExecuteNonQuery();
 
             cmd.CommandText = @"CREATE TABLE categoryTypes(Id INTEGER PRIMARY KEY,
