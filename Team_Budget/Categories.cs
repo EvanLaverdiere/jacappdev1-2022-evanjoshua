@@ -31,6 +31,7 @@ namespace Budget
         private List<Category> _Cats = new List<Category>();
         private string _FileName;
         private string _DirName;
+        private SQLiteConnection _connection;
 
         // ====================================================================
         // Properties
@@ -63,7 +64,7 @@ namespace Budget
 
         public Categories(SQLiteConnection conn, bool newDB = false)
         {
-
+            _connection = conn; 
         }
 
         // ====================================================================
