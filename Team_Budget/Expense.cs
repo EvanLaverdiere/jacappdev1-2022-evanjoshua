@@ -19,6 +19,7 @@ namespace Budget
     /// Class representing a single expense within a budget. Expenses can be grouped within the <see cref="Expenses"/> class.
     /// </summary>
     /// <seealso cref="Expenses"/>
+    /// 
     public class Expense
     {
         // ====================================================================
@@ -31,19 +32,19 @@ namespace Budget
         /// <summary>
         /// Gets the date on which the Expense was incurred.
         /// </summary>
-        public DateTime Date { get;  }
+        public DateTime Date { get; }
         /// <summary>
         /// Gets or sets the amount of money spent on the Expense.
         /// </summary>
-        public Double Amount { get; set; }
+        public Double Amount { get; }
         /// <summary>
         /// Gets or sets the description of the Expense.
         /// </summary>
-        public String Description { get; set; }
+        public String Description { get; }
         /// <summary>
         /// Gets or sets the category of the Expense.
         /// </summary>
-        public int Category { get; set; }
+        public int Category { get; }
 
         // ====================================================================
         // Constructor
