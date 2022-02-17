@@ -53,8 +53,8 @@ namespace BudgetCodeTests
 
             // Assert 
             Assert.Equal(id, expense.Id);
-            Assert.NotEqual(amount, copy.Amount);
-            Assert.Equal(expense.Amount + 15, copy.Amount);
+            Assert.Equal(amount, copy.Amount);
+            Assert.Equal(expense.Amount, copy.Amount);
             Assert.Equal(descr, expense.Description);
             Assert.Equal(category, expense.Category);
             Assert.Equal(now, expense.Date);
@@ -78,7 +78,7 @@ namespace BudgetCodeTests
             string newDescr = "Angora Sweater";
             int newCategory = 38;
 
-            Expense expense = new Expense(id, now, category, amount, descr);
+            Expense expense = new Expense(id, now, newCategory, newAmount, newDescr);
 
             // Act
             //expense.Amount = newAmount;
