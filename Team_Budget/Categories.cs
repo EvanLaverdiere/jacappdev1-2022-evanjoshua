@@ -64,7 +64,11 @@ namespace Budget
 
         public Categories(SQLiteConnection conn, bool newDB = false)
         {
-            _connection = conn; 
+            _connection = conn;
+            if (newDB)
+            {
+
+            }
         }
 
         // ====================================================================
@@ -434,6 +438,11 @@ namespace Budget
                 throw new Exception("_WriteXMLFile: Reading XML " + e.Message);
             }
 
+        }
+
+        public void UpdateProperties(int id, string newDescription, Category.CategoryType newType)
+        {
+            // To be filled
         }
 
     }
