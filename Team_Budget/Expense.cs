@@ -19,31 +19,38 @@ namespace Budget
     /// Class representing a single expense within a budget. Expenses can be grouped within the <see cref="Expenses"/> class.
     /// </summary>
     /// <seealso cref="Expenses"/>
+    /// 
     public class Expense
     {
+        private int _id;
+        private DateTime _date;
+        private Double _amount;
+        private String _description;
+        private int _category;
+
         // ====================================================================
         // Properties
         // ====================================================================
         /// <summary>
         /// Gets the ID number of the Expense.
         /// </summary>
-        public int Id { get; }
+        public int Id { get { return _id; } }
         /// <summary>
         /// Gets the date on which the Expense was incurred.
         /// </summary>
-        public DateTime Date { get;  }
+        public DateTime Date { get { return _date; } }
         /// <summary>
         /// Gets or sets the amount of money spent on the Expense.
         /// </summary>
-        public Double Amount { get; set; }
+        public Double Amount { get { return _amount; } }
         /// <summary>
         /// Gets or sets the description of the Expense.
         /// </summary>
-        public String Description { get; set; }
+        public String Description { get { return _description; } }
         /// <summary>
         /// Gets or sets the category of the Expense.
         /// </summary>
-        public int Category { get; set; }
+        public int Category { get { return _category; } }
 
         // ====================================================================
         // Constructor
@@ -70,13 +77,21 @@ namespace Budget
         /// Expense consultation = new Expense(id, time, category, amount, description);
         /// </code>
         /// </example>
+        public Expense(DateTime date, int category, Double amount, String description)
+        {
+            this._date = date;
+            this._category = category;
+            this._amount = amount;
+            this._description = description;
+        }
+
         public Expense(int id, DateTime date, int category, Double amount, String description)
         {
-            this.Id = id;
-            this.Date = date;
-            this.Category = category;
-            this.Amount = amount;
-            this.Description = description;
+            this._id = id;
+            this._date = date;
+            this._category = category;
+            this._amount = amount;
+            this._description = description;
         }
 
         // ====================================================================
@@ -101,12 +116,10 @@ namespace Budget
         /// </example>
         public Expense (Expense obj)
         {
-            this.Id = obj.Id;
-            this.Date = obj.Date;
-            this.Category = obj.Category;
-            this.Amount = obj.Amount;
-            this.Description = obj.Description;
-           
+            this._date = obj.Date;
+            this._category = obj.Category;
+            this._amount = obj.Amount;
+            this._description = obj.Description;
         }
     }
 }
