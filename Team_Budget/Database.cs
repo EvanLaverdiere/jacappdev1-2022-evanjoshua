@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 using System.Threading;
+using System.IO;
 
 // ===================================================================
 // Very important notes:
@@ -87,14 +88,20 @@ namespace Budget
         // ===================================================================
         public static void existingDatabase(string filename)
         {
+            if (File.Exists(filename))
+            {
+                CloseDatabaseAndReleaseFile();
 
-            CloseDatabaseAndReleaseFile();
+                // your code
+                string cs = $"Data Source={filename}; Foreign Keys=1";
 
-            // your code
-            string cs = $"Data Source={filename}; Foreign Keys=1";
-
-            _connection = new SQLiteConnection(cs);
-            _connection.Open();
+                _connection = new SQLiteConnection(cs);
+                _connection.Open();
+            }
+            else
+            {
+                throw new IOException("Database file does not exist.");
+            }
 
         }
 
