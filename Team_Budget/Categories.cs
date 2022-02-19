@@ -28,7 +28,7 @@ namespace Budget
     public class Categories
     {
         private static String DefaultFileName = "budgetCategories.txt";
-        private List<Category> _Cats = new List<Category>();
+        //private List<Category> _Cats = new List<Category>();
         private string _FileName;
         private string _DirName;
         private SQLiteConnection _connection;
@@ -96,12 +96,13 @@ namespace Budget
         /// </example>
         public Category GetCategoryFromId(int i)
         {
-            Category c = _Cats.Find(x => x.Id == i);
-            if (c == null)
-            {
-                throw new Exception("Cannot find category with id " + i.ToString());
-            }
-            return c;
+            //Category c = _Cats.Find(x => x.Id == i);
+            //if (c == null)
+            //{
+            //    throw new Exception("Cannot find category with id " + i.ToString());
+            //}
+            //return c;
+            return null;
         }
 
         // ====================================================================
@@ -130,7 +131,7 @@ namespace Budget
             // ---------------------------------------------------------------
             // reading from file resets all the current categories,
             // ---------------------------------------------------------------
-            _Cats.Clear();
+            //_Cats.Clear();
 
             // ---------------------------------------------------------------
             // reset default dir/filename to null 
@@ -195,7 +196,7 @@ namespace Budget
             // ---------------------------------------------------------------
             // save as XML
             // ---------------------------------------------------------------
-            _WriteXMLFile(filepath);
+            //_WriteXMLFile(filepath);
 
             // ----------------------------------------------------------------
             // save filename info for later use
@@ -253,52 +254,52 @@ namespace Budget
             Add("Savings", Category.CategoryType.Savings);
             Add("Income", Category.CategoryType.Income);
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (1,1, \"Utilities\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (1,2, \"Utilities\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (2,1, \"Rent\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (2,2, \"Rent\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (3,1, \"Food\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (3,2, \"Food\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (4,1, \"Entertainment\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (4,2, \"Entertainment\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (5,1, \"Education\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (5,2, \"Education\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (6,1, \"Miscellaneous\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (6,2, \"Miscellaneous\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (7,1, \"Medical Expenses\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (7,2, \"Medical Expenses\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (8,1, \"Vacation\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (8,2, \"Vacation\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (9,2, \"Credit Card\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (9,3, \"Credit Card\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (10,1, \"Clothes\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (10,2, \"Clothes\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (11,1, \"Gifts\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (11,2, \"Gifts\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (12,1, \"Insurance\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (12,2, \"Insurance\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (13,1, \"Transportation\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (13,2, \"Transportation\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (14,1, \"Eating Out\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (14,2, \"Eating Out\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (15,3, \"Savings\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (15,4, \"Savings\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (16,0, \"Utilities\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (16,1, \"Utilities\")";
             cmd.ExecuteNonQuery();
 
         }
@@ -320,7 +321,7 @@ namespace Budget
         /// </example>
         private void Add(Category cat)
         {
-            _Cats.Add(cat);
+            //_Cats.Add(cat);
         }
 
         /// <summary>
@@ -340,16 +341,13 @@ namespace Budget
         /// </example>
         public void Add(String desc, Category.CategoryType type)
         {
-            using var cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "PRAGMA foreign_keys = OFF";
-            cmd.ExecuteNonQuery();
-            cmd.CommandText = "INSERT INTO categories(Description,TypeId) VALUES(@description,@type)";
-            cmd.Parameters.AddWithValue("@description", desc);
-            cmd.Parameters.AddWithValue("@type", (int)type);
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
-
-            //_Cats.Add(new Category(desc, type));
+            //int new_num = 1;
+            //if (_Cats.Count > 0)
+            //{
+            //    new_num = (from c in _Cats select c.Id).Max();
+            //    new_num++;
+            //}
+            //_Cats.Add(new Category(new_num, desc, type));
         }
 
 
@@ -371,12 +369,12 @@ namespace Budget
         /// </example>
         public void Delete(int Id)
         {
-            int i = _Cats.FindIndex(x => x.Id == Id);
+            //int i = _Cats.FindIndex(x => x.Id == Id);
 
-            if(i != -1)
-            {
-                _Cats.RemoveAt(i);
-            }
+            //if(i != -1)
+            //{
+            //    _Cats.RemoveAt(i);
+            //}
         }
 
         // ====================================================================
@@ -402,10 +400,25 @@ namespace Budget
         public List<Category> List()
         {
             List<Category> newList = new List<Category>();
-            foreach (Category category in _Cats)
+            //foreach (Category category in _Cats)
+            //{
+            //    newList.Add(new Category(category));
+            //}
+
+            using SQLiteCommand command = new SQLiteCommand(_connection);
+            string stm = "SELECT Id, TypeId, Description FROM categories";
+
+            using var cmd = new SQLiteCommand(stm, _connection);
+            using SQLiteDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
             {
-                newList.Add(new Category(category));
+                int id = reader.GetInt32(0);
+                int typeId = reader.GetInt32(1) - 1;
+                string description = reader.GetString(2);
+                newList.Add(new Category(id, description, (Category.CategoryType)typeId));
             }
+
             return newList;
         }
 
@@ -463,41 +476,41 @@ namespace Budget
         // ====================================================================
         // write all categories in our list to XML file
         // ====================================================================
-        private void _WriteXMLFile(String filepath)
-        {
-            try
-            {
-                // create top level element of categories
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml("<Categories></Categories>");
+        //private void _WriteXMLFile(String filepath)
+        //{
+        //    try
+        //    {
+        //        // create top level element of categories
+        //        XmlDocument doc = new XmlDocument();
+        //        doc.LoadXml("<Categories></Categories>");
 
-                // foreach Category, create an new xml element
-                foreach (Category cat in _Cats)
-                {
-                    XmlElement ele = doc.CreateElement("Category");
-                    XmlAttribute attr = doc.CreateAttribute("ID");
-                    attr.Value = cat.Id.ToString();
-                    ele.SetAttributeNode(attr);
-                    XmlAttribute type = doc.CreateAttribute("type");
-                    type.Value = cat.Type.ToString();
-                    ele.SetAttributeNode(type);
+        //        // foreach Category, create an new xml element
+        //        foreach (Category cat in _Cats)
+        //        {
+        //            XmlElement ele = doc.CreateElement("Category");
+        //            XmlAttribute attr = doc.CreateAttribute("ID");
+        //            attr.Value = cat.Id.ToString();
+        //            ele.SetAttributeNode(attr);
+        //            XmlAttribute type = doc.CreateAttribute("type");
+        //            type.Value = cat.Type.ToString();
+        //            ele.SetAttributeNode(type);
 
-                    XmlText text = doc.CreateTextNode(cat.Description);
-                    doc.DocumentElement.AppendChild(ele);
-                    doc.DocumentElement.LastChild.AppendChild(text);
+        //            XmlText text = doc.CreateTextNode(cat.Description);
+        //            doc.DocumentElement.AppendChild(ele);
+        //            doc.DocumentElement.LastChild.AppendChild(text);
 
-                }
+        //        }
 
-                // write the xml to FilePath
-                doc.Save(filepath);
+        //        // write the xml to FilePath
+        //        doc.Save(filepath);
 
-            }
-            catch (Exception e)
-            {
-                throw new Exception("_WriteXMLFile: Reading XML " + e.Message);
-            }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new Exception("_WriteXMLFile: Reading XML " + e.Message);
+        //    }
 
-        }
+        //}
 
         public void UpdateProperties(int id, string newDescription, Category.CategoryType newType)
         {
@@ -516,20 +529,20 @@ namespace Budget
         {
             // Remove values from table.
             using SQLiteCommand cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "DELETE FROM categoryTypes";
+            cmd.CommandText = "PRAGMA foreign_keys = OFF; DELETE FROM categoryTypes; PRAGMA foreign_keys = ON";
             cmd.ExecuteNonQuery();
 
             // Insert default category types.
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Description) VALUES (0, \"Income\")";
+            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (1, \"Income\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Description) VALUES (1, \"Expense\")";
+            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (2, \"Expense\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Description) VALUES (2, \"Credit\")";
+            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (3, \"Credit\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Description) VALUES (3, \"Savings\")";
+            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (4, \"Savings\")";
             cmd.ExecuteNonQuery();
 
         }
