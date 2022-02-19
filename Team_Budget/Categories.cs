@@ -254,52 +254,52 @@ namespace Budget
             Add("Savings", Category.CategoryType.Savings);
             Add("Income", Category.CategoryType.Income);
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (1,1, \"Utilities\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (1,2, \"Utilities\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (2,1, \"Rent\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (2,2, \"Rent\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (3,1, \"Food\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (3,2, \"Food\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (4,1, \"Entertainment\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (4,2, \"Entertainment\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (5,1, \"Education\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (5,2, \"Education\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (6,1, \"Miscellaneous\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (6,2, \"Miscellaneous\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (7,1, \"Medical Expenses\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (7,2, \"Medical Expenses\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (8,1, \"Vacation\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (8,2, \"Vacation\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (9,2, \"Credit Card\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (9,3, \"Credit Card\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (10,1, \"Clothes\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (10,2, \"Clothes\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (11,1, \"Gifts\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (11,2, \"Gifts\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (12,1, \"Insurance\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (12,2, \"Insurance\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (13,1, \"Transportation\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (13,2, \"Transportation\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (14,1, \"Eating Out\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (14,2, \"Eating Out\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (15,3, \"Savings\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (15,4, \"Savings\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (16,0, \"Utilities\")";
+            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (16,1, \"Utilities\")";
             cmd.ExecuteNonQuery();
 
         }
