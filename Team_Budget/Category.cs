@@ -114,7 +114,7 @@ namespace Budget
         /// </example>
         public Category(Category category)
         {
-            this.id = category.Id;
+            this.id = category.id;
             this.description = category.Description;
             this.type = category.Type;
         }
