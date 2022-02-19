@@ -66,7 +66,7 @@ namespace Budget
         {
             _connection = conn;
             // fill the categoryTypes table.
-            //SetCategoryTypes();
+            SetCategoryTypes();
 
             // if user specified they want a new database, set the list of categories to defaults.
             if (newDB)
@@ -254,53 +254,53 @@ namespace Budget
             Add("Savings", Category.CategoryType.Savings);
             Add("Income", Category.CategoryType.Income);
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (1,2, \"Utilities\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (1,2, \"Utilities\")";
+            //cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (2,2, \"Rent\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (2,2, \"Rent\")";
+            //cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (3,2, \"Food\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (3,2, \"Food\")";
+            //cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (4,2, \"Entertainment\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (4,2, \"Entertainment\")";
+            //cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (5,2, \"Education\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (5,2, \"Education\")";
+            //cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (6,2, \"Miscellaneous\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (6,2, \"Miscellaneous\")";
+            //cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (7,2, \"Medical Expenses\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (7,2, \"Medical Expenses\")";
+            //cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (8,2, \"Vacation\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (8,2, \"Vacation\")";
+            //cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (9,3, \"Credit Card\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (9,3, \"Credit Card\")";
+            //cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (10,2, \"Clothes\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (10,2, \"Clothes\")";
+            //cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (11,2, \"Gifts\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (11,2, \"Gifts\")";
+            //cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (12,2, \"Insurance\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (12,2, \"Insurance\")";
+            //cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (13,2, \"Transportation\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (13,2, \"Transportation\")";
+            //cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (14,2, \"Eating Out\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (14,2, \"Eating Out\")";
+            //cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (15,4, \"Savings\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (15,4, \"Savings\")";
+            //cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (16,1, \"Utilities\")";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "INSERT INTO categories (Id, TypeId, Description) VALUES (16,1, \"Utilities\")";
+            //cmd.ExecuteNonQuery();
 
         }
 
@@ -341,13 +341,16 @@ namespace Budget
         /// </example>
         public void Add(String desc, Category.CategoryType type)
         {
-            //int new_num = 1;
-            //if (_Cats.Count > 0)
-            //{
-            //    new_num = (from c in _Cats select c.Id).Max();
-            //    new_num++;
-            //}
-            //_Cats.Add(new Category(new_num, desc, type));
+            using var cmd = new SQLiteCommand(_connection);
+            cmd.CommandText = "PRAGMA foreign_keys = OFF";
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = "INSERT INTO categories(Description, TypeId) VALUES(@description, @type)";
+            cmd.Parameters.AddWithValue("@description", desc);
+            cmd.Parameters.AddWithValue("@type", (int)type);
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+
+            //_Cats.Add(new Category(desc, type));
         }
 
 
@@ -369,12 +372,11 @@ namespace Budget
         /// </example>
         public void Delete(int Id)
         {
-            //int i = _Cats.FindIndex(x => x.Id == Id);
-
-            //if(i != -1)
-            //{
-            //    _Cats.RemoveAt(i);
-            //}
+            using var cmd = new SQLiteCommand(_connection);
+            cmd.CommandText = "DELETE from categories where Id=@Id";
+            cmd.Parameters.AddWithValue("@Id", Id);
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
         }
 
         // ====================================================================
