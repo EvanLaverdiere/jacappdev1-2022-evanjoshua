@@ -59,7 +59,7 @@ namespace Budget
             cmd.ExecuteNonQuery();
 
             cmd.CommandText = @"CREATE TABLE categoryTypes(Id INTEGER PRIMARY KEY,
-                Description TEXT)";
+                Type TEXT)";
             cmd.ExecuteNonQuery();
 
             cmd.CommandText = "PRAGMA foreign_keys = OFF; DROP TABLE IF EXISTS categories; PRAGMA foreign_keys = ON";
