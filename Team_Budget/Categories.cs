@@ -66,7 +66,7 @@ namespace Budget
         {
             _connection = conn;
             // fill the categoryTypes table.
-            SetCategoryTypes();
+            //SetCategoryTypes();
 
             // if user specified they want a new database, set the list of categories to defaults.
             if (newDB)
@@ -340,14 +340,18 @@ namespace Budget
         /// </example>
         public void Add(String desc, Category.CategoryType type)
         {
-            int new_num = 1;
-            if (_Cats.Count > 0)
-            {
-                new_num = (from c in _Cats select c.Id).Max();
-                new_num++;
-            }
-            _Cats.Add(new Category(new_num, desc, type));
+            using var cmd = new SQLiteCommand(_connection);
+            cmd.CommandText = "PRAGMA foreign_keys = OFF";
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = "INSERT INTO categories(Description,TypeId) VALUES(@description,@type)";
+            cmd.Parameters.AddWithValue("@description", desc);
+            cmd.Parameters.AddWithValue("@type", (int)type);
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+
+            //_Cats.Add(new Category(desc, type));
         }
+
 
         // ====================================================================
         // Delete category
@@ -498,6 +502,14 @@ namespace Budget
         public void UpdateProperties(int id, string newDescription, Category.CategoryType newType)
         {
             // To be filled
+            using var cmd = new SQLiteCommand(_connection);
+
+            cmd.CommandText = "UPDATE categories SET Description=@newDescription, TypeId=@newType WHERE Id=@id";
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Parameters.AddWithValue("@newDescription", newDescription);
+            cmd.Parameters.AddWithValue("@newType", newType);
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
         }
 
         private void SetCategoryTypes()
