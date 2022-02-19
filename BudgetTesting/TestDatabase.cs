@@ -59,7 +59,7 @@ namespace BudgetCodeTests
             Database.newDatabase(GetSolutionDir() + "\\" + filename);
             var cmd = new SQLiteCommand(Database.dbConnection);
 
-            cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES('Whatever')";
+            cmd.CommandText = "INSERT INTO categoryTypes(Type) VALUES('Whatever')";
             cmd.ExecuteNonQuery();
             cmd.Dispose();
 
@@ -161,7 +161,7 @@ namespace BudgetCodeTests
             // Arrange
             string path = GetSolutionDir();
             string filename = "newdb.db";
-            List<String> columns = new List<string>() { "Id", "Description" };
+            List<String> columns = new List<string>() { "Id", "Type" };
 
             // Act
             Database.newDatabase(GetSolutionDir() + "\\" + filename);
@@ -264,7 +264,7 @@ namespace BudgetCodeTests
             Database.newDatabase(GetSolutionDir() + "\\" + filename);
             var cmd = new SQLiteCommand(Database.dbConnection);
 
-            cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES('Whatever')";
+            cmd.CommandText = "INSERT INTO categoryTypes(Type) VALUES('Whatever')";
             cmd.ExecuteNonQuery();
             cmd.Dispose();
 
