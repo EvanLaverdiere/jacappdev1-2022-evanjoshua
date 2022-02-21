@@ -65,12 +65,13 @@ namespace Budget
         public Categories(SQLiteConnection conn, bool newDB = false)
         {
             _connection = conn;
-            // fill the categoryTypes table.
-            SetCategoryTypes();
 
             // if user specified they want a new database, set the list of categories to defaults.
             if (newDB)
             {
+                // fill the categoryTypes table.
+                SetCategoryTypes();
+
                 SetCategoriesToDefaults();
             }
         }
