@@ -113,7 +113,7 @@ namespace Budget
             reader.Read();
 
             int id = reader.GetInt32(0);
-            int typeId = reader.GetInt32(1);
+            int typeId = reader.GetInt32(1) - 1;
             string description = reader.GetString(2);
 
             Category category = new Category(id, description, (Category.CategoryType)typeId);
@@ -433,7 +433,7 @@ namespace Budget
             while (reader.Read())
             {
                 int id = reader.GetInt32(0);
-                int typeId = reader.GetInt32(1);
+                int typeId = reader.GetInt32(1) - 1;
                 string description = reader.GetString(2);
                 newList.Add(new Category(id, description, (Category.CategoryType)typeId));
             }
@@ -552,16 +552,16 @@ namespace Budget
             cmd.ExecuteNonQuery();
 
             // Insert default category types.
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (0, \"Income\")";
+            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (1, \"Income\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (1, \"Expense\")";
+            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (2, \"Expense\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (2, \"Credit\")";
+            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (3, \"Credit\")";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (3, \"Savings\")";
+            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (4, \"Savings\")";
             cmd.ExecuteNonQuery();
 
         }
