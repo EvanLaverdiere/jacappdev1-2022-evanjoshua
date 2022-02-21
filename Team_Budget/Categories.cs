@@ -65,12 +65,13 @@ namespace Budget
         public Categories(SQLiteConnection conn, bool newDB = false)
         {
             _connection = conn;
-            // fill the categoryTypes table.
-            SetCategoryTypes();
 
             // if user specified they want a new database, set the list of categories to defaults.
             if (newDB)
             {
+                // fill the categoryTypes table.
+                SetCategoryTypes();
+
                 SetCategoriesToDefaults();
             }
         }
@@ -102,7 +103,23 @@ namespace Budget
             //    throw new Exception("Cannot find category with id " + i.ToString());
             //}
             //return c;
-            return null;
+            //return null;
+            using SQLiteCommand command = new SQLiteCommand(_connection);
+            String stm = "SELECT Id, TypeId, Description FROM categories WHERE Id = " + i;
+
+            using var cm = new SQLiteCommand(stm, _connection);
+            using SQLiteDataReader reader = cm.ExecuteReader();
+
+            reader.Read();
+
+            int id = reader.GetInt32(0);
+            int typeId = reader.GetInt32(1) - 1;
+            string description = reader.GetString(2);
+
+            Category category = new Category(id, description, (Category.CategoryType)typeId);
+
+            return category;
+
         }
 
         // ====================================================================
