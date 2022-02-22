@@ -27,7 +27,7 @@ namespace Budget
     /// <seealso cref="Category"/>
     public class Categories
     {
-        private static String DefaultFileName = "budgetCategories.txt";
+        //private static String DefaultFileName = "budgetCategories.txt";
         //private List<Category> _Cats = new List<Category>();
         private string _FileName;
         private string _DirName;
@@ -159,7 +159,7 @@ namespace Budget
             // ---------------------------------------------------------------
             // get filepath name (throws exception if it doesn't exist)
             // ---------------------------------------------------------------
-            filepath = BudgetFiles.VerifyReadFromFileName(filepath, DefaultFileName);
+            filepath = BudgetFiles.VerifyReadFromFileName(filepath/*, DefaultFileName*/);
 
             // ---------------------------------------------------------------
             // If file exists, read it
@@ -207,7 +207,7 @@ namespace Budget
             // ---------------------------------------------------------------
             // get filepath name (throws exception if it doesn't exist)
             // ---------------------------------------------------------------
-            filepath = BudgetFiles.VerifyWriteToFileName(filepath, DefaultFileName);
+            filepath = BudgetFiles.VerifyWriteToFileName(filepath/*, DefaultFileName*/);
 
             // ---------------------------------------------------------------
             // save as XML
