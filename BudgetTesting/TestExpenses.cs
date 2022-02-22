@@ -132,7 +132,7 @@ namespace BudgetCodeTests
             // Assert
             Assert.Equal(numberOfExpensesInFile+1, sizeOfList);
             Assert.Equal(maxIDInExpenseFile + 1, expensesList[sizeOfList - 1].Id);
-            Assert.Equal(amount, expensesList[sizeOfList - 1].Amount);
+            Assert.Equal(amount, -expensesList[sizeOfList - 1].Amount);
 
         }
 
