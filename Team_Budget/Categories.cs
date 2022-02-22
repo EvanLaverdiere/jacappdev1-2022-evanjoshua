@@ -113,13 +113,12 @@ namespace Budget
             reader.Read();
 
             int id = reader.GetInt32(0);
-            int typeId = reader.GetInt32(1) - 1;
+            int typeId = reader.GetInt32(1);
             string description = reader.GetString(2);
 
             Category category = new Category(id, description, (Category.CategoryType)typeId);
 
             return category;
-
         }
 
         // ====================================================================
@@ -425,7 +424,7 @@ namespace Budget
             //}
 
             using SQLiteCommand command = new SQLiteCommand(_connection);
-            string stm = "SELECT Id, TypeId, Description FROM categories";
+            string stm = "SELECT Id, TypeId, Description FROM categories ORDER BY Id ASC";
 
             using var cmd = new SQLiteCommand(stm, _connection);
             using SQLiteDataReader reader = cmd.ExecuteReader();
