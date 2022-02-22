@@ -425,7 +425,7 @@ namespace Budget
             //}
 
             using SQLiteCommand command = new SQLiteCommand(_connection);
-            string stm = "SELECT Id, TypeId, Description FROM categories";
+            string stm = "SELECT Id, TypeId, Description FROM categories ORDER BY Id ASC";
 
             using var cmd = new SQLiteCommand(stm, _connection);
             using SQLiteDataReader reader = cmd.ExecuteReader();
