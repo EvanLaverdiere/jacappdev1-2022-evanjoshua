@@ -113,13 +113,12 @@ namespace Budget
             reader.Read();
 
             int id = reader.GetInt32(0);
-            int typeId = reader.GetInt32(1) - 1;
+            int typeId = reader.GetInt32(1);
             string description = reader.GetString(2);
 
             Category category = new Category(id, description, (Category.CategoryType)typeId);
 
             return category;
-
         }
 
         // ====================================================================

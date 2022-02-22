@@ -314,9 +314,9 @@ namespace Budget
         /// <code>
         /// Cat_ID  Expense_ID  Date                    Description                    Cost     Balance
         ///    10       1       1/10/2018 12:00:00 AM   Clothes hat (on credit)         10      -10
-        ///     9       2       1/11/2018 12:00:00 AM   Credit Card hat                -10      10
+        ///     9       2       1/11/2018 12:00:00 AM   Credit Card hat                -10       0
         ///    10       3       1/10/2019 12:00:00 AM   Clothes scarf(on credit)        15      -15
-        ///     9       4       1/10/2020 12:00:00 AM   Credit Card scarf              -15      0
+        ///     9       4       1/10/2020 12:00:00 AM   Credit Card scarf              -15       0
         ///    14       5       1/11/2020 12:00:00 AM   Eating Out McDonalds            45      -45
         ///    14       7       1/12/2020 12:00:00 AM   Eating Out Wendys               25      -70
         ///    14      10       2/1/2020 12:00:00 AM    Eating Out Pizza                33.33   -103.33
