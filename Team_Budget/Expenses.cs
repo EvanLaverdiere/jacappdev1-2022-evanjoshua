@@ -92,7 +92,7 @@ namespace Budget
             // ---------------------------------------------------------------
             // get filepath name (throws exception if it doesn't exist)
             // ---------------------------------------------------------------
-            filepath = BudgetFiles.VerifyReadFromFileName(filepath, DefaultFileName);
+            filepath = BudgetFiles.VerifyReadFromFileName(filepath/*, DefaultFileName*/);
 
             // ---------------------------------------------------------------
             // read the expenses from the xml file
@@ -149,7 +149,7 @@ namespace Budget
             // ---------------------------------------------------------------
             // get filepath name (throws exception if it doesn't exist)
             // ---------------------------------------------------------------
-            filepath = BudgetFiles.VerifyWriteToFileName(filepath, DefaultFileName);
+            filepath = BudgetFiles.VerifyWriteToFileName(filepath/*, DefaultFileName*/);
 
             // ---------------------------------------------------------------
             // save as XML

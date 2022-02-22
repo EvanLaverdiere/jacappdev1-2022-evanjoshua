@@ -21,8 +21,8 @@ namespace Budget
     /// <seealso cref="HomeBudget"/>
     public class BudgetFiles
     {
-        private static String DefaultSavePath = @"Budget\";
-        private static String DefaultAppData = @"%USERPROFILE%\AppData\Local\";
+        //private static String DefaultSavePath = @"Budget\";
+        //private static String DefaultAppData = @"%USERPROFILE%\AppData\Local\";
 
         // ====================================================================
         // verify that the name of the file, or set the default file, and 
@@ -51,7 +51,7 @@ namespace Budget
         ///     }
         /// </code>
         /// </example>
-        public static String VerifyReadFromFileName(String FilePath, String DefaultFileName)
+        public static String VerifyReadFromFileName(String FilePath/*, String DefaultFileName*/)
         {
 
             // ---------------------------------------------------------------
@@ -59,7 +59,8 @@ namespace Budget
             // ---------------------------------------------------------------
             if (FilePath == null)
             {
-                FilePath = Environment.ExpandEnvironmentVariables(DefaultAppData + DefaultSavePath + DefaultFileName);
+                //FilePath = Environment.ExpandEnvironmentVariables(DefaultAppData + DefaultSavePath + DefaultFileName);
+                throw new ArgumentNullException("A file must be specified");
             }
 
             // ---------------------------------------------------------------
@@ -103,7 +104,7 @@ namespace Budget
         ///     }
         /// </code>
         /// </example>
-        public static String VerifyWriteToFileName(String FilePath, String DefaultFileName)
+        public static String VerifyWriteToFileName(String FilePath/*, String DefaultFileName*/)
         {
             // ---------------------------------------------------------------
             // if the directory for the path was not specified, then use standard application data
@@ -111,21 +112,22 @@ namespace Budget
             // ---------------------------------------------------------------
             if (FilePath == null)
             {
-                // create the default appdata directory if it does not already exist
-                String tmp = Environment.ExpandEnvironmentVariables(DefaultAppData);
-                if (!Directory.Exists(tmp))
-                {
-                    Directory.CreateDirectory(tmp);
-                }
+                //// create the default appdata directory if it does not already exist
+                //String tmp = Environment.ExpandEnvironmentVariables(DefaultAppData);
+                //if (!Directory.Exists(tmp))
+                //{
+                //    Directory.CreateDirectory(tmp);
+                //}
 
-                // create the default Budget directory in the appdirectory if it does not already exist
-                tmp = Environment.ExpandEnvironmentVariables(DefaultAppData + DefaultSavePath);
-                if (!Directory.Exists(tmp))
-                {
-                    Directory.CreateDirectory(tmp);
-                }
+                //// create the default Budget directory in the appdirectory if it does not already exist
+                //tmp = Environment.ExpandEnvironmentVariables(DefaultAppData + DefaultSavePath);
+                //if (!Directory.Exists(tmp))
+                //{
+                //    Directory.CreateDirectory(tmp);
+                //}
 
-                FilePath = Environment.ExpandEnvironmentVariables(DefaultAppData + DefaultSavePath + DefaultFileName);
+                //FilePath = Environment.ExpandEnvironmentVariables(DefaultAppData + DefaultSavePath + DefaultFileName);
+                throw new ArgumentNullException("Filepath must be specified");
             }
 
             // ---------------------------------------------------------------
@@ -150,6 +152,7 @@ namespace Budget
                     throw new Exception("SaveToFileException:  FilePath(" + FilePath + ") is read only");
                 }
             }
+            // If the specifed directory exists but the file does not, create it 
 
             // ---------------------------------------------------------------
             // valid file path
