@@ -210,7 +210,7 @@ namespace Budget
                 new_id++;
             }
 
-            _Expenses.Add(new Expense(new_id, date, category, amount, description));
+            _Expenses.Add(new Expense(new_id, date, category, -amount, description));
 
         }
 

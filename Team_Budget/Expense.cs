@@ -116,6 +116,7 @@ namespace Budget
         /// </example>
         public Expense (Expense obj)
         {
+            this._id = obj.Id;
             this._date = obj.Date;
             this._category = obj.Category;
             this._amount = obj.Amount;
