@@ -119,11 +119,11 @@ namespace Budget
         /// HomeBudget homeBudget = new HomeBudget();
         /// </code>
         /// </example>
-        public HomeBudget()
-        {
-            _categories = new Categories();
-            _expenses = new Expenses();
-        }
+        //public HomeBudget()
+        //{
+        //    _categories = new Categories();
+        //    _expenses = new Expenses();
+        //}
 
         // -------------------------------------------------------------------
         // Constructor (existing budget ... must specify file)
@@ -201,7 +201,7 @@ namespace Budget
             try
             {
                 // get filepath name (throws exception if it doesn't exist)
-                budgetFileName = BudgetFiles.VerifyReadFromFileName(budgetFileName, "");
+                budgetFileName = BudgetFiles.VerifyReadFromFileName(budgetFileName/*, ""*/);
 
                 // If file exists, read it
                 string[] filenames = System.IO.File.ReadAllLines(budgetFileName);
@@ -257,7 +257,7 @@ namespace Budget
             // ---------------------------------------------------------------
             // get filepath name (throws exception if we can't write to the file)
             // ---------------------------------------------------------------
-            filepath = BudgetFiles.VerifyWriteToFileName(filepath, "");
+            filepath = BudgetFiles.VerifyWriteToFileName(filepath/*, ""*/);
 
             String path = Path.GetDirectoryName(Path.GetFullPath(filepath));
             String file = Path.GetFileNameWithoutExtension(filepath);
