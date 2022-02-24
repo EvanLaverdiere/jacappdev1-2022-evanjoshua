@@ -147,33 +147,33 @@ namespace Budget
         ///     categories.ReadFromFile(categoriesFile);
         /// </code>
         /// </example>
-        public void ReadFromFile(String filepath = null)
-        {
+        //public void ReadFromFile(String filepath = null)
+        //{
 
-            // ---------------------------------------------------------------
-            // reading from file resets all the current categories,
-            // ---------------------------------------------------------------
-            //_Cats.Clear();
+        //    // ---------------------------------------------------------------
+        //    // reading from file resets all the current categories,
+        //    // ---------------------------------------------------------------
+        //    //_Cats.Clear();
 
-            // ---------------------------------------------------------------
-            // reset default dir/filename to null 
-            // ... filepath may not be valid, 
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
+        //    // ---------------------------------------------------------------
+        //    // reset default dir/filename to null 
+        //    // ... filepath may not be valid, 
+        //    // ---------------------------------------------------------------
+        //    _DirName = null;
+        //    _FileName = null;
 
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if it doesn't exist)
-            // ---------------------------------------------------------------
-            filepath = BudgetFiles.VerifyReadFromFileName(filepath/*, DefaultFileName*/);
+        //    // ---------------------------------------------------------------
+        //    // get filepath name (throws exception if it doesn't exist)
+        //    // ---------------------------------------------------------------
+        //    filepath = BudgetFiles.VerifyReadFromFileName(filepath/*, DefaultFileName*/);
 
-            // ---------------------------------------------------------------
-            // If file exists, read it
-            // ---------------------------------------------------------------
-            _ReadXMLFile(filepath);
-            _DirName = Path.GetDirectoryName(filepath);
-            _FileName = Path.GetFileName(filepath);
-        }
+        //    // ---------------------------------------------------------------
+        //    // If file exists, read it
+        //    // ---------------------------------------------------------------
+        //    _ReadXMLFile(filepath);
+        //    _DirName = Path.GetDirectoryName(filepath);
+        //    _FileName = Path.GetFileName(filepath);
+        //}
 
         // ====================================================================
         // save to a file
@@ -194,38 +194,38 @@ namespace Budget
         ///     categories.SaveToFile(categoriesFile);
         /// </code>
         /// </example>
-        public void SaveToFile(String filepath = null)
-        {
-            // ---------------------------------------------------------------
-            // if file path not specified, set to last read file
-            // ---------------------------------------------------------------
-            if (filepath == null && DirName != null && FileName != null)
-            {
-                filepath = DirName + "\\" + FileName;
-            }
+        //public void SaveToFile(String filepath = null)
+        //{
+        //    // ---------------------------------------------------------------
+        //    // if file path not specified, set to last read file
+        //    // ---------------------------------------------------------------
+        //    if (filepath == null && DirName != null && FileName != null)
+        //    {
+        //        filepath = DirName + "\\" + FileName;
+        //    }
 
-            // ---------------------------------------------------------------
-            // just in case filepath doesn't exist, reset path info
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
+        //    // ---------------------------------------------------------------
+        //    // just in case filepath doesn't exist, reset path info
+        //    // ---------------------------------------------------------------
+        //    _DirName = null;
+        //    _FileName = null;
 
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if it doesn't exist)
-            // ---------------------------------------------------------------
-            filepath = BudgetFiles.VerifyWriteToFileName(filepath/*, DefaultFileName*/);
+        //    // ---------------------------------------------------------------
+        //    // get filepath name (throws exception if it doesn't exist)
+        //    // ---------------------------------------------------------------
+        //    filepath = BudgetFiles.VerifyWriteToFileName(filepath/*, DefaultFileName*/);
 
-            // ---------------------------------------------------------------
-            // save as XML
-            // ---------------------------------------------------------------
-            //_WriteXMLFile(filepath);
+        //    // ---------------------------------------------------------------
+        //    // save as XML
+        //    // ---------------------------------------------------------------
+        //    //_WriteXMLFile(filepath);
 
-            // ----------------------------------------------------------------
-            // save filename info for later use
-            // ----------------------------------------------------------------
-            _DirName = Path.GetDirectoryName(filepath);
-            _FileName = Path.GetFileName(filepath);
-        }
+        //    // ----------------------------------------------------------------
+        //    // save filename info for later use
+        //    // ----------------------------------------------------------------
+        //    _DirName = Path.GetDirectoryName(filepath);
+        //    _FileName = Path.GetFileName(filepath);
+        //}
 
         // ====================================================================
         // set categories to default
