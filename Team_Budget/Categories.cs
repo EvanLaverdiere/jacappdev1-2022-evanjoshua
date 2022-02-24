@@ -113,7 +113,7 @@ namespace Budget
             reader.Read();
 
             int id = reader.GetInt32(0);
-            int typeId = reader.GetInt32(1);
+            int typeId = reader.GetInt32(1) - 1;
             string description = reader.GetString(2);
 
             Category category = new Category(id, description, (Category.CategoryType)typeId);
@@ -358,11 +358,11 @@ namespace Budget
         public void Add(String desc, Category.CategoryType type)
         {
             using var cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "PRAGMA foreign_keys = OFF";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "PRAGMA foreign_keys = OFF";
+            //cmd.ExecuteNonQuery();
             cmd.CommandText = "INSERT INTO categories(Description, TypeId) VALUES(@description, @type)";
             cmd.Parameters.AddWithValue("@description", desc);
-            cmd.Parameters.AddWithValue("@type", (int)type);
+            cmd.Parameters.AddWithValue("@type", (int)type + 1);
             cmd.Prepare();
             cmd.ExecuteNonQuery();
 
@@ -538,7 +538,7 @@ namespace Budget
             cmd.CommandText = "UPDATE categories SET Description=@newDescription, TypeId=@newType WHERE Id=@id";
             cmd.Parameters.AddWithValue("@id", id);
             cmd.Parameters.AddWithValue("@newDescription", newDescription);
-            cmd.Parameters.AddWithValue("@newType", newType);
+            cmd.Parameters.AddWithValue("@newType", (int) newType + 1);
             cmd.Prepare();
             cmd.ExecuteNonQuery();
         }
@@ -547,7 +547,7 @@ namespace Budget
         {
             // Remove values from table.
             using SQLiteCommand cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "PRAGMA foreign_keys = OFF; DELETE FROM categoryTypes; PRAGMA foreign_keys = ON";
+            cmd.CommandText = "DELETE FROM categoryTypes";
             cmd.ExecuteNonQuery();
 
             // Insert default category types.
