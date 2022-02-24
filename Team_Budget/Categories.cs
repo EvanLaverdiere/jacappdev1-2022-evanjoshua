@@ -62,6 +62,12 @@ namespace Budget
             SetCategoriesToDefaults();
         }
 
+        /// <summary>
+        /// Connects to the categories table of an SQLite database. 
+        /// If database is new, creates a collection <see cref="Category"/> objects with default values.
+        /// </summary>
+        /// <param name="conn">A connection to an SQLite database.</param>
+        /// <param name="newDB">True if a new database is to be created, false otherwise.</param>
         public Categories(SQLiteConnection conn, bool newDB = false)
         {
             _connection = conn;
