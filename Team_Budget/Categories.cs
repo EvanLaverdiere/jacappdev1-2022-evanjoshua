@@ -62,6 +62,12 @@ namespace Budget
             SetCategoriesToDefaults();
         }
 
+        /// <summary>
+        /// Connects to the categories table of an SQLite database. 
+        /// If database is new, creates a collection <see cref="Category"/> objects with default values.
+        /// </summary>
+        /// <param name="conn">A connection to an SQLite database.</param>
+        /// <param name="newDB">True if a new database is to be created, false otherwise.</param>
         public Categories(SQLiteConnection conn, bool newDB = false)
         {
             _connection = conn;
@@ -113,7 +119,7 @@ namespace Budget
             reader.Read();
 
             int id = reader.GetInt32(0);
-            int typeId = reader.GetInt32(1);
+            int typeId = reader.GetInt32(1) - 1;
             string description = reader.GetString(2);
 
             Category category = new Category(id, description, (Category.CategoryType)typeId);
@@ -141,33 +147,33 @@ namespace Budget
         ///     categories.ReadFromFile(categoriesFile);
         /// </code>
         /// </example>
-        public void ReadFromFile(String filepath = null)
-        {
+        //public void ReadFromFile(String filepath = null)
+        //{
 
-            // ---------------------------------------------------------------
-            // reading from file resets all the current categories,
-            // ---------------------------------------------------------------
-            //_Cats.Clear();
+        //    // ---------------------------------------------------------------
+        //    // reading from file resets all the current categories,
+        //    // ---------------------------------------------------------------
+        //    //_Cats.Clear();
 
-            // ---------------------------------------------------------------
-            // reset default dir/filename to null 
-            // ... filepath may not be valid, 
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
+        //    // ---------------------------------------------------------------
+        //    // reset default dir/filename to null 
+        //    // ... filepath may not be valid, 
+        //    // ---------------------------------------------------------------
+        //    _DirName = null;
+        //    _FileName = null;
 
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if it doesn't exist)
-            // ---------------------------------------------------------------
-            filepath = BudgetFiles.VerifyReadFromFileName(filepath/*, DefaultFileName*/);
+        //    // ---------------------------------------------------------------
+        //    // get filepath name (throws exception if it doesn't exist)
+        //    // ---------------------------------------------------------------
+        //    filepath = BudgetFiles.VerifyReadFromFileName(filepath/*, DefaultFileName*/);
 
-            // ---------------------------------------------------------------
-            // If file exists, read it
-            // ---------------------------------------------------------------
-            _ReadXMLFile(filepath);
-            _DirName = Path.GetDirectoryName(filepath);
-            _FileName = Path.GetFileName(filepath);
-        }
+        //    // ---------------------------------------------------------------
+        //    // If file exists, read it
+        //    // ---------------------------------------------------------------
+        //    _ReadXMLFile(filepath);
+        //    _DirName = Path.GetDirectoryName(filepath);
+        //    _FileName = Path.GetFileName(filepath);
+        //}
 
         // ====================================================================
         // save to a file
@@ -188,38 +194,38 @@ namespace Budget
         ///     categories.SaveToFile(categoriesFile);
         /// </code>
         /// </example>
-        public void SaveToFile(String filepath = null)
-        {
-            // ---------------------------------------------------------------
-            // if file path not specified, set to last read file
-            // ---------------------------------------------------------------
-            if (filepath == null && DirName != null && FileName != null)
-            {
-                filepath = DirName + "\\" + FileName;
-            }
+        //public void SaveToFile(String filepath = null)
+        //{
+        //    // ---------------------------------------------------------------
+        //    // if file path not specified, set to last read file
+        //    // ---------------------------------------------------------------
+        //    if (filepath == null && DirName != null && FileName != null)
+        //    {
+        //        filepath = DirName + "\\" + FileName;
+        //    }
 
-            // ---------------------------------------------------------------
-            // just in case filepath doesn't exist, reset path info
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
+        //    // ---------------------------------------------------------------
+        //    // just in case filepath doesn't exist, reset path info
+        //    // ---------------------------------------------------------------
+        //    _DirName = null;
+        //    _FileName = null;
 
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if it doesn't exist)
-            // ---------------------------------------------------------------
-            filepath = BudgetFiles.VerifyWriteToFileName(filepath/*, DefaultFileName*/);
+        //    // ---------------------------------------------------------------
+        //    // get filepath name (throws exception if it doesn't exist)
+        //    // ---------------------------------------------------------------
+        //    filepath = BudgetFiles.VerifyWriteToFileName(filepath/*, DefaultFileName*/);
 
-            // ---------------------------------------------------------------
-            // save as XML
-            // ---------------------------------------------------------------
-            //_WriteXMLFile(filepath);
+        //    // ---------------------------------------------------------------
+        //    // save as XML
+        //    // ---------------------------------------------------------------
+        //    //_WriteXMLFile(filepath);
 
-            // ----------------------------------------------------------------
-            // save filename info for later use
-            // ----------------------------------------------------------------
-            _DirName = Path.GetDirectoryName(filepath);
-            _FileName = Path.GetFileName(filepath);
-        }
+        //    // ----------------------------------------------------------------
+        //    // save filename info for later use
+        //    // ----------------------------------------------------------------
+        //    _DirName = Path.GetDirectoryName(filepath);
+        //    _FileName = Path.GetFileName(filepath);
+        //}
 
         // ====================================================================
         // set categories to default
@@ -358,11 +364,11 @@ namespace Budget
         public void Add(String desc, Category.CategoryType type)
         {
             using var cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "PRAGMA foreign_keys = OFF";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = "PRAGMA foreign_keys = OFF";
+            //cmd.ExecuteNonQuery();
             cmd.CommandText = "INSERT INTO categories(Description, TypeId) VALUES(@description, @type)";
             cmd.Parameters.AddWithValue("@description", desc);
-            cmd.Parameters.AddWithValue("@type", (int)type);
+            cmd.Parameters.AddWithValue("@type", (int)type + 1);
             cmd.Prepare();
             cmd.ExecuteNonQuery();
 
@@ -538,7 +544,7 @@ namespace Budget
             cmd.CommandText = "UPDATE categories SET Description=@newDescription, TypeId=@newType WHERE Id=@id";
             cmd.Parameters.AddWithValue("@id", id);
             cmd.Parameters.AddWithValue("@newDescription", newDescription);
-            cmd.Parameters.AddWithValue("@newType", newType);
+            cmd.Parameters.AddWithValue("@newType", (int) newType + 1);
             cmd.Prepare();
             cmd.ExecuteNonQuery();
         }
@@ -547,7 +553,7 @@ namespace Budget
         {
             // Remove values from table.
             using SQLiteCommand cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "PRAGMA foreign_keys = OFF; DELETE FROM categoryTypes; PRAGMA foreign_keys = ON";
+            cmd.CommandText = "DELETE FROM categoryTypes";
             cmd.ExecuteNonQuery();
 
             // Insert default category types.
