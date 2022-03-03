@@ -3,6 +3,7 @@ using Xunit;
 using System.IO;
 using System.Collections.Generic;
 using Budget;
+using System.Data.SQLite;
 
 namespace BudgetCodeTests
 {
@@ -117,6 +118,28 @@ namespace BudgetCodeTests
         [Fact]
         public void ExpensesMethod_Add()
         {
+            //// Arrange
+            //String folder = TestConstants.GetSolutionDir();
+            //String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            //String messyDB = $"{folder}\\messy.db";
+            //System.IO.File.Copy(goodDB, messyDB, true);
+            //Database.existingDatabase(messyDB);
+            //SQLiteConnection conn = Database.dbConnection;
+            //Expenses expenses = new Expenses(conn);
+            //DateTime date = DateTime.Now;
+            //Double amount = 10.55;
+            //string descr = "McDonald's";
+            //Category.CategoryType type = Category.CategoryType.Expense;
+
+            //// Act
+            //expenses.Add(date, (int)type, amount, descr);
+            //List<Expense> expensesList = expenses.List();
+            //int sizeOfList = expenses.List().Count;
+
+            //// Assert
+            //Assert.Equal(numberOfExpensesInFile + 1, sizeOfList);
+            //Assert.Equal(descr, expensesList[sizeOfList - 1].Description);
+
             // Arrange
             String dir = GetSolutionDir();
             Expenses expenses = new Expenses();
@@ -125,14 +148,41 @@ namespace BudgetCodeTests
             double amount = 98.1;
 
             // Act
-            expenses.Add(DateTime.Now,category,amount,"new expense");
+            expenses.Add(DateTime.Now, category, amount, "new expense");
             List<Expense> expensesList = expenses.List();
             int sizeOfList = expenses.List().Count;
 
             // Assert
-            Assert.Equal(numberOfExpensesInFile+1, sizeOfList);
+            Assert.Equal(numberOfExpensesInFile + 1, sizeOfList);
             Assert.Equal(maxIDInExpenseFile + 1, expensesList[sizeOfList - 1].Id);
             Assert.Equal(amount, -expensesList[sizeOfList - 1].Amount);
+
+        }
+
+        // ========================================================================
+
+        [Fact]
+        public void ExpensesMethod_Update()
+        {
+            // Arrange
+            String folder = TestConstants.GetSolutionDir();
+            String newDB = $"{folder}\\newDB.db";
+            Database.newDatabase(newDB);
+            SQLiteConnection conn = Database.dbConnection;
+            Expenses expense = new Expenses(conn);
+            DateTime date = DateTime.Now;
+            String newDescr = "Tim Hortons";
+            Double amount = 11.22;
+            int id = 1;
+            int category = (int)Category.CategoryType.Expense;
+
+            // Act
+            expense.Update(id, date, category, amount, newDescr);
+            List<Expense> expensesList = expense.List();
+
+            // Assert 
+            Assert.Equal(newDescr, expensesList[0].Description);
+            Assert.Equal(amount, expensesList[0].Amount);
 
         }
 

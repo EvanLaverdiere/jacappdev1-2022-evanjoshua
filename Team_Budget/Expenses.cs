@@ -273,6 +273,20 @@ namespace Budget
 
         }
 
+        public void Update(int id, DateTime date, int category, Double amount, String description)
+        {
+            using var cmd = new SQLiteCommand(_connection);
+
+            cmd.CommandText = "UPDATE expenses SET Date=@date, Description=@description, Amount=@amount, CategoryId=@category WHERE Id=@id";
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Parameters.AddWithValue("@date", date.ToString());
+            cmd.Parameters.AddWithValue("@description", description);
+            cmd.Parameters.AddWithValue("@amount", amount);
+            cmd.Parameters.AddWithValue("@category", category);
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+        }
+
         // ====================================================================
         // Return list of expenses
         // Note:  make new copy of list, so user cannot modify what is part of
