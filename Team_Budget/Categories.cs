@@ -32,14 +32,6 @@ namespace Budget
         // ====================================================================
         // Properties
         // ====================================================================
-        /// <summary>
-        /// Gets the name of the file where the list of categories is saved.
-        /// </summary>
-        public String FileName { get { return _FileName; } }
-        /// <summary>
-        /// Gets the directory containing the categories file.
-        /// </summary>
-        public String DirName { get { return _DirName; } }
 
         // ====================================================================
         // Constructor
