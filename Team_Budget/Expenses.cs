@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
+using System.Data.SQLite;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -36,6 +37,17 @@ namespace Budget
         private List<Expense> _Expenses = new List<Expense>();
         private string _FileName;
         private string _DirName;
+        private SQLiteConnection _connection;
+
+        public Expenses()
+        {
+
+        }
+
+        public Expenses(SQLiteConnection conn)
+        {
+            _connection = conn;
+        }
 
         // ====================================================================
         // Properties
@@ -201,16 +213,25 @@ namespace Budget
         /// </example>
         public void Add(DateTime date, int category, Double amount, String description)
         {
-            int new_id = 1;
+            using var cmd = new SQLiteCommand(_connection);
+            cmd.CommandText = "INSERT INTO expenses(Date, Description, Amount, CategoryId) VALUES(@date, @description, @amount, @category)";
+            cmd.Parameters.AddWithValue("@date", date.ToString());
+            cmd.Parameters.AddWithValue("@description", description);
+            cmd.Parameters.AddWithValue("@amount", amount);
+            cmd.Parameters.AddWithValue("@category", category);
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
 
-            // if we already have expenses, set ID to max
-            if (_Expenses.Count > 0)
-            {
-                new_id = (from e in _Expenses select e.Id).Max();
-                new_id++;
-            }
+            //int new_id = 1;
 
-            _Expenses.Add(new Expense(new_id, date, category, -amount, description));
+            //// if we already have expenses, set ID to max
+            //if (_Expenses.Count > 0)
+            //{
+            //    new_id = (from e in _Expenses select e.Id).Max();
+            //    new_id++;
+            //}
+
+            //_Expenses.Add(new Expense(new_id, date, category, -amount, description));
 
         }
 
