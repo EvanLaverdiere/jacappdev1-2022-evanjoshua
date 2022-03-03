@@ -27,10 +27,6 @@ namespace Budget
     /// <seealso cref="Category"/>
     public class Categories
     {
-        //private static String DefaultFileName = "budgetCategories.txt";
-        //private List<Category> _Cats = new List<Category>();
-        private string _FileName;
-        private string _DirName;
         private SQLiteConnection _connection;
 
         // ====================================================================
