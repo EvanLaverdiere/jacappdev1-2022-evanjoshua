@@ -164,10 +164,13 @@ namespace BudgetCodeTests
         [Fact]
         public void ExpensesMethod_Update()
         {
+
             // Arrange
             String folder = TestConstants.GetSolutionDir();
-            String newDB = $"{folder}\\newDB.db";
-            Database.newDatabase(newDB);
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String messyDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, messyDB, true);
+            Database.existingDatabase(messyDB);
             SQLiteConnection conn = Database.dbConnection;
             Expenses expense = new Expenses(conn);
             DateTime date = DateTime.Now;
