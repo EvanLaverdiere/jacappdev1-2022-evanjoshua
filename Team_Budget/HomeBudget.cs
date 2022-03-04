@@ -149,34 +149,48 @@ namespace Budget
         /// <exception cref="Exception">Thrown when the method fails to read the passed file or its referenced files.</exception>
         /// <exception cref="FileNotFoundException">Thrown when the passed file does not exist, or when its referenced files do not exist.</exception>
         /// <seealso cref="ReadFromFile(string)"/>
-        public HomeBudget(String budgetFileName)
-        {
-            _categories = new Categories();
-            _expenses = new Expenses();
-            ReadFromFile(budgetFileName);
-        }
+        //public HomeBudget(String budgetFileName)
+        //{
+        //    _categories = new Categories();
+        //    _expenses = new Expenses();
+        //    ReadFromFile(budgetFileName);
+        //}
 
-        public HomeBudget(String databaseFile, String expensesXMLFile, bool newDB = false)
+        public HomeBudget(String categoriesDatabaseFile, String expensesDatabaseFile, bool newDB = false)
         {
             // if database exists, and user doesn't want a new database, open existing DB
-            if(! newDB && File.Exists(databaseFile))
+            if (!newDB && File.Exists(categoriesDatabaseFile))
             {
-                Database.existingDatabase(databaseFile);
+                Database.existingDatabase(categoriesDatabaseFile);
             }
 
             // file did not exist, or user wants a new database, so open NEW DB
             else
             {
-                Database.newDatabase(databaseFile);
+                Database.newDatabase(categoriesDatabaseFile);
                 newDB = true;
             }
+
 
             // create the category object
             _categories = new Categories(Database.dbConnection, newDB);
 
-            // create the _expenses course
-            _expenses = new Expenses();
-            _expenses.ReadFromFile(expensesXMLFile);
+            // if database exists, and user doesn't want a new database, open existing DB
+            if (!newDB && File.Exists(expensesDatabaseFile))
+            {
+                Database.existingDatabase(expensesDatabaseFile);
+            }
+
+            // file did not exist, or user wants a new database, so open NEW DB
+            else
+            {
+                Database.newDatabase(expensesDatabaseFile);
+                newDB = true;
+            }
+
+            // create the expenses object
+            _categories = new Categories(Database.dbConnection, newDB);
+
         }
 
         #region OpenNewAndSave
@@ -408,7 +422,7 @@ namespace Budget
             Start = Start ?? new DateTime(1900, 1, 1);
             End = End ?? new DateTime(2500, 1, 1);
 
-            var query =  from c in _categories.List()
+            var query = from c in _categories.List()
                         join e in _expenses.List() on c.Id equals e.Category
                         where e.Date >= Start && e.Date <= End
                         select new { CatId = c.Id, ExpId = e.Id, e.Date, Category = c.Description, e.Description, e.Amount };
@@ -991,7 +1005,7 @@ namespace Budget
         /// Credit Card         :    $65.00
         /// </code>
         /// </example>
-        public List<Dictionary<string,object>> GetBudgetDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
+        public List<Dictionary<string, object>> GetBudgetDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // -----------------------------------------------------------------------
             // get all items by month 
@@ -1031,7 +1045,7 @@ namespace Budget
                     }
 
                     // add new properties and values to our record object
-                    record["details:" + CategoryGroup.Key] =  details;
+                    record["details:" + CategoryGroup.Key] = details;
                     record[CategoryGroup.Key] = total;
 
                     // keep track of totals for each category

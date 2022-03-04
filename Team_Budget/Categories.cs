@@ -45,10 +45,10 @@ namespace Budget
         /// </code>
         /// </example>
         /// <seealso cref="SetCategoriesToDefaults"/>
-        public Categories()
-        {
-            SetCategoriesToDefaults();
-        }
+        //public categories()
+        //{
+        //    setcategoriestodefaults();
+        //}
 
         /// <summary>
         /// Connects to the categories table of an SQLite database. 
