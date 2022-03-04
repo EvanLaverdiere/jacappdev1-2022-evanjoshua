@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
+using System.Data.SQLite;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -249,6 +250,15 @@ namespace Budget
             {
                 _Expenses.RemoveAt(i);
             }
+
+            /* 
+             * [TO BE IMPLEMENTED ONCE PULL REQUESTS #64 & #65 HAVE BEEN APPROVED
+             */
+            //using var cmd = new SQLiteCommand(_connection);
+            //cmd.CommandText = "DELETE FROM expenses WHERE Id=@id";
+            //cmd.Parameters.AddWithValue("@Id", Id);
+            //cmd.Prepare();
+            //cmd.ExecuteNonQuery();
 
         }
 
