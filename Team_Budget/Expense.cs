@@ -114,7 +114,7 @@ namespace Budget
         /// Expense copiedConsultation = new Expense(consultation); 
         /// </code>
         /// </example>
-        public Expense (Expense obj)
+        public Expense(Expense obj)
         {
             this._id = obj.Id;
             this._date = obj.Date;

@@ -149,34 +149,46 @@ namespace Budget
         /// <exception cref="Exception">Thrown when the method fails to read the passed file or its referenced files.</exception>
         /// <exception cref="FileNotFoundException">Thrown when the passed file does not exist, or when its referenced files do not exist.</exception>
         /// <seealso cref="ReadFromFile(string)"/>
-        public HomeBudget(String budgetFileName)
-        {
-            _categories = new Categories();
-            _expenses = new Expenses();
-            ReadFromFile(budgetFileName);
-        }
+        //public HomeBudget(String budgetFileName)
+        //{
+        //    _categories = new Categories();
+        //    _expenses = new Expenses();
+        //    ReadFromFile(budgetFileName);
+        //}
 
-        public HomeBudget(String databaseFile, String expensesXMLFile, bool newDB = false)
+        public HomeBudget(String categoriesDBFile, String expensesDBFile, bool newCategoriesDB = false, bool newExpensesDB = false)
         {
             // if database exists, and user doesn't want a new database, open existing DB
-            if(! newDB && File.Exists(databaseFile))
+            if(! newCategoriesDB && File.Exists(categoriesDBFile))
             {
-                Database.existingDatabase(databaseFile);
+                Database.existingDatabase(categoriesDBFile);
             }
 
             // file did not exist, or user wants a new database, so open NEW DB
             else
             {
-                Database.newDatabase(databaseFile);
-                newDB = true;
+                Database.newDatabase(categoriesDBFile);
+                newCategoriesDB = true;
             }
 
             // create the category object
-            _categories = new Categories(Database.dbConnection, newDB);
+            _categories = new Categories(Database.dbConnection, newCategoriesDB);
 
-            // create the _expenses course
-            _expenses = new Expenses();
-            _expenses.ReadFromFile(expensesXMLFile);
+            // if database exists, and user doesn't want a new database, open existing DB
+            if (!newCategoriesDB && File.Exists(expensesDBFile))
+            {
+                Database.existingDatabase(expensesDBFile);
+            }
+
+            // file did not exist, or user wants a new database, so open NEW DB
+            else
+            {
+                Database.newDatabase(expensesDBFile);
+                newExpensesDB = true;
+            }
+
+            // create the category object
+            _categories = new Categories(Database.dbConnection, newExpensesDB);
         }
 
         #region OpenNewAndSave
@@ -214,7 +226,7 @@ namespace Budget
 
                 // read the expenses and categories from their respective files
                 //_categories.ReadFromFile(folder + "\\" + filenames[0]);
-                _expenses.ReadFromFile(folder + "\\" + filenames[1]);
+                //_expenses.ReadFromFile(folder + "\\" + filenames[1]);
 
                 // Save information about budget file
                 _DirName = Path.GetDirectoryName(budgetFileName);
@@ -272,7 +284,7 @@ namespace Budget
             // ---------------------------------------------------------------
             // save the expenses and budgets into their own files
             // ---------------------------------------------------------------
-            _expenses.SaveToFile(expensepath);
+            //_expenses.SaveToFile(expensepath);
             //_categories.SaveToFile(categorypath);
 
             // ---------------------------------------------------------------
