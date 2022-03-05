@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Xml;
 using System.Data.SQLite;
 
 // ============================================================================
@@ -45,10 +44,10 @@ namespace Budget
         /// </code>
         /// </example>
         /// <seealso cref="SetCategoriesToDefaults"/>
-        public Categories()
-        {
-            SetCategoriesToDefaults();
-        }
+        //public Categories()
+        //{
+        //    SetCategoriesToDefaults();
+        //}
 
         /// <summary>
         /// Connects to the categories table of an SQLite database. 
@@ -281,7 +280,7 @@ namespace Budget
             cmd.CommandText = "UPDATE categories SET Description=@newDescription, TypeId=@newType WHERE Id=@id";
             cmd.Parameters.AddWithValue("@id", id);
             cmd.Parameters.AddWithValue("@newDescription", newDescription);
-            cmd.Parameters.AddWithValue("@newType", (int) newType + 1);
+            cmd.Parameters.AddWithValue("@newType", (int)newType + 1);
             cmd.Prepare();
             cmd.ExecuteNonQuery();
         }
