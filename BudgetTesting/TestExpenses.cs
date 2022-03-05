@@ -183,51 +183,73 @@ namespace BudgetCodeTests
 
         // ========================================================================
 
-        //[Fact]
-        //public void ExpensesMethod_Delete()
-        //{
-        //    // Arrange
-        //    String dir = GetSolutionDir();
-        //    Expenses expenses = new Expenses();
-        //    expenses.ReadFromFile(dir + "\\" + testInputFile);
-        //    int IdToDelete = 3;
+        [Fact]
+        public void ExpensesMethod_Delete()
+        {
+            // Arrange
+            //String dir = GetSolutionDir();
+            //Expenses expenses = new Expenses();
+            //expenses.ReadFromFile(dir + "\\" + testInputFile);
+            //int IdToDelete = 3;
 
-        //    // Act
-        //    expenses.Delete(IdToDelete);
-        //    List<Expense> expensesList = expenses.List();
-        //    int sizeOfList = expensesList.Count;
+            string folder = TestConstants.GetSolutionDir();
+            string goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            string messyDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, messyDB, true);
+            Database.existingDatabase(messyDB);
+            SQLiteConnection connection = Database.dbConnection;
+            Expenses expenses = new Expenses(connection);
+            int idToDelete = 3;
 
-        //    // Assert
-        //    Assert.Equal(numberOfExpensesInFile - 1, sizeOfList);
-        //    Assert.False(expensesList.Exists(e => e.Id == IdToDelete), "correct expense item deleted");
 
-        //}
+
+            // Act
+            expenses.Delete(idToDelete);
+            List<Expense> expensesList = expenses.List();
+            int sizeOfList = expensesList.Count;
+
+            // Assert
+            Assert.Equal(numberOfExpensesInFile - 1, sizeOfList);
+            Assert.False(expensesList.Exists(e => e.Id == idToDelete), "correct expense item deleted");
+
+        }
 
         //// ========================================================================
 
-        //[Fact]
-        //public void ExpensesMethod_Delete_InvalidIDDoesntCrash()
-        //{
-        //    // Arrange
-        //    String dir = GetSolutionDir();
-        //    Expenses expenses = new Expenses();
-        //    expenses.ReadFromFile(dir + "\\" + testInputFile);
-        //    int IdToDelete = 1006;
-        //    int sizeOfList = expenses.List().Count;
+        [Fact]
+        public void ExpensesMethod_Delete_InvalidIDDoesntCrash()
+        {
+            // Arrange
+            //String dir = GetSolutionDir();
+            //Expenses expenses = new Expenses();
+            //expenses.ReadFromFile(dir + "\\" + testInputFile);
+            //int IdToDelete = 1006;
+            //int sizeOfList = expenses.List().Count;
 
-        //    // Act
-        //    try
-        //    {
-        //        expenses.Delete(IdToDelete);
-        //        Assert.Equal(sizeOfList, expenses.List().Count);
-        //    }
+            String folder = TestConstants.GetSolutionDir();
+            string goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            string messyDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, messyDB, true);
+            Database.existingDatabase(messyDB);
+            SQLiteConnection connection = Database.dbConnection;
+            Expenses expenses = new Expenses(connection);
+            int idToDelete = 9999;
+            int sizeOfList = expenses.List().Count;
 
-        //    // Assert
-        //    catch
-        //    {
-        //        Assert.True(false, "Invalid ID causes Delete to break");
-        //    }
-        //}
+
+            // Act
+            try
+            {
+                expenses.Delete(idToDelete);
+                Assert.Equal(sizeOfList, expenses.List().Count);
+            }
+
+            // Assert
+            catch
+            {
+                Assert.True(false, "Invalid ID causes Delete to break");
+            }
+        }
 
 
         //// ========================================================================
