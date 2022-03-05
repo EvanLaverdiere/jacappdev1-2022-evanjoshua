@@ -203,8 +203,7 @@ namespace Budget
             //_Expenses.Add(exp);
 
             using var cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "INSERT INTO expenses(Id, CategoryId, Amount, Description, Date) VALUES(@id, @categoryId, @amount, @description, @date)";
-            cmd.Parameters.AddWithValue("@id", expense.Id);
+            cmd.CommandText = "INSERT INTO expenses(CategoryId, Amount, Description, Date) VALUES(@categoryId, @amount, @description, @date)";
             cmd.Parameters.AddWithValue("@categoryId", expense.Category);
             cmd.Parameters.AddWithValue("@amount", expense.Amount);
             cmd.Parameters.AddWithValue("@description", expense.Description);
@@ -230,17 +229,14 @@ namespace Budget
         /// </example>
         public void Add(DateTime date, int category, Double amount, String description)
         {
-            int new_id = 1;
-
-            // if we already have expenses, set ID to max
-            if (_Expenses.Count > 0)
-            {
-                new_id = (from e in _Expenses select e.Id).Max();
-                new_id++;
-            }
-
-            _Expenses.Add(new Expense(new_id, date, category, -amount, description));
-
+            using var cmd = new SQLiteCommand(_connection);
+            cmd.CommandText = "INSERT INTO expenses(CategoryId, Amount, Description, Date) VALUES(@categoryId, @amount, @description, @date)";
+            cmd.Parameters.AddWithValue("@categoryId", category);
+            cmd.Parameters.AddWithValue("@amount", -amount);
+            cmd.Parameters.AddWithValue("@description", description);
+            cmd.Parameters.AddWithValue("@date", date);
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
         }
 
         // ====================================================================
@@ -458,4 +454,3 @@ namespace Budget
         }
     }
 }
-
