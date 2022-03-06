@@ -68,6 +68,7 @@ namespace Budget
         /// <example>
         /// In this example, an expense representing a one-hour consultation with an electrician is created.
         /// <code>
+        /// <![CDATA[
         /// int id = 1;
         /// DateTime time = new DateTime(2021, 10, 31); // initializes a DateTime object with a date of October 31st, 2021.
         /// int category = 1; // In a default list of categories, this value corresponds to the Utilities category.
@@ -75,6 +76,7 @@ namespace Budget
         /// String description = "Electrician Consultation"; 
         /// 
         /// Expense consultation = new Expense(id, time, category, amount, description);
+        /// ]]>
         /// </code>
         /// </example>
         public Expense(DateTime date, int category, Double amount, String description)
@@ -104,6 +106,7 @@ namespace Budget
         /// <example>
         /// In this example, an Expense object representing a consultation with an electrician is created. It is then cloned into a new Expense using this constructor.
         /// <code>
+        /// <![CDATA[
         /// int id = 1;
         /// DateTime time = new DateTime(2021, 10, 31); // initializes a DateTime object with a date of October 31st, 2021.
         /// int category = 1; // In a default list of categories, this value corresponds to the Utilities category.
@@ -112,6 +115,7 @@ namespace Budget
         /// 
         /// Expense consultation = new Expense(id, time, category, amount, description);
         /// Expense copiedConsultation = new Expense(consultation); 
+        /// ]]>
         /// </code>
         /// </example>
         public Expense(Expense obj)
