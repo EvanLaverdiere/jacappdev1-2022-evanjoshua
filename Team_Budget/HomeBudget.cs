@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Dynamic;
+using System.Data.SQLite;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -66,6 +67,8 @@ namespace Budget
         private string _DirName;
         private Categories _categories;
         private Expenses _expenses;
+        private SQLiteConnection _connection;
+
 
         // ====================================================================
         // Properties
@@ -159,7 +162,7 @@ namespace Budget
         public HomeBudget(String categoriesDBFile, String expensesDBFile, bool newCategoriesDB = false, bool newExpensesDB = false)
         {
             // if database exists, and user doesn't want a new database, open existing DB
-            if(! newCategoriesDB && File.Exists(categoriesDBFile))
+            if (!newCategoriesDB && File.Exists(categoriesDBFile))
             {
                 Database.existingDatabase(categoriesDBFile);
             }
@@ -420,40 +423,80 @@ namespace Budget
             Start = Start ?? new DateTime(1900, 1, 1);
             End = End ?? new DateTime(2500, 1, 1);
 
-            var query =  from c in _categories.List()
-                        join e in _expenses.List() on c.Id equals e.Category
-                        where e.Date >= Start && e.Date <= End
-                        select new { CatId = c.Id, ExpId = e.Id, e.Date, Category = c.Description, e.Description, e.Amount };
+            using SQLiteCommand command = new SQLiteCommand(_connection);
+            StringBuilder stm = new StringBuilder();
+            stm.Append("Select e.Id as 'ExpenseId', c.Id as 'CategoryId', " +
+                            "e.Date, e.Amount, e.Description as 'ExpenseDescription', " +
+                            "c.Description as 'CategoryDescription " +
+                            "FROM expenses as e " +
+                            "INNER JOIN categories as c " +
+                            "ON e.CategoryId=c.Id " +
+                            $"WHERE e.Date>={Start} AND e.Date<={End} ");
 
-            // ------------------------------------------------------------------------
-            // create a BudgetItem list with totals,
-            // ------------------------------------------------------------------------
-            List<BudgetItem> items = new List<BudgetItem>();
-            Double total = 0;
-
-            foreach (var e in query.OrderBy(q => q.Date))
+            if (FilterFlag)
             {
-                // filter out unwanted categories if filter flag is on
-                if (FilterFlag && CategoryID != e.CatId)
-                {
-                    continue;
-                }
+                stm.Append($"AND c.Id={CategoryID}");
+            }
 
-                // keep track of running totals
-                total = total + e.Amount;
-                items.Add(new BudgetItem
+            stm.Append(";");
+
+            using var cmd = new SQLiteCommand(stm.ToString(), _connection);
+            using SQLiteDataReader reader = cmd.ExecuteReader();
+
+            List<BudgetItem> budgetItemList = new List<BudgetItem>();
+            double balance = 0;
+            while (reader.Read())
+            {
+
+                balance += reader.GetDouble(3);
+                budgetItemList.Add(new BudgetItem
                 {
-                    CategoryID = e.CatId,
-                    ExpenseID = e.ExpId,
-                    ShortDescription = e.Description,
-                    Date = e.Date,
-                    Amount = e.Amount,
-                    Category = e.Category,
-                    Balance = total
+                    ExpenseID = reader.GetInt32(0),
+                    CategoryID = reader.GetInt32(1),
+                    Date = reader.GetDateTime(2),
+                    Amount = reader.GetDouble(3),
+                    ShortDescription = reader.GetString(4),
+                    Category = reader.GetString(5),
+                    Balance = balance
                 });
             }
 
-            return items;
+            return budgetItemList;
+
+            //var query =  from c in _categories.List()
+            //            join e in _expenses.List() on c.Id equals e.Category
+            //            where e.Date >= Start && e.Date <= End
+            //            select new { CatId = c.Id, ExpId = e.Id, e.Date, Category = c.Description, e.Description, e.Amount };
+
+            //// ------------------------------------------------------------------------
+            //// create a BudgetItem list with totals,
+            //// ------------------------------------------------------------------------
+            //List<BudgetItem> items = new List<BudgetItem>();
+            //Double total = 0;
+
+            //foreach (var e in query.OrderBy(q => q.Date))
+            //{
+            //    // filter out unwanted categories if filter flag is on
+            //    if (FilterFlag && CategoryID != e.CatId)
+            //    {
+            //        continue;
+            //    }
+
+            //    // keep track of running totals
+            //    total = total + e.Amount;
+            //    items.Add(new BudgetItem
+            //    {
+            //        CategoryID = e.CatId,
+            //        ExpenseID = e.ExpId,
+            //        ShortDescription = e.Description,
+            //        Date = e.Date,
+            //        Amount = e.Amount,
+            //        Category = e.Category,
+            //        Balance = total
+            //    });
+            //}
+
+            //return items;
         }
 
         // ============================================================================
@@ -1003,7 +1046,7 @@ namespace Budget
         /// Credit Card         :    $65.00
         /// </code>
         /// </example>
-        public List<Dictionary<string,object>> GetBudgetDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
+        public List<Dictionary<string, object>> GetBudgetDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // -----------------------------------------------------------------------
             // get all items by month 
@@ -1043,7 +1086,7 @@ namespace Budget
                     }
 
                     // add new properties and values to our record object
-                    record["details:" + CategoryGroup.Key] =  details;
+                    record["details:" + CategoryGroup.Key] = details;
                     record[CategoryGroup.Key] = total;
 
                     // keep track of totals for each category

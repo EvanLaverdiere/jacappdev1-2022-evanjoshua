@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
 using System.Data.SQLite;
 
 // ============================================================================
@@ -16,7 +15,7 @@ namespace Budget
     // ====================================================================
     // CLASS: expenses
     //        - A collection of expense items,
-    //        - Read / write to file
+    //        - Read / write to database
     //        - etc
     // ====================================================================
     /// <summary>
@@ -27,7 +26,9 @@ namespace Budget
     /// <example>
     /// In this example, an empty Expenses object is created using the default constructor.
     /// <code>
-    /// Expenses expenses = new Expenses();
+    /// <![CDATA[
+    /// Expenses expenses = new Expenses(connection);
+    /// ]]>
     /// </code>
     /// </example>
     public class Expenses
@@ -36,7 +37,7 @@ namespace Budget
 
         #region Constructors
         /// <summary>
-        /// Creates a connection to the database of expenses. odifications made to the Expenses object
+        /// Creates a connection to the database of expenses. Modifications made to the Expenses object
         /// reflect directly on the Expenses database.
         /// </summary>
         /// <param name="conn">connection to be used to communicate with the database</param>
@@ -55,6 +56,18 @@ namespace Budget
         public Expenses(SQLiteConnection conn)
         {
             _connection = conn;
+        }
+
+        /// <summary>
+        /// Creates a connection to the database of expenses on a new database if <paramref name="newDb"/> is true.
+        /// Modifications made to the Expenses object reflect directly on the Expenses database.
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <param name="newDb"></param>
+        public Expenses(SQLiteConnection conn, bool newDb) : this(conn)
+        {
+            if (newDb)
+                EmptyDatabase();
         }
         #endregion
 
@@ -101,7 +114,7 @@ namespace Budget
 
         /// <summary>
         /// Creates a new <see cref="Expense"/> object based on passed values and adds it to the 
-        /// Expenses databaselist. An ID number is assigned automatically by the database.
+        /// Expenses database. An ID number is assigned automatically by the database.
         /// </summary>
         /// <param name="date">The date on which the expense occurred.</param>
         /// <param name="category">A number representing category of the expense.</param>
@@ -155,26 +168,7 @@ namespace Budget
 
         }
 
-        /// <summary>
-        /// Deletes all Expenses in the database
-        /// </summary>
-        /// <example>
-        /// In this example, the database is cleared before adding back all the elements after modifictionan 
-        /// <code>
-        /// <![CDATA[
-        /// Expenses expenses = new Expenses(connection);
-        /// 
-        /// expenses.Add(DateTime.Now, 1, 450, "Electrician Consultation");
-        /// List&lt;Expense> list = expenses.List();
-        /// expense.EmptyDatabase();
-        /// 
-        /// foreach(Expense exp in list)
-        ///     exp.amount = -exp.amount;
-        ///     expense.Add(exp);
-        /// ]]>
-        /// </code>
-        /// </example>
-        public void EmptyDatabase()
+        private void EmptyDatabase()
         {
             using SQLiteCommand cmd = new SQLiteCommand(_connection);
             cmd.CommandText = "DELETE FROM expenses";
