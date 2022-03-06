@@ -832,9 +832,21 @@ namespace Budget
             List<String> categoryNames = new List<String>();
             List<int> categoryIDs = new List<int>();
 
-            string stm = "SELECT DISTINCT c.Description, c.Id from categories c inner join expenses e on c.Id = e.CategoryId order by c.Description ASC";
+            //string stm = "SELECT DISTINCT c.Description, c.Id from categories c inner join expenses e on c.Id = e.CategoryId order by c.Description ASC";
 
-            using var cmd = new SQLiteCommand(stm, _connection);
+            StringBuilder stm = new StringBuilder();
+
+            stm.Append("SELECT DISTINCT c.Description, c.Id from categories c" +
+                " INNER JOIN expenses e ON c.Id = e.CategoryId" +
+                $" WHERE e.Date >= {Start} AND e.Date <= {End}");
+            // if the user wants to filter the results by category, tweak the command.
+            if (FilterFlag)
+            {
+                stm.Append($" AND c.Id = {CategoryID}");
+            }
+            stm.Append(" order by c.Description ASC;");
+
+            using var cmd = new SQLiteCommand(stm.ToString(), _connection);
             using SQLiteDataReader reader = cmd.ExecuteReader();
 
             while (reader.Read())
