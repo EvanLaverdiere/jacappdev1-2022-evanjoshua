@@ -192,6 +192,9 @@ namespace Budget
 
             // create the category object
             _categories = new Categories(Database.dbConnection, newExpensesDB);
+
+            // assign a value to the connection property so we can properly execute queries.
+            _connection = Database.dbConnection;
         }
 
         #region OpenNewAndSave
@@ -832,13 +835,18 @@ namespace Budget
             List<String> categoryNames = new List<String>();
             List<int> categoryIDs = new List<int>();
 
+            // Ensure Start and End have a fixed value if null. convert them into strings to avoid exceptions.
+            Start = Start ?? new DateTime(1900, 1, 1);
+            string startString = Start.ToString();
+            End = End ?? new DateTime(2500, 1, 1);
+
             //string stm = "SELECT DISTINCT c.Description, c.Id from categories c inner join expenses e on c.Id = e.CategoryId order by c.Description ASC";
 
             StringBuilder stm = new StringBuilder();
 
             stm.Append("SELECT DISTINCT c.Description, c.Id from categories c" +
                 " INNER JOIN expenses e ON c.Id = e.CategoryId" +
-                $" WHERE e.Date >= {Start} AND e.Date <= {End}");
+                $" WHERE e.Date >= {startString} AND e.Date <= {End}");
             // if the user wants to filter the results by category, tweak the command.
             if (FilterFlag)
             {
