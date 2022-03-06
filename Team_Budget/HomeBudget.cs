@@ -430,7 +430,7 @@ namespace Budget
             StringBuilder stm = new StringBuilder();
             stm.Append("Select e.Id as 'ExpenseId', c.Id as 'CategoryId', " +
                             "e.Date, e.Amount, e.Description as 'ExpenseDescription', " +
-                            "c.Description as CategoryDescription " +
+                            "c.Description as 'CategoryDescription' " +
                             "FROM expenses as e " +
                             "INNER JOIN categories as c " +
                             "ON e.CategoryId=c.Id " +
