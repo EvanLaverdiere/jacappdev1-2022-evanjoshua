@@ -837,8 +837,9 @@ namespace Budget
 
             // Ensure Start and End have a fixed value if null. convert them into strings to avoid exceptions.
             Start = Start ?? new DateTime(1900, 1, 1);
-            string startString = Start.ToString();
+            string startString = Start.Value.ToString("yyyy-MM-dd");
             End = End ?? new DateTime(2500, 1, 1);
+            string endString = End.Value.ToString("yyyy-MM-dd");
 
             //string stm = "SELECT DISTINCT c.Description, c.Id from categories c inner join expenses e on c.Id = e.CategoryId order by c.Description ASC";
 
@@ -846,7 +847,7 @@ namespace Budget
 
             stm.Append("SELECT DISTINCT c.Description, c.Id from categories c" +
                 " INNER JOIN expenses e ON c.Id = e.CategoryId" +
-                $" WHERE e.Date >= {startString} AND e.Date <= {End}");
+                $" WHERE e.Date >= \'{startString}\' AND e.Date <= \'{endString}\'");
             // if the user wants to filter the results by category, tweak the command.
             if (FilterFlag)
             {
