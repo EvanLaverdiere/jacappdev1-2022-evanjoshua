@@ -59,6 +59,7 @@ namespace Budget
         #endregion
 
         #region Properties
+        #endregion
         #region Add
         /// <summary>
         /// Adds a passed <see cref="Expense"/> object to the expenses database.
@@ -246,7 +247,6 @@ namespace Budget
             cmd.Prepare();
             cmd.ExecuteNonQuery();
         }
-        #endregion
         #endregion
     }
 }
