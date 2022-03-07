@@ -69,12 +69,7 @@ namespace Budget
         private Expenses _expenses;
         private SQLiteConnection _connection;
 
-
-        // ====================================================================
-        // Properties
-        // ===================================================================
-
-        // Properties (location of files etc)
+        #region Properties
         /// <summary>
         /// Gets the name of the file containing the budget.
         /// </summary>
@@ -100,8 +95,6 @@ namespace Budget
                 }
             }
         }
-
-        // Properties (categories and expenses object)
         /// <summary>
         /// Gets a Categories object.
         /// </summary>
@@ -110,203 +103,42 @@ namespace Budget
         /// Gets an Expenses object.
         /// </summary>
         public Expenses expenses { get { return _expenses; } }
+        #endregion
 
-        // -------------------------------------------------------------------
-        // Constructor (new... default categories, no expenses)
-        // -------------------------------------------------------------------
+        #region Constructor
         /// <summary>
-        /// Creates a new HomeBudget with a list of default <see cref="Categories">categories</see> and a blank list of <see cref="Expenses">expenses</see>.
+        /// Creates a HomeBudget object with its categories list and expenses lists. 
+        /// A new database is created if the database is to be created.
         /// </summary>
-        /// <example>
-        /// <code>
-        /// HomeBudget homeBudget = new HomeBudget();
-        /// </code>
-        /// </example>
-        //public HomeBudget()
-        //{
-        //    _categories = new Categories();
-        //    _expenses = new Expenses();
-        //}
-
-        // -------------------------------------------------------------------
-        // Constructor (existing budget ... must specify file)
-        // -------------------------------------------------------------------
-        /// <summary>
-        /// Creates a HomeBudget by reading from a specified file.
-        /// </summary>
-        /// <param name="budgetFileName">The file containing the desired budget.</param>
-        /// <example>
-        /// In this example, a new HomeBudget is initialized using a budget file. The declaration is contained within a try-catch block in case the program has any difficulties with reading this file, or in reading the files that it references.
-        /// <code>
-        /// String budgetFile = "./test.budget";
-        /// try
-        /// {
-        ///     HomeBudget homeBudget = new HomeBudget(budgetFile);
-        /// }
-        /// catch(Exception e)
-        /// {
-        ///     Console.WriteLine("ERROR READING FILE(S): " + e.Message);
-        /// }
-        /// </code>
-        /// </example>
-        /// <exception cref="Exception">Thrown when the method fails to read the passed file or its referenced files.</exception>
-        /// <exception cref="FileNotFoundException">Thrown when the passed file does not exist, or when its referenced files do not exist.</exception>
-        /// <seealso cref="ReadFromFile(string)"/>
-        //public HomeBudget(String budgetFileName)
-        //{
-        //    _categories = new Categories();
-        //    _expenses = new Expenses();
-        //    ReadFromFile(budgetFileName);
-        //}
-
-        public HomeBudget(String categoriesDBFile, String expensesDBFile, bool newCategoriesDB = false, bool newExpensesDB = false)
+        /// <param name="HomeBudgetDBFile">the location of the database to use or create</param>
+        /// <param name="newDatabase">the flag that indicates if a new database is to be created</param>
+        public HomeBudget(String HomeBudgetDBFile, bool newDatabase = false)
         {
             // if database exists, and user doesn't want a new database, open existing DB
-            if (!newCategoriesDB && File.Exists(categoriesDBFile))
+            if (!newDatabase && File.Exists(HomeBudgetDBFile))
             {
-                Database.existingDatabase(categoriesDBFile);
+                Database.existingDatabase(HomeBudgetDBFile);
             }
 
             // file did not exist, or user wants a new database, so open NEW DB
             else
             {
-                Database.newDatabase(categoriesDBFile);
-                newCategoriesDB = true;
+                Database.newDatabase(HomeBudgetDBFile);
+                newDatabase = true;
             }
 
-            // create the category object
-            _categories = new Categories(Database.dbConnection, newCategoriesDB);
+            // create the categories object
+            _categories = new Categories(Database.dbConnection, newDatabase);
 
-            // if database exists, and user doesn't want a new database, open existing DB
-            if (!newCategoriesDB && File.Exists(expensesDBFile))
-            {
-                Database.existingDatabase(expensesDBFile);
-            }
+            // create the expenses object
+            _categories = new Categories(Database.dbConnection, newDatabase);
 
-            // file did not exist, or user wants a new database, so open NEW DB
-            else
-            {
-                Database.newDatabase(expensesDBFile);
-                newExpensesDB = true;
-            }
-
-            // create the category object
-            _categories = new Categories(Database.dbConnection, newExpensesDB);
+            // assign a value to the connection property so we can properly execute queries.
+            _connection = Database.dbConnection;
         }
+        #endregion
 
-        #region OpenNewAndSave
-        // ---------------------------------------------------------------
-        // Read
-        // Throws Exception if any problem reading this file
-        // ---------------------------------------------------------------
-        /// <summary>
-        /// Reads a passed file in order to load an existing HomeBudget.
-        /// </summary>
-        /// <param name="budgetFileName">A file containing the names of files where the budget's categories and expenses are stored.</param>
-        /// <exception cref="Exception">Thrown when the method fails to read the passed file or its referenced files.</exception>
-        /// <exception cref="FileNotFoundException">Thrown when the passed file does not exist, or when its referenced files do not exist.</exception>
-        /// <example>
-        /// 
-        /// </example>
-        public void ReadFromFile(String budgetFileName)
-        {
-            // ---------------------------------------------------------------
-            // read the budget file and process
-            // ---------------------------------------------------------------
-            try
-            {
-                // get filepath name (throws exception if it doesn't exist)
-                budgetFileName = BudgetFiles.VerifyReadFromFileName(budgetFileName/*, ""*/);
-
-                // If file exists, read it
-                string[] filenames = System.IO.File.ReadAllLines(budgetFileName);
-
-                // ----------------------------------------------------------------
-                // Save information about budget file
-                // ----------------------------------------------------------------
-                string folder = Path.GetDirectoryName(budgetFileName);
-                _FileName = Path.GetFileName(budgetFileName);
-
-                // read the expenses and categories from their respective files
-                //_categories.ReadFromFile(folder + "\\" + filenames[0]);
-                //_expenses.ReadFromFile(folder + "\\" + filenames[1]);
-
-                // Save information about budget file
-                _DirName = Path.GetDirectoryName(budgetFileName);
-                _FileName = Path.GetFileName(budgetFileName);
-
-            }
-
-            // ----------------------------------------------------------------
-            // throw new exception if we cannot get the info that we need
-            // ----------------------------------------------------------------
-            catch (Exception e)
-            {
-                throw new Exception("Could not read budget info: \n" + e.Message);
-            }
-
-        }
-
-        // ====================================================================
-        // save to a file
-        // saves the following files:
-        //  filepath_expenses.exps  # expenses file
-        //  filepath_categories.cats # categories files
-        //  filepath # a file containing the names of the expenses and categories files.
-        //  Throws exception if we cannot write to that file (ex: invalid dir, wrong permissions)
-        // ====================================================================
-        /// <summary>
-        /// Saves the budget to a series of three files: one for the expenses, one for the categories, and a main file which contains references to the two aforementioned files.
-        /// </summary>
-        /// <param name="filepath">The name of the file which will contain the names of the expenses and categories files.</param>
-        /// <exception cref="Exception">Thrown when directory of the passed file does not exist, when the passed file is read-only, or when either of the expenses or categories files are read-only.</exception>
-        public void SaveToFile(String filepath)
-        {
-
-            // ---------------------------------------------------------------
-            // just in case filepath doesn't exist, reset path info
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
-
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if we can't write to the file)
-            // ---------------------------------------------------------------
-            filepath = BudgetFiles.VerifyWriteToFileName(filepath/*, ""*/);
-
-            String path = Path.GetDirectoryName(Path.GetFullPath(filepath));
-            String file = Path.GetFileNameWithoutExtension(filepath);
-            String ext = Path.GetExtension(filepath);
-
-            // ---------------------------------------------------------------
-            // construct file names for expenses and categories
-            // ---------------------------------------------------------------
-            String expensepath = path + "\\" + file + "_expenses" + ".exps";
-            String categorypath = path + "\\" + file + "_categories" + ".cats";
-
-            // ---------------------------------------------------------------
-            // save the expenses and budgets into their own files
-            // ---------------------------------------------------------------
-            //_expenses.SaveToFile(expensepath);
-            //_categories.SaveToFile(categorypath);
-
-            // ---------------------------------------------------------------
-            // save filenames of expenses and categories to budget file
-            // ---------------------------------------------------------------
-            string[] files = { Path.GetFileName(categorypath), Path.GetFileName(expensepath) };
-            System.IO.File.WriteAllLines(filepath, files);
-
-            // ----------------------------------------------------------------
-            // save filename info for later use
-            // ----------------------------------------------------------------
-            _DirName = path;
-            _FileName = Path.GetFileName(filepath);
-        }
-        #endregion OpenNewAndSave
-
-        #region GetList
-
-
+        #region Methods
 
         // ============================================================================
         // Get all expenses list
@@ -414,24 +246,26 @@ namespace Budget
         /// 2020/Feb/25 Hat                     $25.00      $65.00
         /// </code>
         /// </example>
-
         public List<BudgetItem> GetBudgetItems(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // ------------------------------------------------------------------------
             // return joined list within time frame
             // ------------------------------------------------------------------------
             Start = Start ?? new DateTime(1900, 1, 1);
+            string startString = Start.Value.ToString("yyyy-MM-dd");
             End = End ?? new DateTime(2500, 1, 1);
+            string endString = End.Value.ToString("yyyy-MM-dd");
+
 
             using SQLiteCommand command = new SQLiteCommand(_connection);
             StringBuilder stm = new StringBuilder();
             stm.Append("Select e.Id as 'ExpenseId', c.Id as 'CategoryId', " +
                             "e.Date, e.Amount, e.Description as 'ExpenseDescription', " +
-                            "c.Description as 'CategoryDescription " +
+                            "c.Description as 'CategoryDescription' " +
                             "FROM expenses as e " +
                             "INNER JOIN categories as c " +
                             "ON e.CategoryId=c.Id " +
-                            $"WHERE e.Date>={Start} AND e.Date<={End} ");
+                            $"WHERE e.Date>={startString} AND e.Date<={endString} ");
 
             if (FilterFlag)
             {
@@ -462,41 +296,6 @@ namespace Budget
             }
 
             return budgetItemList;
-
-            //var query =  from c in _categories.List()
-            //            join e in _expenses.List() on c.Id equals e.Category
-            //            where e.Date >= Start && e.Date <= End
-            //            select new { CatId = c.Id, ExpId = e.Id, e.Date, Category = c.Description, e.Description, e.Amount };
-
-            //// ------------------------------------------------------------------------
-            //// create a BudgetItem list with totals,
-            //// ------------------------------------------------------------------------
-            //List<BudgetItem> items = new List<BudgetItem>();
-            //Double total = 0;
-
-            //foreach (var e in query.OrderBy(q => q.Date))
-            //{
-            //    // filter out unwanted categories if filter flag is on
-            //    if (FilterFlag && CategoryID != e.CatId)
-            //    {
-            //        continue;
-            //    }
-
-            //    // keep track of running totals
-            //    total = total + e.Amount;
-            //    items.Add(new BudgetItem
-            //    {
-            //        CategoryID = e.CatId,
-            //        ExpenseID = e.ExpId,
-            //        ShortDescription = e.Description,
-            //        Date = e.Date,
-            //        Amount = e.Amount,
-            //        Category = e.Category,
-            //        Balance = total
-            //    });
-            //}
-
-            //return items;
         }
 
         // ============================================================================
@@ -656,7 +455,7 @@ namespace Budget
 
             int count = 0;
 
-            while(reader.Read())
+            while (reader.Read())
             {
                 years.Add(reader.GetInt32(0));
                 months.Add(reader.GetInt32(1));
@@ -668,11 +467,11 @@ namespace Budget
             for (int i = 0; i < count; i++)
             {
                 List<BudgetItem> details = new List<BudgetItem>();
-                
+
                 Double total = 0;
                 int startDate = 1;
                 int endDate = DateTime.DaysInMonth(years[i], months[i]);
-                
+
                 List<BudgetItem> items = GetBudgetItems(new DateTime(years[i], months[i], startDate), new DateTime(years[i], months[i], endDate), FilterFlag, CategoryID);
 
                 foreach (BudgetItem item in items)
@@ -816,35 +615,62 @@ namespace Budget
         /// </example>
         public List<BudgetItemsByCategory> GeBudgetItemsByCategory(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
-            // -----------------------------------------------------------------------
-            // get all items first
-            // -----------------------------------------------------------------------
-            List<BudgetItem> items = GetBudgetItems(Start, End, FilterFlag, CategoryID);
+            // First, get all categories that have associated expenses within the budget.
+            List<String> categoryNames = new List<String>();
+            List<int> categoryIDs = new List<int>();
 
-            // -----------------------------------------------------------------------
-            // Group by Category
-            // -----------------------------------------------------------------------
-            var GroupedByCategory = items.GroupBy(c => c.Category);
+            // Ensure Start and End have a fixed value if null. convert them into strings to avoid exceptions.
+            Start = Start ?? new DateTime(1900, 1, 1);
+            string startString = Start.Value.ToString("yyyy-MM-dd");
+            End = End ?? new DateTime(2500, 1, 1);
+            string endString = End.Value.ToString("yyyy-MM-dd");
 
-            // -----------------------------------------------------------------------
-            // create new list
-            // -----------------------------------------------------------------------
-            var summary = new List<BudgetItemsByCategory>();
-            foreach (var CategoryGroup in GroupedByCategory.OrderBy(g => g.Key))
+            //string stm = "SELECT DISTINCT c.Description, c.Id from categories c inner join expenses e on c.Id = e.CategoryId order by c.Description ASC";
+
+            StringBuilder stm = new StringBuilder();
+
+            stm.Append("SELECT DISTINCT c.Description, c.Id from categories c" +
+                " INNER JOIN expenses e ON c.Id = e.CategoryId" +
+                $" WHERE e.Date >= \'{startString}\' AND e.Date <= \'{endString}\'");
+            // if the user wants to filter the results by category, tweak the command.
+            if (FilterFlag)
             {
-                // calculate total for this category, and create list of details
+                stm.Append($" AND c.Id = {CategoryID}");
+            }
+            stm.Append(" order by c.Description ASC;");
+
+            using var cmd = new SQLiteCommand(stm.ToString(), _connection);
+            using SQLiteDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                string cat = reader.GetString(0);
+                categoryNames.Add(cat);
+
+                int id = reader.GetInt32(1);
+                categoryIDs.Add(id);
+            }
+
+            // create list of BudgetItemsByCategory.
+            var summary = new List<BudgetItemsByCategory>();
+
+            // Cycle through each category in the budget.
+            for (int i = 0; i < categoryIDs.Count; i++)
+            {
+                // Get list of all BudgetItems belonging to this category.
+                List<BudgetItem> details = GetBudgetItems(Start, End, true, categoryIDs[i]);
+
+                // Calculate total balance for this category.
                 double total = 0;
-                var details = new List<BudgetItem>();
-                foreach (var item in CategoryGroup)
+                foreach (BudgetItem item in details)
                 {
-                    total = total + item.Amount;
-                    details.Add(item);
+                    total += item.Amount;
                 }
 
-                // Add new BudgetItemsByCategory to our list
+                // Add new BudgetItemsByCategory to the list.
                 summary.Add(new BudgetItemsByCategory
                 {
-                    Category = CategoryGroup.Key,
+                    Category = categoryNames[i],
                     Details = details,
                     Total = total
                 });
@@ -852,8 +678,6 @@ namespace Budget
 
             return summary;
         }
-
-
 
         // ============================================================================
         // Group all expenses by category and Month
@@ -1146,11 +970,6 @@ namespace Budget
 
             return summary;
         }
-
-
-
-
-        #endregion GetList
-
+        #endregion
     }
 }
