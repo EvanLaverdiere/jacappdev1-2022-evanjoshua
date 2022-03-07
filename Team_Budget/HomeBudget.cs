@@ -641,7 +641,7 @@ namespace Budget
 
             StringBuilder stm = new StringBuilder();
 
-            stm.Append("SELECT strftime('%y', expenses.Date) as 'Year', strftime('%m', expenses.Date) as 'Month' FROM expenses INNER JOIN categories on expenses.CategoryId = expenses.Id WHERE expenses.Date >= " + startString.ToString() + "AND expenses.Date <= " + endString.ToString());
+            stm.Append("SELECT DISTINCT strftime('%Y', expenses.Date) as 'Year', strftime('%m', expenses.Date) as 'Month' FROM expenses INNER JOIN categories on expenses.CategoryId = expenses.Id WHERE expenses.Date >= " + startString.ToString() + "AND expenses.Date <= " + endString.ToString());
 
             if (FilterFlag == true)
             {
@@ -656,7 +656,7 @@ namespace Budget
 
             int count = 0;
 
-            while (reader.Read())
+            while(reader.Read())
             {
                 years.Add(reader.GetInt32(0));
                 months.Add(reader.GetInt32(1));
