@@ -130,8 +130,10 @@ namespace Budget
             // create the categories object
             _categories = new Categories(Database.dbConnection, newDatabase);
 
+
             // create the expenses object
             _categories = new Categories(Database.dbConnection, newDatabase);
+
 
             // assign a value to the connection property so we can properly execute queries.
             _connection = Database.dbConnection;
@@ -613,7 +615,7 @@ namespace Budget
         /// CATEGORY SUBTOTAL:   $65.00
         /// </code>
         /// </example>
-        public List<BudgetItemsByCategory> GeBudgetItemsByCategory(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
+        public List<BudgetItemsByCategory> GetBudgetItemsByCategory(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // First, get all categories that have associated expenses within the budget.
             List<String> categoryNames = new List<String>();
