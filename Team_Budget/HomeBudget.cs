@@ -615,7 +615,7 @@ namespace Budget
         /// CATEGORY SUBTOTAL:   $65.00
         /// </code>
         /// </example>
-        public List<BudgetItemsByCategory> GeBudgetItemsByCategory(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
+        public List<BudgetItemsByCategory> GetBudgetItemsByCategory(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // First, get all categories that have associated expenses within the budget.
             List<String> categoryNames = new List<String>();
