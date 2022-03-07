@@ -634,41 +634,65 @@ namespace Budget
         /// </example>
         public List<BudgetItemsByMonth> GetBudgetItemsByMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
-            // -----------------------------------------------------------------------
-            // get all items first
-            // -----------------------------------------------------------------------
-            List<BudgetItem> items = GetBudgetItems(Start, End, FilterFlag, CategoryID);
+            Start = Start ?? new DateTime(1900, 1, 1);
+            string startString = Start.Value.ToString("yyyy-MM-dd");
+            End = End ?? new DateTime(2500, 1, 1);
+            string endString = End.Value.ToString("yyyy-MM-dd");
 
-            // -----------------------------------------------------------------------
-            // Group by year/month
-            // -----------------------------------------------------------------------
-            var GroupedByMonth = items.GroupBy(c => c.Date.Year.ToString("D4") + "/" + c.Date.Month.ToString("D2"));
+            List<int> years = new List<int>();
+            List<int> months = new List<int>();
 
-            // -----------------------------------------------------------------------
-            // create new list
-            // -----------------------------------------------------------------------
-            var summary = new List<BudgetItemsByMonth>();
-            foreach (var MonthGroup in GroupedByMonth)
+            StringBuilder stm = new StringBuilder();
+
+            stm.Append("SELECT DISTINCT strftime('%Y', expenses.Date) as 'Year', strftime('%m', expenses.Date) as 'Month' FROM expenses INNER JOIN categories on expenses.CategoryId = expenses.Id WHERE expenses.Date >= " + startString.ToString() + "AND expenses.Date <= " + endString.ToString());
+
+            if (FilterFlag == true)
             {
-                // calculate total for this month, and create list of details
-                double total = 0;
-                var details = new List<BudgetItem>();
-                foreach (var item in MonthGroup)
+                stm.Append(" AND categories.Id = " + CategoryID);
+            }
+
+            stm.Append(" GROUP BY 'Year', 'Month';");
+
+            using var cmd = new SQLiteCommand(stm.ToString(), _connection);
+
+            using SQLiteDataReader reader = cmd.ExecuteReader();
+
+            int count = 0;
+
+            while(reader.Read())
+            {
+                years.Add(reader.GetInt32(0));
+                months.Add(reader.GetInt32(1));
+                count++;
+            }
+
+            List<BudgetItemsByMonth> itemsByMonth = new List<BudgetItemsByMonth>();
+
+            for (int i = 0; i < count; i++)
+            {
+                List<BudgetItem> details = new List<BudgetItem>();
+                
+                Double total = 0;
+                int startDate = 1;
+                int endDate = DateTime.DaysInMonth(years[i], months[i]);
+                
+                List<BudgetItem> items = GetBudgetItems(new DateTime(years[i], months[i], startDate), new DateTime(years[i], months[i], endDate), FilterFlag, CategoryID);
+
+                foreach (BudgetItem item in items)
                 {
-                    total = total + item.Amount;
+                    total += item.Amount;
                     details.Add(item);
                 }
 
-                // Add new BudgetItemsByMonth to our list
-                summary.Add(new BudgetItemsByMonth
+                itemsByMonth.Add(new BudgetItemsByMonth
                 {
-                    Month = MonthGroup.Key,
+                    Month = new DateTime(years[i], months[i], startDate).ToString("MMMM"),
                     Details = details,
                     Total = total
                 });
             }
 
-            return summary;
+            return itemsByMonth;
         }
 
         // ============================================================================
