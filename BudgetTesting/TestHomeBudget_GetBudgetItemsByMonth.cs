@@ -25,7 +25,7 @@ namespace BudgetCodeTests
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
-            HomeBudget homeBudget = new HomeBudget(messyDB, inFile, false);
+            HomeBudget homeBudget = new HomeBudget(messyDB, false);
             int maxRecords = TestConstants.budgetItemsByMonth_MaxRecords;
             BudgetItemsByMonth firstRecord = TestConstants.budgetItemsByMonth_FirstRecord;
 
@@ -62,7 +62,7 @@ namespace BudgetCodeTests
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
-            HomeBudget homeBudget = new HomeBudget(messyDB, inFile, false);
+            HomeBudget homeBudget = new HomeBudget(messyDB, false);
             int maxRecords = TestConstants.budgetItemsByMonth_FilteredByCat9_number;
             BudgetItemsByMonth firstRecord = TestConstants.budgetItemsByMonth_FirstRecord_FilteredCat9;
 
@@ -98,7 +98,7 @@ namespace BudgetCodeTests
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
-            HomeBudget homeBudget = new HomeBudget(messyDB, inFile, false);
+            HomeBudget homeBudget = new HomeBudget(messyDB, false);
 
             List<Expense> listExpenses = TestConstants.filteredbyYear2018();
             List<Category> listCategories = homeBudget.categories.List();
@@ -138,7 +138,7 @@ namespace BudgetCodeTests
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
-            HomeBudget homeBudget = new HomeBudget(messyDB, inFile, false);
+            HomeBudget homeBudget = new HomeBudget(messyDB, false);
 
             List<BudgetItemsByMonth> validBudgetItemsByMonth = TestConstants.getBudgetItemsBy2018_01();
             BudgetItemsByMonth firstRecord = validBudgetItemsByMonth[0];
