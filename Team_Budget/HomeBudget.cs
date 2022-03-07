@@ -192,6 +192,9 @@ namespace Budget
 
             // create the category object
             _categories = new Categories(Database.dbConnection, newExpensesDB);
+
+            // assign a value to the connection property so we can properly execute queries.
+            _connection = Database.dbConnection;
         }
 
         #region OpenNewAndSave
@@ -427,7 +430,7 @@ namespace Budget
             StringBuilder stm = new StringBuilder();
             stm.Append("Select e.Id as 'ExpenseId', c.Id as 'CategoryId', " +
                             "e.Date, e.Amount, e.Description as 'ExpenseDescription', " +
-                            "c.Description as 'CategoryDescription " +
+                            "c.Description as 'CategoryDescription' " +
                             "FROM expenses as e " +
                             "INNER JOIN categories as c " +
                             "ON e.CategoryId=c.Id " +
@@ -792,35 +795,98 @@ namespace Budget
         /// </example>
         public List<BudgetItemsByCategory> GeBudgetItemsByCategory(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
-            // -----------------------------------------------------------------------
-            // get all items first
-            // -----------------------------------------------------------------------
-            List<BudgetItem> items = GetBudgetItems(Start, End, FilterFlag, CategoryID);
+            //// -----------------------------------------------------------------------
+            //// get all items first
+            //// -----------------------------------------------------------------------
+            //List<BudgetItem> items = GetBudgetItems(Start, End, FilterFlag, CategoryID);
 
-            // -----------------------------------------------------------------------
-            // Group by Category
-            // -----------------------------------------------------------------------
-            var GroupedByCategory = items.GroupBy(c => c.Category);
+            //// -----------------------------------------------------------------------
+            //// Group by Category
+            //// -----------------------------------------------------------------------
+            //var GroupedByCategory = items.GroupBy(c => c.Category);
 
-            // -----------------------------------------------------------------------
-            // create new list
-            // -----------------------------------------------------------------------
-            var summary = new List<BudgetItemsByCategory>();
-            foreach (var CategoryGroup in GroupedByCategory.OrderBy(g => g.Key))
+            //// -----------------------------------------------------------------------
+            //// create new list
+            //// -----------------------------------------------------------------------
+            //var summary = new List<BudgetItemsByCategory>();
+            //foreach (var CategoryGroup in GroupedByCategory.OrderBy(g => g.Key))
+            //{
+            //    // calculate total for this category, and create list of details
+            //    double total = 0;
+            //    var details = new List<BudgetItem>();
+            //    foreach (var item in CategoryGroup)
+            //    {
+            //        total = total + item.Amount;
+            //        details.Add(item);
+            //    }
+
+            //    // Add new BudgetItemsByCategory to our list
+            //    summary.Add(new BudgetItemsByCategory
+            //    {
+            //        Category = CategoryGroup.Key,
+            //        Details = details,
+            //        Total = total
+            //    });
+            //}
+
+            //return summary;
+
+            // First, get all categories that have associated expenses within the budget.
+            List<String> categoryNames = new List<String>();
+            List<int> categoryIDs = new List<int>();
+
+            // Ensure Start and End have a fixed value if null. convert them into strings to avoid exceptions.
+            Start = Start ?? new DateTime(1900, 1, 1);
+            string startString = Start.Value.ToString("yyyy-MM-dd");
+            End = End ?? new DateTime(2500, 1, 1);
+            string endString = End.Value.ToString("yyyy-MM-dd");
+
+            //string stm = "SELECT DISTINCT c.Description, c.Id from categories c inner join expenses e on c.Id = e.CategoryId order by c.Description ASC";
+
+            StringBuilder stm = new StringBuilder();
+
+            stm.Append("SELECT DISTINCT c.Description, c.Id from categories c" +
+                " INNER JOIN expenses e ON c.Id = e.CategoryId" +
+                $" WHERE e.Date >= \'{startString}\' AND e.Date <= \'{endString}\'");
+            // if the user wants to filter the results by category, tweak the command.
+            if (FilterFlag)
             {
-                // calculate total for this category, and create list of details
+                stm.Append($" AND c.Id = {CategoryID}");
+            }
+            stm.Append(" order by c.Description ASC;");
+
+            using var cmd = new SQLiteCommand(stm.ToString(), _connection);
+            using SQLiteDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                string cat = reader.GetString(0);
+                categoryNames.Add(cat);
+
+                int id = reader.GetInt32(1);
+                categoryIDs.Add(id);
+            }
+
+            // create list of BudgetItemsByCategory.
+            var summary = new List<BudgetItemsByCategory>();
+
+            // Cycle through each category in the budget.
+            for(int i = 0; i < categoryIDs.Count; i++)
+            {
+                // Get list of all BudgetItems belonging to this category.
+                List<BudgetItem> details = GetBudgetItems(Start, End, true, categoryIDs[i]);
+
+                // Calculate total balance for this category.
                 double total = 0;
-                var details = new List<BudgetItem>();
-                foreach (var item in CategoryGroup)
+                foreach (BudgetItem item in details)
                 {
-                    total = total + item.Amount;
-                    details.Add(item);
+                    total += item.Amount;
                 }
 
-                // Add new BudgetItemsByCategory to our list
+                // Add new BudgetItemsByCategory to the list.
                 summary.Add(new BudgetItemsByCategory
                 {
-                    Category = CategoryGroup.Key,
+                    Category = categoryNames[i],
                     Details = details,
                     Total = total
                 });

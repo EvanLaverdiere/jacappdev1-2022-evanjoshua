@@ -187,11 +187,6 @@ namespace BudgetCodeTests
         public void ExpensesMethod_Delete()
         {
             // Arrange
-            //String dir = GetSolutionDir();
-            //Expenses expenses = new Expenses();
-            //expenses.ReadFromFile(dir + "\\" + testInputFile);
-            //int IdToDelete = 3;
-
             string folder = TestConstants.GetSolutionDir();
             string goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             string messyDB = $"{folder}\\messy.db";
@@ -220,12 +215,6 @@ namespace BudgetCodeTests
         public void ExpensesMethod_Delete_InvalidIDDoesntCrash()
         {
             // Arrange
-            //String dir = GetSolutionDir();
-            //Expenses expenses = new Expenses();
-            //expenses.ReadFromFile(dir + "\\" + testInputFile);
-            //int IdToDelete = 1006;
-            //int sizeOfList = expenses.List().Count;
-
             String folder = TestConstants.GetSolutionDir();
             string goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             string messyDB = $"{folder}\\messy.db";
