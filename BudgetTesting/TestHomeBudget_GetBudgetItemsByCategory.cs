@@ -29,7 +29,7 @@ namespace BudgetCodeTests
             BudgetItemsByCategory firstRecord = TestConstants.budgetItemsByCategory_FirstRecord;
 
             // Act
-            List<BudgetItemsByCategory> budgetItemsByCategory = homeBudget.GeBudgetItemsByCategory(null, null, false, 9);
+            List<BudgetItemsByCategory> budgetItemsByCategory = homeBudget.GetBudgetItemsByCategory(null, null, false, 9);
             BudgetItemsByCategory firstRecordTest = budgetItemsByCategory[0];
 
             // Assert
@@ -61,12 +61,12 @@ namespace BudgetCodeTests
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
-            HomeBudget homeBudget = new HomeBudget(messyDB, inFile, false);
+            HomeBudget homeBudget = new HomeBudget(messyDB, messyDB, false);
             int maxRecords14 = TestConstants.budgetItemsByCategory14;
             int maxRecords20 = TestConstants.budgetItemsByCategory20;
 
             // Act
-            List<BudgetItemsByMonth> budgetItemsByCategory = homeBudget.GetBudgetItemsByMonth(null, null, true, 14);
+            List<BudgetItemsByCategory> budgetItemsByCategory = homeBudget.GetBudgetItemsByCategory(null, null, true, 14);
 
             // Assert
             Assert.Equal(maxRecords14, budgetItemsByCategory.Count);
@@ -95,7 +95,7 @@ namespace BudgetCodeTests
             BudgetItemsByCategory firstRecord = validBudgetItemsByCategory[0];
 
             // Act
-            List<BudgetItemsByCategory> budgetItemsByCategory = homeBudget.GeBudgetItemsByCategory(new DateTime(2018, 1, 1), new DateTime(2018, 12, 31), true, 9);
+            List<BudgetItemsByCategory> budgetItemsByCategory = homeBudget.GetBudgetItemsByCategory(new DateTime(2018, 1, 1), new DateTime(2018, 12, 31), true, 9);
             BudgetItemsByCategory firstRecordTest = budgetItemsByCategory[0];
 
             // Assert
@@ -134,7 +134,7 @@ namespace BudgetCodeTests
 
 
             // Act
-            List<BudgetItemsByCategory> budgetItemsByCategory = homeBudget.GeBudgetItemsByCategory(new DateTime(2018, 1, 1), new DateTime(2018, 12, 31), false, 9);
+            List<BudgetItemsByCategory> budgetItemsByCategory = homeBudget.GetBudgetItemsByCategory(new DateTime(2018, 1, 1), new DateTime(2018, 12, 31), false, 9);
             BudgetItemsByCategory firstRecordTest = budgetItemsByCategory[0];
 
             // Assert
