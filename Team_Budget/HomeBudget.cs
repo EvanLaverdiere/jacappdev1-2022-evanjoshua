@@ -673,7 +673,7 @@ namespace Budget
                 int startDate = 1;
                 int endDate = DateTime.DaysInMonth(years[i], months[i]);
                 
-                List<BudgetItem> items = GetBudgetItems(new DateTime(years[i], months[i], startDate), new DateTime(years[i], months[i], endDate), FilterFlag, endDate);
+                List<BudgetItem> items = GetBudgetItems(new DateTime(years[i], months[i], startDate), new DateTime(years[i], months[i], endDate), FilterFlag, CategoryID);
 
                 foreach (BudgetItem item in items)
                 {
