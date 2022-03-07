@@ -267,7 +267,7 @@ namespace Budget
                             "FROM expenses as e " +
                             "INNER JOIN categories as c " +
                             "ON e.CategoryId=c.Id " +
-                            $"WHERE e.Date>={startString} AND e.Date<={endString} ");
+                            $"WHERE e.Date>=\'{startString}\' AND e.Date<=\'{endString}\' ");
 
             if (FilterFlag)
             {
