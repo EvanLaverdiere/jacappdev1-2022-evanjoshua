@@ -272,7 +272,7 @@ namespace Budget
                 stm.Append($"AND c.Id={CategoryID}");
             }
 
-            stm.Append(";");
+            stm.Append("ORDER BY e.Date ASC;");
 
             using var cmd = new SQLiteCommand(stm.ToString(), _connection);
             using SQLiteDataReader reader = cmd.ExecuteReader();
