@@ -104,8 +104,8 @@ namespace Budget
                 _categories = new Categories(Database.dbConnection, newDatabase);
 
 
-                // create the expenses object
-                _expenses = new Expenses(Database.dbConnection, newDatabase);
+            // create the expenses object
+            _expenses = new Expenses(Database.dbConnection, newDatabase);
 
 
                 // assign a value to the connection property so we can properly execute queries.
