@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SQLite;
 
 // ============================================================================
@@ -27,27 +24,7 @@ namespace Budget
     {
         private SQLiteConnection _connection;
 
-        // ====================================================================
-        // Properties
-        // ====================================================================
-
-        // ====================================================================
-        // Constructor
-        // ====================================================================
-        /// <summary>
-        /// Creates a collection of <see cref="Category"/> objects with default values.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// Categories categories = new Categories();
-        /// </code>
-        /// </example>
-        /// <seealso cref="SetCategoriesToDefaults"/>
-        //public Categories()
-        //{
-        //    SetCategoriesToDefaults();
-        //}
-
+        #region Constructors
         /// <summary>
         /// Connects to the categories table of an SQLite database. 
         /// If database is new, creates a collection <see cref="Category"/> objects with default values.
@@ -67,10 +44,9 @@ namespace Budget
                 SetCategoriesToDefaults();
             }
         }
+        #endregion
 
-        // ====================================================================
-        // get a specific category from the list where the id is the one specified
-        // ====================================================================
+        #region Method
         /// <summary>
         /// Gets a <see cref="Category"/> object corresponding to the passed ID number.
         /// </summary>
@@ -105,18 +81,6 @@ namespace Budget
 
             return category;
         }
-
-        // ====================================================================
-        // populate categories from a file
-        // if filepath is not specified, read/save in AppData file
-        // Throws System.IO.FileNotFoundException if file does not exist
-        // Throws System.Exception if cannot read the file correctly (parsing XML)
-        // ====================================================================
-
-        // ====================================================================
-        // save to a file
-        // if filepath is not specified, read/save in AppData file
-        // ====================================================================
 
         // ====================================================================
         // set categories to default
@@ -305,7 +269,7 @@ namespace Budget
             cmd.ExecuteNonQuery();
 
         }
-
+        #endregion
     }
 }
 

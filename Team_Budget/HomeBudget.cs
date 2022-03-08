@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using System.Dynamic;
 using System.Data.SQLite;
 
 // ============================================================================
@@ -63,38 +61,11 @@ namespace Budget
     /// <seealso cref="BudgetItemsByMonth"/>
     public class HomeBudget
     {
-        private string _FileName;
-        private string _DirName;
         private Categories _categories;
         private Expenses _expenses;
         private SQLiteConnection _connection;
 
         #region Properties
-        /// <summary>
-        /// Gets the name of the file containing the budget.
-        /// </summary>
-        public String FileName { get { return _FileName; } }
-        /// <summary>
-        /// Gets the directory where the file containing the budget is stored.
-        /// </summary>
-        public String DirName { get { return _DirName; } }
-        /// <summary>
-        /// Gets the full path to the location of the file which contains the budget. If directory or file name have no value, returns null.
-        /// </summary>
-        public String PathName
-        {
-            get
-            {
-                if (_FileName != null && _DirName != null)
-                {
-                    return Path.GetFullPath(_DirName + "\\" + _FileName);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
         /// <summary>
         /// Gets a Categories object.
         /// </summary>
@@ -274,7 +245,7 @@ namespace Budget
                 stm.Append($"AND c.Id={CategoryID}");
             }
 
-            stm.Append(";");
+            stm.Append("ORDER BY e.Date ASC;");
 
             using var cmd = new SQLiteCommand(stm.ToString(), _connection);
             using SQLiteDataReader reader = cmd.ExecuteReader();
@@ -457,7 +428,7 @@ namespace Budget
 
             int count = 0;
 
-            while(reader.Read())
+            while (reader.Read())
             {
                 years.Add(reader.GetString(0));
                 months.Add(reader.GetString(1));
@@ -970,7 +941,6 @@ namespace Budget
                 catch { }
             }
             summary.Add(totalsRecord);
-
 
             return summary;
         }
