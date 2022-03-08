@@ -1,6 +1,7 @@
 ﻿using System;
 using Xunit;
 using System.IO;
+using System.Threading;
 using System.Collections.Generic;
 using Budget;
 
@@ -9,7 +10,8 @@ namespace BudgetCodeTests
     [Collection("Sequential")]
     public class TestHomeBudget_GetBudgetItemsByMonth
     {
-        
+        string testInputFile = TestConstants.testExpensesInputFile;
+
 
         // ========================================================================
         // Get Expenses By Month Method tests
@@ -160,6 +162,63 @@ namespace BudgetCodeTests
 
             }
         }
+
+        [Fact]
+        public void HomeBudgetMethod_GetBudgetItemsByMonth_TimePeriodHasNoData()
+        {
+            // Arrange
+            string folder = TestConstants.GetSolutionDir();
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String messyDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, messyDB, true);
+            HomeBudget homeBudget = new HomeBudget(messyDB, false);
+
+            // Act
+            List<BudgetItemsByMonth> budgetItemsByMonth = homeBudget.GetBudgetItemsByMonth(new DateTime(1999, 1, 1), new DateTime(1999, 12, 31), true, 9);
+
+            // Assert
+            Assert.Empty(budgetItemsByMonth);
+        }
+
+        [Fact]
+        public void HomeBudgetMethod_GetBudgetItemsByMonth_NonExistantCategory()
+        {
+            // Arrange
+            string folder = TestConstants.GetSolutionDir();
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String messyDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, messyDB, true);
+            HomeBudget homeBudget = new HomeBudget(messyDB, false);
+            int category = 123456;
+
+            // Act
+            List<BudgetItemsByMonth> budgetItemsByMonth = homeBudget.GetBudgetItemsByMonth(new DateTime(2018, 1, 1), new DateTime(2018, 12, 31), true, category);
+
+            // Assert
+            Assert.Empty(budgetItemsByMonth);
+        }
+
+        [Fact]
+        public void HomeBudgetMethod_GetBudgetItemsByMonth_Updated()
+        {
+            // Arrange
+            string folder = TestConstants.GetSolutionDir();
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String messyDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, messyDB, true);
+            HomeBudget homeBudget = new HomeBudget(messyDB, false);
+
+            // Act
+            List<BudgetItemsByMonth> budgetItemsByMonth = homeBudget.GetBudgetItemsByMonth(new DateTime(2018, 1, 1), new DateTime(2018, 12, 31), true, 9);
+            int originalCount = budgetItemsByMonth.Count;
+
+            homeBudget.expenses.Add(new DateTime(2018, 6, 1), 9, -800, "Rent (on credit card)");
+
+            budgetItemsByMonth = homeBudget.GetBudgetItemsByMonth(new DateTime(2018, 1, 1), new DateTime(2018, 12, 31), true, 9);
+            int newCount = budgetItemsByMonth.Count;
+
+            // Assert
+            Assert.NotEqual(originalCount, newCount);
+        }
     }
 }
-
