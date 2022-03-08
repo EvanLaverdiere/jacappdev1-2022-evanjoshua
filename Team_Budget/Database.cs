@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SQLite;
-using System.Threading;
 using System.IO;
 
 // ===================================================================
@@ -40,13 +35,16 @@ namespace Budget
         // ===================================================================
         // create and open a new database
         // ===================================================================
+        /// <summary>
+        /// Creates a new Homebudget Database at the location given by <paramref name="filename"/>. Creates a 
+        /// connection to the created database.
+        /// </summary>
+        /// <param name="filename">the location where the database is to be created</param>
         public static void newDatabase(string filename)
         {
-
             // If there was a database open before, close it and release the lock
             CloseDatabaseAndReleaseFile();
 
-            // your code
             //string cs = @"URI=file:C:\Users\Documents\test.db";
             // open a connection to the database specified in passed filename string
             string cs = $"Data Source={filename}; Foreign Keys=1";
@@ -80,12 +78,15 @@ namespace Budget
                 FOREIGN KEY (CategoryId) REFERENCES categories(Id)
             )";
             cmd.ExecuteNonQuery();
-
         }
 
         // ===================================================================
         // open an existing database
         // ===================================================================
+        /// <summary>
+        /// Opens a connection to the existing database given in <paramref name="filename"/>
+        /// </summary>
+        /// <param name="filename">the filepath of the database to be connected to</param>
         public static void existingDatabase(string filename)
         {
             if (File.Exists(filename))
@@ -105,17 +106,20 @@ namespace Budget
 
         }
 
-       // ===================================================================
-       // close existing database, wait for garbage collector to
-       // release the lock before continuing
-       // ===================================================================
+        // ===================================================================
+        // close existing database, wait for garbage collector to
+        // release the lock before continuing
+        // ===================================================================
+        /// <summary>
+        /// Closes the open connection to a database.
+        /// </summary>
         static public void CloseDatabaseAndReleaseFile()
         {
             if (Database.dbConnection != null)
             {
                 // close the database connection
                 Database.dbConnection.Close();
-                
+
 
                 // wait for the garbage collector to remove the
                 // lock from the database file
