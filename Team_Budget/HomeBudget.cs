@@ -103,7 +103,7 @@ namespace Budget
 
 
             // create the expenses object
-            _categories = new Categories(Database.dbConnection, newDatabase);
+            _expenses = new Expenses(Database.dbConnection, newDatabase);
 
 
             // assign a value to the connection property so we can properly execute queries.
@@ -242,7 +242,7 @@ namespace Budget
 
             if (FilterFlag)
             {
-                stm.Append($"AND c.Id={CategoryID}");
+                stm.Append($"AND c.Id={CategoryID} ");
             }
 
             stm.Append("ORDER BY e.Date ASC;");
