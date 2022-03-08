@@ -85,29 +85,36 @@ namespace Budget
         /// <param name="newDatabase">the flag that indicates if a new database is to be created</param>
         public HomeBudget(String HomeBudgetDBFile, bool newDatabase = false)
         {
-            // if database exists, and user doesn't want a new database, open existing DB
-            if (!newDatabase && File.Exists(HomeBudgetDBFile))
+            try
             {
-                Database.existingDatabase(HomeBudgetDBFile);
-            }
+                // if database exists, and user doesn't want a new database, open existing DB
+                if (!newDatabase && File.Exists(HomeBudgetDBFile))
+                {
+                    Database.existingDatabase(HomeBudgetDBFile);
+                }
 
-            // file did not exist, or user wants a new database, so open NEW DB
-            else
+                // file did not exist, or user wants a new database, so open NEW DB
+                else
+                {
+                    Database.newDatabase(HomeBudgetDBFile);
+                    newDatabase = true;
+                }
+
+                // create the categories object
+                _categories = new Categories(Database.dbConnection, newDatabase);
+
+
+                // create the expenses object
+                _expenses = new Expenses(Database.dbConnection, newDatabase);
+
+
+                // assign a value to the connection property so we can properly execute queries.
+                _connection = Database.dbConnection;
+            }
+            catch (Exception error)
             {
-                Database.newDatabase(HomeBudgetDBFile);
-                newDatabase = true;
+                throw new Exception($"Could not connect to the database: {error}");
             }
-
-            // create the categories object
-            _categories = new Categories(Database.dbConnection, newDatabase);
-
-
-            // create the expenses object
-            _categories = new Categories(Database.dbConnection, newDatabase);
-
-
-            // assign a value to the connection property so we can properly execute queries.
-            _connection = Database.dbConnection;
         }
         #endregion
 
@@ -228,7 +235,8 @@ namespace Budget
             string startString = Start.Value.ToString("yyyy-MM-dd");
             End = End ?? new DateTime(2500, 1, 1);
             string endString = End.Value.ToString("yyyy-MM-dd");
-
+            List<BudgetItem> budgetItemList = new List<BudgetItem>();
+            double balance = 0;
 
             using SQLiteCommand command = new SQLiteCommand(_connection);
             StringBuilder stm = new StringBuilder();
@@ -242,30 +250,35 @@ namespace Budget
 
             if (FilterFlag)
             {
-                stm.Append($"AND c.Id={CategoryID}");
+                stm.Append($"AND c.Id={CategoryID} ");
             }
 
             stm.Append("ORDER BY e.Date ASC;");
 
             using var cmd = new SQLiteCommand(stm.ToString(), _connection);
-            using SQLiteDataReader reader = cmd.ExecuteReader();
 
-            List<BudgetItem> budgetItemList = new List<BudgetItem>();
-            double balance = 0;
-            while (reader.Read())
+            try
             {
+                using SQLiteDataReader reader = cmd.ExecuteReader();
 
-                balance += reader.GetDouble(3);
-                budgetItemList.Add(new BudgetItem
+                while (reader.Read())
                 {
-                    ExpenseID = reader.GetInt32(0),
-                    CategoryID = reader.GetInt32(1),
-                    Date = reader.GetDateTime(2),
-                    Amount = reader.GetDouble(3),
-                    ShortDescription = reader.GetString(4),
-                    Category = reader.GetString(5),
-                    Balance = balance
-                });
+                    balance += reader.GetDouble(3);
+                    budgetItemList.Add(new BudgetItem
+                    {
+                        ExpenseID = reader.GetInt32(0),
+                        CategoryID = reader.GetInt32(1),
+                        Date = reader.GetDateTime(2),
+                        Amount = reader.GetDouble(3),
+                        ShortDescription = reader.GetString(4),
+                        Category = reader.GetString(5),
+                        Balance = balance
+                    });
+                }
+            }
+            catch (Exception error)
+            {
+                throw new Exception($"The query failed to return anything valid: {error}");
             }
 
             return budgetItemList;
@@ -403,43 +416,54 @@ namespace Budget
         /// </example>
         public List<BudgetItemsByMonth> GetBudgetItemsByMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
+            // Sets the start and the end date of the budget to get
             Start = Start ?? new DateTime(1900, 1, 1);
             string startString = Start.Value.ToString("yyyy-MM-dd");
             End = End ?? new DateTime(2500, 1, 1);
             string endString = End.Value.ToString("yyyy-MM-dd");
 
+            // List of the years and the month that were present in the expenses
             List<string> years = new List<string>();
             List<string> months = new List<string>();
 
             StringBuilder stm = new StringBuilder();
-
-            stm.Append("SELECT DISTINCT strftime('%Y', expenses.Date) as 'Year', strftime('%m', expenses.Date) as 'Month' FROM expenses INNER JOIN categories on expenses.CategoryId = categories.Id WHERE expenses.Date >= '" + startString + "' AND expenses.Date <= '" + endString + "'");
+            stm.Append("SELECT DISTINCT strftime('%Y', expenses.Date) as 'Year', " +
+                "strftime('%m', expenses.Date) as 'Month' " +
+                "FROM expenses " +
+                "INNER JOIN categories on expenses.CategoryId = categories.Id " +
+                $"WHERE expenses.Date >= '{startString}' " +
+                $"AND expenses.Date <= '{endString}' ");
 
             if (FilterFlag)
             {
-                stm.Append(" AND categories.Id = " + CategoryID);
+                stm.Append("AND categories.Id = " + CategoryID);
             }
 
-            stm.Append(" ORDER BY 'Year', 'Month';");
+            stm.Append("ORDER BY 'Year', 'Month';");
 
             using var cmd = new SQLiteCommand(stm.ToString(), _connection);
-
-            using SQLiteDataReader reader = cmd.ExecuteReader();
-
-            int count = 0;
-
-            while (reader.Read())
+            try
             {
-                years.Add(reader.GetString(0));
-                months.Add(reader.GetString(1));
-                count++;
+                using SQLiteDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    years.Add(reader.GetString(0));
+                    months.Add(reader.GetString(1));
+                }
             }
+            catch (Exception error)
+            {
+                throw new Exception($"The query failed to return anything valid: {error}");
+            }
+
+
 
             List<BudgetItemsByMonth> itemsByMonth = new List<BudgetItemsByMonth>();
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < years.Count(); i++)
             {
-                List<BudgetItem> details = new List<BudgetItem>();
+                List<BudgetItem> monthlyExpenses = new List<BudgetItem>();
 
                 Double total = 0;
                 int year = int.Parse(years[i]);
@@ -447,18 +471,25 @@ namespace Budget
                 int startDate = 1;
                 int endDate = DateTime.DaysInMonth(year, month);
 
-                List<BudgetItem> items = GetBudgetItems(new DateTime(year, month, startDate), new DateTime(year, month, endDate), FilterFlag, CategoryID);
-
-                foreach (BudgetItem item in items)
+                try
                 {
-                    total += item.Amount;
-                    details.Add(item);
+                    List<BudgetItem> items = GetBudgetItems(new DateTime(year, month, startDate), new DateTime(year, month, endDate), FilterFlag, CategoryID);
+
+                    foreach (BudgetItem item in items)
+                    {
+                        total += item.Amount;
+                        monthlyExpenses.Add(item);
+                    }
+                }
+                catch (Exception error)
+                {
+                    throw error;
                 }
 
                 itemsByMonth.Add(new BudgetItemsByMonth
                 {
                     Month = years[i] + "/" + months[i],
-                    Details = details,
+                    Details = monthlyExpenses,
                     Total = total
                 });
             }

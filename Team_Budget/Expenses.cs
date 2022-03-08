@@ -95,19 +95,19 @@ namespace Budget
         /// ]]>
         /// </code>
         /// </example>
-        private void Add(Expense expense)
-        {
-            using var cmd = new SQLiteCommand(_connection);
+        //private void Add(Expense expense)
+        //{
+        //    using var cmd = new SQLiteCommand(_connection);
 
-            cmd.CommandText = "INSERT INTO expenses(CategoryId, Amount, Description, Date) VALUES(@categoryId, @amount, @description, @date)";
-            cmd.Parameters.AddWithValue("@categoryId", expense.Category);
-            cmd.Parameters.AddWithValue("@amount", expense.Amount);
-            cmd.Parameters.AddWithValue("@description", expense.Description);
-            cmd.Parameters.AddWithValue("@date", expense.Date);
+        //    cmd.CommandText = "INSERT INTO expenses(CategoryId, Amount, Description, Date) VALUES(@categoryId, @amount, @description, @date)";
+        //    cmd.Parameters.AddWithValue("@categoryId", expense.Category);
+        //    cmd.Parameters.AddWithValue("@amount", expense.Amount);
+        //    cmd.Parameters.AddWithValue("@description", expense.Description);
+        //    cmd.Parameters.AddWithValue("@date", expense.Date);
 
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
-        }
+        //    cmd.Prepare();
+        //    cmd.ExecuteNonQuery();
+        //}
 
         /// <summary>
         /// Creates a new <see cref="Expense"/> object based on passed values and adds it to the 
