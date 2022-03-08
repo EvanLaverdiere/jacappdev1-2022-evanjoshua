@@ -130,8 +130,10 @@ namespace Budget
             // create the categories object
             _categories = new Categories(Database.dbConnection, newDatabase);
 
+
             // create the expenses object
             _categories = new Categories(Database.dbConnection, newDatabase);
+
 
             // assign a value to the connection property so we can properly execute queries.
             _connection = Database.dbConnection;
@@ -265,7 +267,7 @@ namespace Budget
                             "FROM expenses as e " +
                             "INNER JOIN categories as c " +
                             "ON e.CategoryId=c.Id " +
-                            $"WHERE e.Date>={startString} AND e.Date<={endString} ");
+                            $"WHERE e.Date>=\'{startString}\' AND e.Date<=\'{endString}\' ");
 
             if (FilterFlag)
             {
@@ -435,19 +437,19 @@ namespace Budget
             End = End ?? new DateTime(2500, 1, 1);
             string endString = End.Value.ToString("yyyy-MM-dd");
 
-            List<int> years = new List<int>();
-            List<int> months = new List<int>();
+            List<string> years = new List<string>();
+            List<string> months = new List<string>();
 
             StringBuilder stm = new StringBuilder();
 
-            stm.Append("SELECT DISTINCT strftime('%Y', expenses.Date) as 'Year', strftime('%m', expenses.Date) as 'Month' FROM expenses INNER JOIN categories on expenses.CategoryId = expenses.Id WHERE expenses.Date >= " + startString.ToString() + "AND expenses.Date <= " + endString.ToString());
+            stm.Append("SELECT DISTINCT strftime('%Y', expenses.Date) as 'Year', strftime('%m', expenses.Date) as 'Month' FROM expenses INNER JOIN categories on expenses.CategoryId = categories.Id WHERE expenses.Date >= '" + startString + "' AND expenses.Date <= '" + endString + "'");
 
-            if (FilterFlag == true)
+            if (FilterFlag)
             {
                 stm.Append(" AND categories.Id = " + CategoryID);
             }
 
-            stm.Append(" GROUP BY 'Year', 'Month';");
+            stm.Append(" ORDER BY 'Year', 'Month';");
 
             using var cmd = new SQLiteCommand(stm.ToString(), _connection);
 
@@ -455,10 +457,10 @@ namespace Budget
 
             int count = 0;
 
-            while (reader.Read())
+            while(reader.Read())
             {
-                years.Add(reader.GetInt32(0));
-                months.Add(reader.GetInt32(1));
+                years.Add(reader.GetString(0));
+                months.Add(reader.GetString(1));
                 count++;
             }
 
@@ -469,10 +471,12 @@ namespace Budget
                 List<BudgetItem> details = new List<BudgetItem>();
 
                 Double total = 0;
+                int year = int.Parse(years[i]);
+                int month = int.Parse(months[i]);
                 int startDate = 1;
-                int endDate = DateTime.DaysInMonth(years[i], months[i]);
+                int endDate = DateTime.DaysInMonth(year, month);
 
-                List<BudgetItem> items = GetBudgetItems(new DateTime(years[i], months[i], startDate), new DateTime(years[i], months[i], endDate), FilterFlag, CategoryID);
+                List<BudgetItem> items = GetBudgetItems(new DateTime(year, month, startDate), new DateTime(year, month, endDate), FilterFlag, CategoryID);
 
                 foreach (BudgetItem item in items)
                 {
@@ -482,7 +486,7 @@ namespace Budget
 
                 itemsByMonth.Add(new BudgetItemsByMonth
                 {
-                    Month = new DateTime(years[i], months[i], startDate).ToString("MMMM"),
+                    Month = years[i] + "/" + months[i],
                     Details = details,
                     Total = total
                 });
@@ -613,7 +617,7 @@ namespace Budget
         /// CATEGORY SUBTOTAL:   $65.00
         /// </code>
         /// </example>
-        public List<BudgetItemsByCategory> GeBudgetItemsByCategory(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
+        public List<BudgetItemsByCategory> GetBudgetItemsByCategory(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // First, get all categories that have associated expenses within the budget.
             List<String> categoryNames = new List<String>();
