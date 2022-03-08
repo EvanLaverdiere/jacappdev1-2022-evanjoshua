@@ -457,8 +457,6 @@ namespace Budget
                 throw new Exception($"The query failed to return anything valid: {error}");
             }
 
-
-
             List<BudgetItemsByMonth> itemsByMonth = new List<BudgetItemsByMonth>();
 
             for (int i = 0; i < years.Count(); i++)
