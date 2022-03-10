@@ -113,9 +113,8 @@ namespace Budget
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                throw new Exception("Error", e);
             }
-
         }
         #endregion
 
@@ -279,7 +278,7 @@ namespace Budget
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                throw new Exception("Error", e);
             }
 
             return budgetItemList;
@@ -453,7 +452,7 @@ namespace Budget
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                throw new Exception("Error", e);
             }
 
             List<BudgetItemsByMonth> itemsByMonth = new List<BudgetItemsByMonth>();
