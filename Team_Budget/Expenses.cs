@@ -226,7 +226,6 @@ namespace Budget
         /// <param name="description">the new description to be given to the expense</param>
         public void UpdateProperties(int id, DateTime date, int categoryId, double amount, string description)
         {
-            // To be filled
             using var cmd = new SQLiteCommand(_connection);
 
             cmd.CommandText = "UPDATE expenses SET Date=@newDate, CategoryId=@newCategryId, Amount=@newAmount, Description=@newDescription WHERE Id=@id";
