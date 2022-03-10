@@ -65,35 +65,43 @@ namespace Budget
         /// </example>
         public Category GetCategoryFromId(int i)
         {
-            // throw an exception is user tries to pass an ID number of 0 or less.
-            if (i <= 0)
-                throw new ArgumentException("A category's ID number cannot be less than 1.");
-            
-            using SQLiteCommand command = new SQLiteCommand(_connection);
-            String stm = "SELECT Id, TypeId, Description FROM categories WHERE Id = " + i;
-
-            using var cm = new SQLiteCommand(stm, _connection);
-            using SQLiteDataReader reader = cm.ExecuteReader();
-
-            // Did the command retrieve any rows from the database?
-            if (reader.HasRows)
+            try
             {
-                reader.Read();
+                // throw an exception is user tries to pass an ID number of 0 or less.
+                if (i <= 0)
+                    throw new ArgumentException("A category's ID number cannot be less than 1.");
 
-                int id = reader.GetInt32(0);
-                int typeId = reader.GetInt32(1) - 1;
-                string description = reader.GetString(2);
+                using SQLiteCommand command = new SQLiteCommand(_connection);
+                String stm = "SELECT Id, TypeId, Description FROM categories WHERE Id = " + i;
 
-                Category category = new Category(id, description, (Category.CategoryType)typeId);
+                using var cm = new SQLiteCommand(stm, _connection);
+                using SQLiteDataReader reader = cm.ExecuteReader();
 
-                return category;
+                // Did the command retrieve any rows from the database?
+                if (reader.HasRows)
+                {
+                    reader.Read();
 
+                    int id = reader.GetInt32(0);
+                    int typeId = reader.GetInt32(1) - 1;
+                    string description = reader.GetString(2);
+
+                    Category category = new Category(id, description, (Category.CategoryType)typeId);
+
+                    return category;
+
+                }
+                // If not, the passed ID must not be in the database.
+                else
+                    throw new ArgumentException("categories table does not contain a record with ID # " + i);
             }
-            // If not, the passed ID must not be in the database.
-            else
-                throw new ArgumentException("categories table does not contain a record with ID # " + i);
+            catch (Exception error)
+            {
+                throw new Exception($"Category with id [{i}] faile could not be obtained: {error}");
+            }
 
         }
+
 
         // ====================================================================
         // set categories to default
@@ -116,32 +124,39 @@ namespace Budget
         /// </example>
         public void SetCategoriesToDefaults()
         {
-            // ---------------------------------------------------------------
-            // reset any current categories,
-            // ---------------------------------------------------------------
-            using SQLiteCommand cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "DELETE FROM categories";
-            cmd.ExecuteNonQuery();
+            try
+            {
+                // ---------------------------------------------------------------
+                // reset any current categories,
+                // ---------------------------------------------------------------
+                using SQLiteCommand cmd = new SQLiteCommand(_connection);
+                cmd.CommandText = "DELETE FROM categories";
+                cmd.ExecuteNonQuery();
 
-            // ---------------------------------------------------------------
-            // Add Defaults
-            // ---------------------------------------------------------------
-            Add("Utilities", Category.CategoryType.Expense);
-            Add("Rent", Category.CategoryType.Expense);
-            Add("Food", Category.CategoryType.Expense);
-            Add("Entertainment", Category.CategoryType.Expense);
-            Add("Education", Category.CategoryType.Expense);
-            Add("Miscellaneous", Category.CategoryType.Expense);
-            Add("Medical Expenses", Category.CategoryType.Expense);
-            Add("Vacation", Category.CategoryType.Expense);
-            Add("Credit Card", Category.CategoryType.Credit);
-            Add("Clothes", Category.CategoryType.Expense);
-            Add("Gifts", Category.CategoryType.Expense);
-            Add("Insurance", Category.CategoryType.Expense);
-            Add("Transportation", Category.CategoryType.Expense);
-            Add("Eating Out", Category.CategoryType.Expense);
-            Add("Savings", Category.CategoryType.Savings);
-            Add("Income", Category.CategoryType.Income);
+                // ---------------------------------------------------------------
+                // Add Defaults
+                // ---------------------------------------------------------------
+                Add("Utilities", Category.CategoryType.Expense);
+                Add("Rent", Category.CategoryType.Expense);
+                Add("Food", Category.CategoryType.Expense);
+                Add("Entertainment", Category.CategoryType.Expense);
+                Add("Education", Category.CategoryType.Expense);
+                Add("Miscellaneous", Category.CategoryType.Expense);
+                Add("Medical Expenses", Category.CategoryType.Expense);
+                Add("Vacation", Category.CategoryType.Expense);
+                Add("Credit Card", Category.CategoryType.Credit);
+                Add("Clothes", Category.CategoryType.Expense);
+                Add("Gifts", Category.CategoryType.Expense);
+                Add("Insurance", Category.CategoryType.Expense);
+                Add("Transportation", Category.CategoryType.Expense);
+                Add("Eating Out", Category.CategoryType.Expense);
+                Add("Savings", Category.CategoryType.Savings);
+                Add("Income", Category.CategoryType.Income);
+            }
+            catch (Exception error)
+            {
+                throw new Exception($"Default categories could not be created: {error}");
+            }
 
         }
 
@@ -166,12 +181,19 @@ namespace Budget
         /// </example>
         public void Add(String desc, Category.CategoryType type)
         {
-            using var cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "INSERT INTO categories(Description, TypeId) VALUES(@description, @type)";
-            cmd.Parameters.AddWithValue("@description", desc);
-            cmd.Parameters.AddWithValue("@type", (int)type + 1);
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
+            try
+            {
+                using var cmd = new SQLiteCommand(_connection);
+                cmd.CommandText = "INSERT INTO categories(Description, TypeId) VALUES(@description, @type)";
+                cmd.Parameters.AddWithValue("@description", desc);
+                cmd.Parameters.AddWithValue("@type", (int)type + 1);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception error)
+            {
+                throw new Exception($"Category [{desc}, {type}] could not be added: {error}");
+            }
 
         }
 
@@ -194,11 +216,18 @@ namespace Budget
         /// </example>
         public void Delete(int Id)
         {
-            using var cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "DELETE from categories where Id=@Id";
-            cmd.Parameters.AddWithValue("@Id", Id);
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
+            try
+            {
+                using var cmd = new SQLiteCommand(_connection);
+                cmd.CommandText = "DELETE from categories where Id=@Id";
+                cmd.Parameters.AddWithValue("@Id", Id);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception error)
+            {
+                throw new Exception($"Category [{Id}] could not be deleted: {error}");
+            }
         }
 
         // ====================================================================
@@ -223,23 +252,30 @@ namespace Budget
         /// </example>
         public List<Category> List()
         {
-            List<Category> newList = new List<Category>();
-
-            using SQLiteCommand command = new SQLiteCommand(_connection);
-            string stm = "SELECT Id, TypeId, Description FROM categories ORDER BY Id ASC";
-
-            using var cmd = new SQLiteCommand(stm, _connection);
-            using SQLiteDataReader reader = cmd.ExecuteReader();
-
-            while (reader.Read())
+            try
             {
-                int id = reader.GetInt32(0);
-                int typeId = reader.GetInt32(1) - 1;
-                string description = reader.GetString(2);
-                newList.Add(new Category(id, description, (Category.CategoryType)typeId));
-            }
+                List<Category> newList = new List<Category>();
 
-            return newList;
+                using SQLiteCommand command = new SQLiteCommand(_connection);
+                string stm = "SELECT Id, TypeId, Description FROM categories ORDER BY Id ASC";
+
+                using var cmd = new SQLiteCommand(stm, _connection);
+                using SQLiteDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int id = reader.GetInt32(0);
+                    int typeId = reader.GetInt32(1) - 1;
+                    string description = reader.GetString(2);
+                    newList.Add(new Category(id, description, (Category.CategoryType)typeId));
+                }
+
+                return newList;
+            }
+            catch (Exception error)
+            {
+                throw new Exception($"Categories list could not be made: {error}");
+            }
         }
 
 
@@ -255,34 +291,47 @@ namespace Budget
         /// <param name="newType">The record's new type.</param>
         public void UpdateProperties(int id, string newDescription, Category.CategoryType newType)
         {
-            // To be filled
-            using var cmd = new SQLiteCommand(_connection);
+            try
+            {
+                using var cmd = new SQLiteCommand(_connection);
 
-            cmd.CommandText = "UPDATE categories SET Description=@newDescription, TypeId=@newType WHERE Id=@id";
-            cmd.Parameters.AddWithValue("@id", id);
-            cmd.Parameters.AddWithValue("@newDescription", newDescription);
-            cmd.Parameters.AddWithValue("@newType", (int)newType + 1);
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
+                cmd.CommandText = "UPDATE categories SET Description=@newDescription, TypeId=@newType WHERE Id=@id";
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.AddWithValue("@newDescription", newDescription);
+                cmd.Parameters.AddWithValue("@newType", (int)newType + 1);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception error)
+            {
+                throw new Exception($"Category [{id}] could not be updated: {error}");
+            }
         }
 
         private void SetCategoryTypes()
         {
-            // Remove values from table.
-            using SQLiteCommand cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "DELETE FROM categoryTypes";
-            cmd.ExecuteNonQuery();
-
-            // Insert default category types.
-            string[] typeNames = Enum.GetNames(typeof(Category.CategoryType));
-
-            for(int i = 0; i < typeNames.Length; i++)
+            try
             {
-                cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (@id, \"@type\")";
-                cmd.Parameters.AddWithValue("@id", i + 1);
-                cmd.Parameters.AddWithValue("@type", typeNames[i]);
-                cmd.Prepare();
+                // Remove values from table.
+                using SQLiteCommand cmd = new SQLiteCommand(_connection);
+                cmd.CommandText = "DELETE FROM categoryTypes";
                 cmd.ExecuteNonQuery();
+
+                // Insert default category types.
+                string[] typeNames = Enum.GetNames(typeof(Category.CategoryType));
+
+                for (int i = 0; i < typeNames.Length; i++)
+                {
+                    cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (@id, \"@type\")";
+                    cmd.Parameters.AddWithValue("@id", i + 1);
+                    cmd.Parameters.AddWithValue("@type", typeNames[i]);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception error)
+            {
+                throw new Exception($"Categories could not be set: {error}");
             }
 
         }

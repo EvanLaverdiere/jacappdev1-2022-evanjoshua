@@ -72,44 +72,6 @@ namespace Budget
         #endregion
         #region Add
         /// <summary>
-        /// Adds a passed <see cref="Expense"/> object to the expenses database.
-        /// </summary>
-        /// <param name="expense">An expense to be added.</param>
-        /// <example>
-        /// In this example, an empty Expenses database is created. A new Expense object is then created 
-        /// and added to the database.
-        /// 
-        /// <code>
-        /// <![CDATA[
-        /// String folder = "C:\\Abdel\\Desktop\\AppDev";
-        /// String dbName = "newDatabase.db";
-        /// string file = folder + "\\" + dbName;
-        /// 
-        /// Database.newDatabase(file);
-        /// SQLiteConnection connection = Database.dbConnection;
-        /// 
-        /// Expenses expenses = new Expenses(connection);
-        /// 
-        /// Expense exp = new Expense(1, DateTime.Now, 1, 450, "Electrician Consultation");
-        /// Expenses.Add(exp);
-        /// ]]>
-        /// </code>
-        /// </example>
-        private void Add(Expense expense)
-        {
-            using var cmd = new SQLiteCommand(_connection);
-
-            cmd.CommandText = "INSERT INTO expenses(CategoryId, Amount, Description, Date) VALUES(@categoryId, @amount, @description, @date)";
-            cmd.Parameters.AddWithValue("@categoryId", expense.Category);
-            cmd.Parameters.AddWithValue("@amount", expense.Amount);
-            cmd.Parameters.AddWithValue("@description", expense.Description);
-            cmd.Parameters.AddWithValue("@date", expense.Date);
-
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
-        }
-
-        /// <summary>
         /// Creates a new <see cref="Expense"/> object based on passed values and adds it to the 
         /// Expenses database. An ID number is assigned automatically by the database.
         /// </summary>
@@ -129,14 +91,21 @@ namespace Budget
         /// </example>
         public void Add(DateTime date, int category, Double amount, String description)
         {
-            using var cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "INSERT INTO expenses(CategoryId, Amount, Description, Date) VALUES(@categoryId, @amount, @description, @date)";
-            cmd.Parameters.AddWithValue("@categoryId", category);
-            cmd.Parameters.AddWithValue("@amount", -amount);
-            cmd.Parameters.AddWithValue("@description", description);
-            cmd.Parameters.AddWithValue("@date", date);
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
+            try
+            {
+                using var cmd = new SQLiteCommand(_connection);
+                cmd.CommandText = "INSERT INTO expenses(CategoryId, Amount, Description, Date) VALUES(@categoryId, @amount, @description, @date)";
+                cmd.Parameters.AddWithValue("@categoryId", category);
+                cmd.Parameters.AddWithValue("@amount", -amount);
+                cmd.Parameters.AddWithValue("@description", description);
+                cmd.Parameters.AddWithValue("@date", date);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception error)
+            {
+                throw new Exception($"Expense [{date}, {category}, {amount}, {description}] could not be added: {error}");
+            }
         }
         #endregion
         #region Delete
@@ -157,12 +126,18 @@ namespace Budget
         /// </example>
         public void Delete(int Id)
         {
-            using var cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "DELETE from expenses where Id=@Id";
-            cmd.Parameters.AddWithValue("@Id", Id);
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
-
+            try
+            {
+                using var cmd = new SQLiteCommand(_connection);
+                cmd.CommandText = "DELETE from expenses where Id=@Id";
+                cmd.Parameters.AddWithValue("@Id", Id);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception error)
+            {
+                throw new Exception($"Expense [{Id}] could not be deleted: {error}");
+            }
         }
 
         private void EmptyDatabase()
@@ -194,25 +169,32 @@ namespace Budget
         /// </example>
         public List<Expense> List()
         {
-            List<Expense> newList = new List<Expense>();
-
-            using SQLiteCommand command = new SQLiteCommand(_connection);
-            string stm = "SELECT Id, CategoryId, Amount, Description, Date FROM expenses ORDER BY Id ASC";
-
-            using var cmd = new SQLiteCommand(stm, _connection);
-            using SQLiteDataReader reader = cmd.ExecuteReader();
-
-            while (reader.Read())
+            try
             {
-                int id = reader.GetInt32(0);
-                int categoryId = reader.GetInt32(1);
-                double amount = reader.GetDouble(2);
-                string description = reader.GetString(3);
-                DateTime date = reader.GetDateTime(4);
-                newList.Add(new Expense(id, date, categoryId, amount, description));
-            }
+                List<Expense> newList = new List<Expense>();
 
-            return newList;
+                using SQLiteCommand command = new SQLiteCommand(_connection);
+                string stm = "SELECT Id, CategoryId, Amount, Description, Date FROM expenses ORDER BY Id ASC";
+
+                using var cmd = new SQLiteCommand(stm, _connection);
+                using SQLiteDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int id = reader.GetInt32(0);
+                    int categoryId = reader.GetInt32(1);
+                    double amount = reader.GetDouble(2);
+                    string description = reader.GetString(3);
+                    DateTime date = reader.GetDateTime(4);
+                    newList.Add(new Expense(id, date, categoryId, amount, description));
+                }
+
+                return newList;
+            }
+            catch (Exception error)
+            {
+                throw new Exception($"Expense list could not be made: {error}");
+            }
         }
         #endregion
         #region Update
@@ -226,17 +208,23 @@ namespace Budget
         /// <param name="description">the new description to be given to the expense</param>
         public void UpdateProperties(int id, DateTime date, int categoryId, double amount, string description)
         {
-            // To be filled
-            using var cmd = new SQLiteCommand(_connection);
+            try
+            {
+                using var cmd = new SQLiteCommand(_connection);
 
-            cmd.CommandText = "UPDATE expenses SET Date=@newDate, CategoryId=@newCategryId, Amount=@newAmount, Description=@newDescription WHERE Id=@id";
-            cmd.Parameters.AddWithValue("@id", id);
-            cmd.Parameters.AddWithValue("@newDate", date);
-            cmd.Parameters.AddWithValue("@newCategryId", categoryId);
-            cmd.Parameters.AddWithValue("@newAmount", amount);
-            cmd.Parameters.AddWithValue("@newDescription", description);
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
+                cmd.CommandText = "UPDATE expenses SET Date=@newDate, CategoryId=@newCategryId, Amount=@newAmount, Description=@newDescription WHERE Id=@id";
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.AddWithValue("@newDate", date);
+                cmd.Parameters.AddWithValue("@newCategryId", categoryId);
+                cmd.Parameters.AddWithValue("@newAmount", amount);
+                cmd.Parameters.AddWithValue("@newDescription", description);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception error)
+            {
+                throw new Exception($"Expense [{id}] could not be updated: {error}");
+            }
         }
         #endregion
     }
