@@ -52,7 +52,7 @@ namespace Budget
         /// </summary>
         /// <param name="i">The ID number of the desired category.</param>
         /// <returns>The desired Category object.</returns>
-        /// <exception cref="Exception">Thrown when no category matches the passed ID number.</exception>
+        /// <exception cref="ArgumentException">Thrown when no category matches the passed ID number.</exception>
         /// <example>
         /// In this example, a list of default Categories is created. GetCategoryFromId is then called to retrieve the Category with the ID of 5. The string representation of said Category is then printed to the console.
         /// <code>
@@ -65,21 +65,34 @@ namespace Budget
         /// </example>
         public Category GetCategoryFromId(int i)
         {
+            // throw an exception is user tries to pass an ID number of 0 or less.
+            if (i <= 0)
+                throw new ArgumentException("A category's ID number cannot be less than 1.");
+            
             using SQLiteCommand command = new SQLiteCommand(_connection);
             String stm = "SELECT Id, TypeId, Description FROM categories WHERE Id = " + i;
 
             using var cm = new SQLiteCommand(stm, _connection);
             using SQLiteDataReader reader = cm.ExecuteReader();
 
-            reader.Read();
+            // Did the command retrieve any rows from the database?
+            if (reader.HasRows)
+            {
+                reader.Read();
 
-            int id = reader.GetInt32(0);
-            int typeId = reader.GetInt32(1) - 1;
-            string description = reader.GetString(2);
+                int id = reader.GetInt32(0);
+                int typeId = reader.GetInt32(1) - 1;
+                string description = reader.GetString(2);
 
-            Category category = new Category(id, description, (Category.CategoryType)typeId);
+                Category category = new Category(id, description, (Category.CategoryType)typeId);
 
-            return category;
+                return category;
+
+            }
+            // If not, the passed ID must not be in the database.
+            else
+                throw new ArgumentException("categories table does not contain a record with ID # " + i);
+
         }
 
         // ====================================================================
@@ -106,7 +119,6 @@ namespace Budget
             // ---------------------------------------------------------------
             // reset any current categories,
             // ---------------------------------------------------------------
-            //_Cats.Clear();
             using SQLiteCommand cmd = new SQLiteCommand(_connection);
             cmd.CommandText = "DELETE FROM categories";
             cmd.ExecuteNonQuery();
@@ -138,7 +150,7 @@ namespace Budget
         // ====================================================================
 
         /// <summary>
-        /// Creates a new <see cref="Category"/> object based on passed values and adds it to the list of categories. An ID number is assigned automatically.
+        /// Creates a new <see cref="Category"/> record based on passed values and adds it to the database. An ID number is assigned automatically.
         /// </summary>
         /// <param name="desc">A brief description of the category.</param>
         /// <param name="type">The category's type.</param>
@@ -168,7 +180,7 @@ namespace Budget
         // Delete category
         // ====================================================================
         /// <summary>
-        /// Deletes a <see cref="Category"/> object which matches the passed ID number.
+        /// Deletes a <see cref="Category"/> record which matches the passed ID number.
         /// </summary>
         /// <param name="Id">The ID number of the category to be deleted.</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the passed ID number is not found within the categories list.</exception>
@@ -195,9 +207,9 @@ namespace Budget
         //        this instance
         // ====================================================================
         /// <summary>
-        /// Returns a copy of the list of categories. Any changes made to this copy will not affect the original list.
+        /// Returns a list of all categories in the database. Any changes made to this list will not affect the database itself.
         /// </summary>
-        /// <returns>The copied list of categories.</returns>
+        /// <returns>The list of categories.</returns>
         /// <example>
         /// In this example, a list of Categories is created with default values. A new Category object is then added to the list. The List() method is then called, and a string representation of each Category in that list is then printed to the console.
         /// <code>
@@ -235,6 +247,12 @@ namespace Budget
         // write all categories in our list to XML file
         // ====================================================================
 
+        /// <summary>
+        /// Update the properties of the <see cref="Category"/> record which matches the passed ID.
+        /// </summary>
+        /// <param name="id">The ID of the category record to be updated.</param>
+        /// <param name="newDescription">The record's new description.</param>
+        /// <param name="newType">The record's new type.</param>
         public void UpdateProperties(int id, string newDescription, Category.CategoryType newType)
         {
             // To be filled
@@ -256,17 +274,16 @@ namespace Budget
             cmd.ExecuteNonQuery();
 
             // Insert default category types.
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (1, \"Income\")";
-            cmd.ExecuteNonQuery();
+            string[] typeNames = Enum.GetNames(typeof(Category.CategoryType));
 
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (2, \"Expense\")";
-            cmd.ExecuteNonQuery();
-
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (3, \"Credit\")";
-            cmd.ExecuteNonQuery();
-
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (4, \"Savings\")";
-            cmd.ExecuteNonQuery();
+            for(int i = 0; i < typeNames.Length; i++)
+            {
+                cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (@id, \"@type\")";
+                cmd.Parameters.AddWithValue("@id", i + 1);
+                cmd.Parameters.AddWithValue("@type", typeNames[i]);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+            }
 
         }
         #endregion
