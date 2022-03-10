@@ -47,11 +47,11 @@ namespace Budget
         /// </summary>
         public String ShortDescription { get; set; }
         /// <summary>
-        /// Gets or sets the monetary amount of the budget item. Amount is the inverse of the Expense's amount: i.e., an amount of -15 in Expense becomes 15 in BudgetItem.
+        /// Gets or sets the monetary amount of the budget item. See <see cref="Expense.Amount"/>
         /// </summary>
         public Double Amount { get; set; }
         /// <summary>
-        /// Gets or sets the balance remaining on the budget after the item's Amount is deducted from the total.
+        /// Gets or sets the balance remaining on the budget after the item's Amount is added to the total.
         /// </summary>
         public Double Balance { get; set; }
 
