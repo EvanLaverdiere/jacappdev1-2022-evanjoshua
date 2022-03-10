@@ -52,7 +52,7 @@ namespace Budget
         /// </summary>
         /// <param name="i">The ID number of the desired category.</param>
         /// <returns>The desired Category object.</returns>
-        /// <exception cref="Exception">Thrown when no category matches the passed ID number.</exception>
+        /// <exception cref="ArgumentException">Thrown when no category matches the passed ID number.</exception>
         /// <example>
         /// In this example, a list of default Categories is created. GetCategoryFromId is then called to retrieve the Category with the ID of 5. The string representation of said Category is then printed to the console.
         /// <code>
@@ -65,21 +65,34 @@ namespace Budget
         /// </example>
         public Category GetCategoryFromId(int i)
         {
+            // throw an exception is user tries to pass an ID number of 0 or less.
+            if (i <= 0)
+                throw new ArgumentException("A category's ID number cannot be less than 1.");
+            
             using SQLiteCommand command = new SQLiteCommand(_connection);
             String stm = "SELECT Id, TypeId, Description FROM categories WHERE Id = " + i;
 
             using var cm = new SQLiteCommand(stm, _connection);
             using SQLiteDataReader reader = cm.ExecuteReader();
 
-            reader.Read();
+            // Did the command retrieve any rows from the database?
+            if (reader.HasRows)
+            {
+                reader.Read();
 
-            int id = reader.GetInt32(0);
-            int typeId = reader.GetInt32(1) - 1;
-            string description = reader.GetString(2);
+                int id = reader.GetInt32(0);
+                int typeId = reader.GetInt32(1) - 1;
+                string description = reader.GetString(2);
 
-            Category category = new Category(id, description, (Category.CategoryType)typeId);
+                Category category = new Category(id, description, (Category.CategoryType)typeId);
 
-            return category;
+                return category;
+
+            }
+            // If not, the passed ID must not be in the database.
+            else
+                throw new ArgumentException("categories table does not contain a record with ID # " + i);
+
         }
 
         // ====================================================================
