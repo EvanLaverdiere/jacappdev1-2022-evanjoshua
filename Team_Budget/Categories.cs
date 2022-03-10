@@ -106,7 +106,6 @@ namespace Budget
             // ---------------------------------------------------------------
             // reset any current categories,
             // ---------------------------------------------------------------
-            //_Cats.Clear();
             using SQLiteCommand cmd = new SQLiteCommand(_connection);
             cmd.CommandText = "DELETE FROM categories";
             cmd.ExecuteNonQuery();
@@ -138,7 +137,7 @@ namespace Budget
         // ====================================================================
 
         /// <summary>
-        /// Creates a new <see cref="Category"/> object based on passed values and adds it to the list of categories. An ID number is assigned automatically.
+        /// Creates a new <see cref="Category"/> record based on passed values and adds it to the database. An ID number is assigned automatically.
         /// </summary>
         /// <param name="desc">A brief description of the category.</param>
         /// <param name="type">The category's type.</param>
@@ -168,7 +167,7 @@ namespace Budget
         // Delete category
         // ====================================================================
         /// <summary>
-        /// Deletes a <see cref="Category"/> object which matches the passed ID number.
+        /// Deletes a <see cref="Category"/> record which matches the passed ID number.
         /// </summary>
         /// <param name="Id">The ID number of the category to be deleted.</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the passed ID number is not found within the categories list.</exception>
@@ -195,9 +194,9 @@ namespace Budget
         //        this instance
         // ====================================================================
         /// <summary>
-        /// Returns a copy of the list of categories. Any changes made to this copy will not affect the original list.
+        /// Returns a list of all categories in the database. Any changes made to this list will not affect the database itself.
         /// </summary>
-        /// <returns>The copied list of categories.</returns>
+        /// <returns>The list of categories.</returns>
         /// <example>
         /// In this example, a list of Categories is created with default values. A new Category object is then added to the list. The List() method is then called, and a string representation of each Category in that list is then printed to the console.
         /// <code>
@@ -235,6 +234,12 @@ namespace Budget
         // write all categories in our list to XML file
         // ====================================================================
 
+        /// <summary>
+        /// Update the properties of the <see cref="Category"/> record which matches the passed ID.
+        /// </summary>
+        /// <param name="id">The ID of the category record to be updated.</param>
+        /// <param name="newDescription">The record's new description.</param>
+        /// <param name="newType">The record's new type.</param>
         public void UpdateProperties(int id, string newDescription, Category.CategoryType newType)
         {
             // To be filled
