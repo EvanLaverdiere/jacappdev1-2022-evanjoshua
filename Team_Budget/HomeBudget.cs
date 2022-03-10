@@ -98,16 +98,24 @@ namespace Budget
                 newDatabase = true;
             }
 
-            // create the categories object
-            _categories = new Categories(Database.dbConnection, newDatabase);
+            try
+            {
+                // create the categories object
+                _categories = new Categories(Database.dbConnection, newDatabase);
 
 
-            // create the expenses object
-            _expenses = new Expenses(Database.dbConnection, newDatabase);
+                // create the expenses object
+                _expenses = new Expenses(Database.dbConnection, newDatabase);
 
 
-            // assign a value to the connection property so we can properly execute queries.
-            _connection = Database.dbConnection;
+                // assign a value to the connection property so we can properly execute queries.
+                _connection = Database.dbConnection;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
         }
         #endregion
 
@@ -228,44 +236,50 @@ namespace Budget
             string startString = Start.Value.ToString("yyyy-MM-dd");
             End = End ?? new DateTime(2500, 1, 1);
             string endString = End.Value.ToString("yyyy-MM-dd");
-
-
-            using SQLiteCommand command = new SQLiteCommand(_connection);
-            StringBuilder stm = new StringBuilder();
-            stm.Append("Select e.Id as 'ExpenseId', c.Id as 'CategoryId', " +
-                            "e.Date, e.Amount, e.Description as 'ExpenseDescription', " +
-                            "c.Description as 'CategoryDescription' " +
-                            "FROM expenses as e " +
-                            "INNER JOIN categories as c " +
-                            "ON e.CategoryId=c.Id " +
-                            $"WHERE e.Date>=\'{startString}\' AND e.Date<=\'{endString}\' ");
-
-            if (FilterFlag)
-            {
-                stm.Append($"AND c.Id={CategoryID} ");
-            }
-
-            stm.Append("ORDER BY e.Date ASC;");
-
-            using var cmd = new SQLiteCommand(stm.ToString(), _connection);
-            using SQLiteDataReader reader = cmd.ExecuteReader();
-
             List<BudgetItem> budgetItemList = new List<BudgetItem>();
-            double balance = 0;
-            while (reader.Read())
+            try
             {
+                using SQLiteCommand command = new SQLiteCommand(_connection);
+                StringBuilder stm = new StringBuilder();
+                stm.Append("Select e.Id as 'ExpenseId', c.Id as 'CategoryId', " +
+                                "e.Date, e.Amount, e.Description as 'ExpenseDescription', " +
+                                "c.Description as 'CategoryDescription' " +
+                                "FROM expenses as e " +
+                                "INNER JOIN categories as c " +
+                                "ON e.CategoryId=c.Id " +
+                                $"WHERE e.Date>=\'{startString}\' AND e.Date<=\'{endString}\' ");
 
-                balance += reader.GetDouble(3);
-                budgetItemList.Add(new BudgetItem
+                if (FilterFlag)
                 {
-                    ExpenseID = reader.GetInt32(0),
-                    CategoryID = reader.GetInt32(1),
-                    Date = reader.GetDateTime(2),
-                    Amount = reader.GetDouble(3),
-                    ShortDescription = reader.GetString(4),
-                    Category = reader.GetString(5),
-                    Balance = balance
-                });
+                    stm.Append($"AND c.Id={CategoryID} ");
+                }
+
+                stm.Append("ORDER BY e.Date ASC;");
+
+                using var cmd = new SQLiteCommand(stm.ToString(), _connection);
+                using SQLiteDataReader reader = cmd.ExecuteReader();
+
+
+                double balance = 0;
+                while (reader.Read())
+                {
+
+                    balance += reader.GetDouble(3);
+                    budgetItemList.Add(new BudgetItem
+                    {
+                        ExpenseID = reader.GetInt32(0),
+                        CategoryID = reader.GetInt32(1),
+                        Date = reader.GetDateTime(2),
+                        Amount = reader.GetDouble(3),
+                        ShortDescription = reader.GetString(4),
+                        Category = reader.GetString(5),
+                        Balance = balance
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
 
             return budgetItemList;
@@ -422,17 +436,24 @@ namespace Budget
 
             stm.Append(" ORDER BY 'Year', 'Month';");
 
-            using var cmd = new SQLiteCommand(stm.ToString(), _connection);
-
-            using SQLiteDataReader reader = cmd.ExecuteReader();
-
             int count = 0;
 
-            while (reader.Read())
+            try
             {
-                years.Add(reader.GetString(0));
-                months.Add(reader.GetString(1));
-                count++;
+                using var cmd = new SQLiteCommand(stm.ToString(), _connection);
+
+                using SQLiteDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    years.Add(reader.GetString(0));
+                    months.Add(reader.GetString(1));
+                    count++;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
 
             List<BudgetItemsByMonth> itemsByMonth = new List<BudgetItemsByMonth>();
@@ -614,42 +635,53 @@ namespace Budget
             }
             stm.Append(" order by c.Description ASC;");
 
-            using var cmd = new SQLiteCommand(stm.ToString(), _connection);
-            using SQLiteDataReader reader = cmd.ExecuteReader();
-
-            while (reader.Read())
-            {
-                string cat = reader.GetString(0);
-                categoryNames.Add(cat);
-
-                int id = reader.GetInt32(1);
-                categoryIDs.Add(id);
-            }
-
-            // create list of BudgetItemsByCategory.
             var summary = new List<BudgetItemsByCategory>();
 
-            // Cycle through each category in the budget.
-            for (int i = 0; i < categoryIDs.Count; i++)
+            try
             {
-                // Get list of all BudgetItems belonging to this category.
-                List<BudgetItem> details = GetBudgetItems(Start, End, true, categoryIDs[i]);
+                using var cmd = new SQLiteCommand(stm.ToString(), _connection);
+                using SQLiteDataReader reader = cmd.ExecuteReader();
 
-                // Calculate total balance for this category.
-                double total = 0;
-                foreach (BudgetItem item in details)
+                while (reader.Read())
                 {
-                    total += item.Amount;
+                    string cat = reader.GetString(0);
+                    categoryNames.Add(cat);
+
+                    int id = reader.GetInt32(1);
+                    categoryIDs.Add(id);
                 }
 
-                // Add new BudgetItemsByCategory to the list.
-                summary.Add(new BudgetItemsByCategory
+                // create list of BudgetItemsByCategory.
+
+
+                // Cycle through each category in the budget.
+                for (int i = 0; i < categoryIDs.Count; i++)
                 {
-                    Category = categoryNames[i],
-                    Details = details,
-                    Total = total
-                });
+                    // Get list of all BudgetItems belonging to this category.
+                    List<BudgetItem> details = GetBudgetItems(Start, End, true, categoryIDs[i]);
+
+                    // Calculate total balance for this category.
+                    double total = 0;
+                    foreach (BudgetItem item in details)
+                    {
+                        total += item.Amount;
+                    }
+
+                    // Add new BudgetItemsByCategory to the list.
+                    summary.Add(new BudgetItemsByCategory
+                    {
+                        Category = categoryNames[i],
+                        Details = details,
+                        Total = total
+                    });
+                }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+
 
             return summary;
         }
