@@ -104,8 +104,8 @@ namespace Budget
                 _categories = new Categories(Database.dbConnection, newDatabase);
 
 
-            // create the expenses object
-            _expenses = new Expenses(Database.dbConnection, newDatabase);
+                // create the expenses object
+                _expenses = new Expenses(Database.dbConnection, newDatabase);
 
 
                 // assign a value to the connection property so we can properly execute queries.
@@ -113,7 +113,7 @@ namespace Budget
             }
             catch (Exception error)
             {
-                throw new Exception($"Could not connect to the database: {error}");
+                throw new Exception($"Could not create a Home Budget: {error}");
             }
         }
         #endregion
@@ -644,15 +644,23 @@ namespace Budget
             stm.Append(" order by c.Description ASC;");
 
             using var cmd = new SQLiteCommand(stm.ToString(), _connection);
-            using SQLiteDataReader reader = cmd.ExecuteReader();
 
-            while (reader.Read())
+            try
             {
-                string cat = reader.GetString(0);
-                categoryNames.Add(cat);
+                using SQLiteDataReader reader = cmd.ExecuteReader();
 
-                int id = reader.GetInt32(1);
-                categoryIDs.Add(id);
+                while (reader.Read())
+                {
+                    string cat = reader.GetString(0);
+                    categoryNames.Add(cat);
+
+                    int id = reader.GetInt32(1);
+                    categoryIDs.Add(id);
+                }
+            }
+            catch (Exception error)
+            {
+                throw new Exception($"The query failed to return anything valid: {error}");
             }
 
             // create list of BudgetItemsByCategory.
