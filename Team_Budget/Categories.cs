@@ -256,17 +256,16 @@ namespace Budget
             cmd.ExecuteNonQuery();
 
             // Insert default category types.
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (1, \"Income\")";
-            cmd.ExecuteNonQuery();
+            string[] typeNames = Enum.GetNames(typeof(Category.CategoryType));
 
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (2, \"Expense\")";
-            cmd.ExecuteNonQuery();
-
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (3, \"Credit\")";
-            cmd.ExecuteNonQuery();
-
-            cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (4, \"Savings\")";
-            cmd.ExecuteNonQuery();
+            for(int i = 0; i < typeNames.Length; i++)
+            {
+                cmd.CommandText = "INSERT INTO categoryTypes (Id, Type) VALUES (@id, \"@type\")";
+                cmd.Parameters.AddWithValue("@id", i + 1);
+                cmd.Parameters.AddWithValue("@type", typeNames[i]);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+            }
 
         }
         #endregion
