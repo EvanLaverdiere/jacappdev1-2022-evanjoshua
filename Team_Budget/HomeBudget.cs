@@ -436,7 +436,7 @@ namespace Budget
 
             if (FilterFlag)
             {
-                stm.Append("AND categories.Id = " + CategoryID);
+                stm.Append($"AND categories.Id = {CategoryID} ");
             }
 
             stm.Append("ORDER BY 'Year', 'Month';");
