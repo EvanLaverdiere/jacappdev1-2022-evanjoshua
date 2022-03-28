@@ -425,10 +425,15 @@ namespace Budget
             // List of the years and the month that were present in the expenses
             List<string> years = new List<string>();
             List<string> months = new List<string>();
+            List<string> yearsAndMonths = new List<string>();
+            List<double> monthlyTotals = new List<double>();
 
             StringBuilder stm = new StringBuilder();
+            // Solution for grouping the sum of the strftime comes from here: https://www.designcise.com/web/tutorial/how-to-group-by-month-and-year-in-sqlite
             stm.Append("SELECT DISTINCT strftime('%Y', expenses.Date) as 'Year', " +
-                "strftime('%m', expenses.Date) as 'Month' " +
+                "strftime('%m', expenses.Date) as 'Month', " +
+                "strftime('%Y-%m', expenses.Date) AS year_month, " +
+                "SUM(expenses.Amount) " +
                 "FROM expenses " +
                 "INNER JOIN categories on expenses.CategoryId = categories.Id " +
                 $"WHERE expenses.Date >= '{startString}' " +
@@ -439,6 +444,7 @@ namespace Budget
                 stm.Append($"AND categories.Id = {CategoryID} ");
             }
 
+            stm.Append("GROUP BY year_month ");
             stm.Append("ORDER BY 'Year', 'Month';");
 
             using var cmd = new SQLiteCommand(stm.ToString(), _connection);
@@ -450,6 +456,8 @@ namespace Budget
                 {
                     years.Add(reader.GetString(0));
                     months.Add(reader.GetString(1));
+                    yearsAndMonths.Add(reader.GetString(2));
+                    monthlyTotals.Add(reader.GetDouble(3));
                 }
             }
             catch (Exception error)
@@ -463,7 +471,7 @@ namespace Budget
             {
                 List<BudgetItem> monthlyExpenses = new List<BudgetItem>();
 
-                Double total = 0;
+                //Double total = 0;
                 int year = int.Parse(years[i]);
                 int month = int.Parse(months[i]);
                 int startDate = 1;
@@ -475,7 +483,7 @@ namespace Budget
 
                     foreach (BudgetItem item in items)
                     {
-                        total += item.Amount;
+                        //total += item.Amount;
                         monthlyExpenses.Add(item);
                     }
                 }
@@ -488,7 +496,7 @@ namespace Budget
                 {
                     Month = years[i] + "/" + months[i],
                     Details = monthlyExpenses,
-                    Total = total
+                    Total = monthlyTotals[i]
                 });
             }
 
