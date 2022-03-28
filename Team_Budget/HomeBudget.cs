@@ -622,6 +622,7 @@ namespace Budget
             // First, get all categories that have associated expenses within the budget.
             List<String> categoryNames = new List<String>();
             List<int> categoryIDs = new List<int>();
+            List<double> categoryAmounts = new List<double>();
 
             // Ensure Start and End have a fixed value if null. convert them into strings to avoid exceptions.
             Start = Start ?? new DateTime(1900, 1, 1);
@@ -633,7 +634,7 @@ namespace Budget
 
             StringBuilder stm = new StringBuilder();
 
-            stm.Append("SELECT DISTINCT c.Description, c.Id from categories c" +
+            stm.Append("SELECT DISTINCT c.Description, c.Id, SUM(e.Amount) from categories c" +
                 " INNER JOIN expenses e ON c.Id = e.CategoryId" +
                 $" WHERE e.Date >= \'{startString}\' AND e.Date <= \'{endString}\'");
             // if the user wants to filter the results by category, tweak the command.
@@ -641,6 +642,7 @@ namespace Budget
             {
                 stm.Append($" AND c.Id = {CategoryID}");
             }
+            stm.Append(" group by c.Description");
             stm.Append(" order by c.Description ASC;");
 
             using var cmd = new SQLiteCommand(stm.ToString(), _connection);
@@ -656,6 +658,9 @@ namespace Budget
 
                     int id = reader.GetInt32(1);
                     categoryIDs.Add(id);
+
+                    double amount = reader.GetDouble(2);
+                    categoryAmounts.Add(amount);
                 }
             }
             catch (Exception error)
@@ -672,20 +677,20 @@ namespace Budget
                 // Get list of all BudgetItems belonging to this category.
                 List<BudgetItem> details = GetBudgetItems(Start, End, true, categoryIDs[i]);
 
-                // Calculate total balance for this category.
-                double total = 0;
-                foreach (BudgetItem item in details)
-                {
-                    total += item.Amount;
-                }
+                //// Calculate total balance for this category.
+                //double total = 0;
+                //foreach (BudgetItem item in details)
+                //{
+                //    total += item.Amount;
+                //}
 
                 // Add new BudgetItemsByCategory to the list.
                 summary.Add(new BudgetItemsByCategory
                 {
                     Category = categoryNames[i],
                     Details = details,
-                    Total = total
-                });
+                    Total = categoryAmounts[i]
+                }); ;
             }
 
             return summary;
