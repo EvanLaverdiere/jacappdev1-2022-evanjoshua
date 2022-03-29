@@ -26,7 +26,7 @@ using System.IO;
 
 namespace Budget
 {
-    public class Database
+    internal class Database
     {
 
         public static SQLiteConnection dbConnection { get { return _connection; } }
