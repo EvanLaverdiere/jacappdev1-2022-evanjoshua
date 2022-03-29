@@ -28,7 +28,7 @@ namespace BudgetCodeTests
             SQLiteConnection connection = Database.dbConnection;
 
             // Act
-            Expenses expenses = new Expenses(connection, true);
+            Expenses expenses = new Expenses(connection);
 
             // Assert 
             Assert.IsType<Expenses>(expenses);
@@ -46,7 +46,7 @@ namespace BudgetCodeTests
             SQLiteConnection connection = Database.dbConnection;
 
             // Act
-            Expenses expenses = new Expenses(connection, true);
+            Expenses expenses = new Expenses(connection);
 
             // Assert 
             int size = expenses.List().Count;
