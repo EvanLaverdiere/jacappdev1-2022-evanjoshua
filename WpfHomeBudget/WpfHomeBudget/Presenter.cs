@@ -9,6 +9,14 @@ namespace WpfHomeBudget
 {
     class Presenter
     {
+        // backing fields
+        IViewable viewable;
 
+        // constructor
+        public Presenter()
+        {
+
+        }
+        // methods
     }
 }
