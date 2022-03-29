@@ -35,5 +35,10 @@ namespace WpfHomeBudget
         {
             budget.categories.Add(categoryName, (Category.CategoryType)categoryType);
         }
+
+        public void CreateNewExpense(DateTime date, int category, Double amount, string description)
+        {
+            budget.expenses.Add(date, category, amount, description);
+        }
     }
 }
