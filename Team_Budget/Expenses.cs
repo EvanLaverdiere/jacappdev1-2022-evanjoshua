@@ -55,17 +55,6 @@ namespace Budget
             _connection = conn;
         }
 
-        /// <summary>
-        /// Creates a connection to the database of expenses on a new database if <paramref name="newDb"/> is true.
-        /// Modifications made to the Expenses object reflect directly on the Expenses database.
-        /// </summary>
-        /// <param name="conn"></param>
-        /// <param name="newDb"></param>
-        public Expenses(SQLiteConnection conn, bool newDb) : this(conn)
-        {
-            if (newDb)
-                EmptyDatabase();
-        }
         #endregion
 
         #region Properties
@@ -140,12 +129,6 @@ namespace Budget
             }
         }
 
-        private void EmptyDatabase()
-        {
-            using SQLiteCommand cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "DELETE FROM expenses";
-            cmd.ExecuteNonQuery();
-        }
         #endregion
         #region List
         /// <summary>
