@@ -6,4 +6,10 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="Team_Budget">
+      <HintPath>dlls\Team_Budget.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
