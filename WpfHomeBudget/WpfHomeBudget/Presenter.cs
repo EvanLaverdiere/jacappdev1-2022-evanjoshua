@@ -10,13 +10,19 @@ namespace WpfHomeBudget
     class Presenter
     {
         // backing fields
-        IViewable viewable;
+        private IViewable viewable;
+        HomeBudget budget;
 
         // constructor
-        public Presenter()
+        public Presenter(IViewable view)
         {
-
+            viewable = view;
+            //budget = new HomeBudget();
         }
         // methods
+        public void CreateBudget(string dbName, bool newDatabase)
+        {
+            budget = new HomeBudget(dbName, newDatabase);
+        }
     }
 }
