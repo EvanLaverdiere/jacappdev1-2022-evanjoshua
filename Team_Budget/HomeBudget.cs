@@ -232,9 +232,9 @@ namespace Budget
             // return joined list within time frame
             // ------------------------------------------------------------------------
             Start = Start ?? new DateTime(1900, 1, 1);
-            string startString = Start.Value.ToString("yyyy-MM-dd");
+            string startString = StringifyDate(Start);
             End = End ?? new DateTime(2500, 1, 1);
-            string endString = End.Value.ToString("yyyy-MM-dd");
+            string endString = StringifyDate(End);
             List<BudgetItem> budgetItemList = new List<BudgetItem>();
             double balance = 0;
 
@@ -418,9 +418,9 @@ namespace Budget
         {
             // Sets the start and the end date of the budget to get
             Start = Start ?? new DateTime(1900, 1, 1);
-            string startString = Start.Value.ToString("yyyy-MM-dd");
+            string startString = StringifyDate(Start);
             End = End ?? new DateTime(2500, 1, 1);
-            string endString = End.Value.ToString("yyyy-MM-dd");
+            string endString = StringifyDate(End);
 
             // List of the years and the month that were present in the expenses
             List<string> years = new List<string>();
@@ -634,9 +634,9 @@ namespace Budget
 
             // Ensure Start and End have a fixed value if null. convert them into strings to avoid exceptions.
             Start = Start ?? new DateTime(1900, 1, 1);
-            string startString = Start.Value.ToString("yyyy-MM-dd");
+            string startString = StringifyDate(Start);
             End = End ?? new DateTime(2500, 1, 1);
-            string endString = End.Value.ToString("yyyy-MM-dd");
+            string endString = StringifyDate(End);
 
             //string stm = "SELECT DISTINCT c.Description, c.Id from categories c inner join expenses e on c.Id = e.CategoryId order by c.Description ASC";
 
@@ -993,6 +993,11 @@ namespace Budget
             summary.Add(totalsRecord);
 
             return summary;
+        }
+
+        public string StringifyDate(DateTime? date)
+        {
+            return date.Value.ToString("yyyy-MM-dd");
         }
         #endregion
     }
