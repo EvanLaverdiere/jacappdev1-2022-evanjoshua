@@ -30,5 +30,10 @@ namespace WpfHomeBudget
         {
             budget = new HomeBudget(dbName, newDatabase);
         }
+
+        public void CreateNewCategory(string categoryName, int categoryType)
+        {
+            budget.categories.Add(categoryName, (Category.CategoryType)categoryType);
+        }
     }
 }
