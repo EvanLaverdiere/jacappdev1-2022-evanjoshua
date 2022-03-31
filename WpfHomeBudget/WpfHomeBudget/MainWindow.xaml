@@ -40,7 +40,7 @@
             </TextBlock>
             <!-- Buffer Zone: row 1-->
             <!-- New Database: row 2-->
-            <Button x:Name="createDbBtn" Grid.Row="2" Padding="15" Cursor="Hand" Click="createDbBtn_Click">
+            <Button x:Name="createDbBtn" Grid.Row="2" Padding="15" Cursor="Hand" Click="CreateDbBtn_Click">
                 <Viewbox>
                     <TextBlock Text="Create New Budget"/>
                 </Viewbox>
