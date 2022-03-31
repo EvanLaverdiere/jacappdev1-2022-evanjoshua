@@ -10,11 +10,11 @@ namespace WpfHomeBudget
     class Presenter
     {
         // backing fields
-        private ViewInterface viewable;
+        private IViewable viewable;
         HomeBudget budget;
 
         // constructor
-        public Presenter(ViewInterface view)
+        public Presenter(IViewable view)
         {
             viewable = view;
             //budget = new HomeBudget();
