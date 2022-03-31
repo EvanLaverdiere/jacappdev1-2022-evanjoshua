@@ -13,8 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Budget;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
+
 
 
 namespace WpfHomeBudget
@@ -24,39 +23,20 @@ namespace WpfHomeBudget
     /// </summary>
     public partial class MainWindow : Window
     {
-
-
+        string directory;
         public MainWindow()
         {
+            // Create the entry window
+            EntryWindow entryWindow = new EntryWindow();
+
+            // Open the new entry window
+            _ = entryWindow.ShowDialog();
+
+            // Get the directory that the user gave in
+            directory = entryWindow.dbDirectory;
+
             InitializeComponent();
         }
 
-        private void CreateDbBtn_Click(object sender, RoutedEventArgs e)
-        {
-            // Create a new FolderBrowserDialog object
-            FolderBrowserDialog openFolderDlg = new FolderBrowserDialog()
-            {
-                //SelectedPath = "%userprofile%\\documents",
-                RootFolder = Environment.SpecialFolder.MyDocuments,
-                Description = "Select the folder in which you want to store your new Budget",
-            };
-
-            // Show the FolderBrowserDialog by calling ShowDialog method
-            DialogResult result = openFolderDlg.ShowDialog();
-
-            // Get the selected file name
-            if (result.ToString() != string.Empty)
-            {
-                string directory = openFolderDlg.SelectedPath;
-            }
-
-            // Pass the value to the entry window so that it knows what to give the presenter
-            // open the new entry winow and close this one
-        }
-
-        private void existingDbBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }
