@@ -10,30 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Budget;
 
 namespace WpfHomeBudget
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for EntryWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class EntryWindow : Window
     {
-        public MainWindow()
+        public EntryWindow()
         {
             InitializeComponent();
-        }
-
-        private void createDbBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void existingDbBtn_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

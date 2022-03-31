@@ -1,0 +1,102 @@
+﻿<Window x:Class="WpfHomeBudget.EntryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfHomeBudget"
+        mc:Ignorable="d"
+        Title="EntryWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="20*" />
+            <ColumnDefinition Width="20*" />
+            <ColumnDefinition Width="20*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <!--Menu: row 0-->
+        <Menu Grid.ColumnSpan="5">
+            <MenuItem Header="_Option" />
+            <MenuItem Header="_Option">
+                <MenuItem Header="_Option" />
+                <MenuItem Header="_Option" />
+            </MenuItem>
+            <MenuItem Header="_Settings" />
+        </Menu>
+
+        <!--Buffer Zone: row 1-->
+        <!-- View Title: row 2 -->
+        <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3">Placeholder</TextBlock>
+
+        <!--Buffer Zone: row 3-->
+        <!--Medicine Data: row 4-->
+        <DataGrid Grid.Row="4" Grid.ColumnSpan="5" AutoGenerateColumns="False" IsReadOnly="True" Margin="16,6,16,6" Grid.RowSpan="2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Displayeable" />
+                <DataGridTextColumn Header="Displayeable"/>
+                <DataGridTextColumn Header="Displayeable"/>
+                <DataGridTextColumn Header="Displayeable"/>
+                <DataGridTextColumn Header="Displayeable"/>
+                <DataGridTextColumn Header="Displayeable"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!--Buffer Zone: row 5-->
+        <!-- Total: row 6 -->
+        <TextBlock  Grid.Row="6" Grid.Column="1">Total</TextBlock>
+        <Border Grid.Row="6" Grid.Column="3" BorderThickness="2" BorderBrush="Black">
+            <TextBlock  Background="#FFD8D7D7"></TextBlock>
+        </Border>
+
+        <!-- Buffer Zone: row 7-->
+        <!--Modification tools: row 8-->
+        <Grid Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <!--Search bar: column 0-->
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBox></TextBox>
+                <Button Grid.Column="1" Content="Search" Width="80"/>
+            </Grid>
+
+            <!--Add item: column 1-->
+            <Button Grid.Column="1" Content="add expense" Width="100"></Button>
+
+            <!--Remove item: column 2-->
+            <Button Grid.Column="2" Content="remove expense" Width="100"></Button>
+
+            <!--Modify item: column 3-->
+            <Button Grid.Column="3" Content="modify expense" Width="100"></Button>
+
+            <!--Save: column 4-->
+            <Button Grid.Column="4" Content="save" Width="100"></Button>
+        </Grid>
+
+        <!--Buffer Zone: row 9-->
+    </Grid>
+</Window>
