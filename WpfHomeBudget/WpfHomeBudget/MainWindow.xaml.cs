@@ -15,6 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Budget;
 
+
+
 namespace WpfHomeBudget
 {
     /// <summary>
@@ -22,8 +24,18 @@ namespace WpfHomeBudget
     /// </summary>
     public partial class MainWindow : Window
     {
+        string directory;
         public MainWindow()
         {
+            // Create the entry window
+            EntryWindow entryWindow = new EntryWindow();
+
+            // Open the new entry window
+            _ = entryWindow.ShowDialog();
+
+            // Get the directory that the user gave in
+            directory = entryWindow.dbDirectory;
+
             InitializeComponent();
             Closing += confirmClose;
         }
@@ -35,5 +47,6 @@ namespace WpfHomeBudget
                 cancelEventArgs.Cancel = true;
             }
         }
+
     }
 }

@@ -5,10 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfHomeBudget"
         mc:Ignorable="d"
-		Height="450" Width="1000"
-        MinWidth="850" MinHeight="150"
-        WindowStartupLocation="CenterScreen"
-        Title="BudgetApplication">
+        MinWidth="500" MinHeight="400"
+        WindowStartupLocation= "CenterScreen"
+        Title="BudgetApplication" Width="692" WindowState="Maximized">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
