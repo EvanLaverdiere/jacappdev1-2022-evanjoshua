@@ -10,11 +10,11 @@ namespace WpfHomeBudget
     class Presenter
     {
         // backing fields
-        private IViewable viewable;
+        private ViewInterface viewable;
         HomeBudget budget;
 
         // constructor
-        public Presenter(IViewable view)
+        public Presenter(ViewInterface view)
         {
             viewable = view;
             //budget = new HomeBudget();
@@ -38,7 +38,35 @@ namespace WpfHomeBudget
 
         public void CreateNewExpense(DateTime date, int category, Double amount, string description)
         {
-            budget.expenses.Add(date, category, amount, description);
+            if(ValidateExpenseInput(date, category, amount, description))
+                budget.expenses.Add(date, category, amount, description);
+        }
+
+        private bool ValidateExpenseInput(DateTime date, int category, double amount, string description)
+        {
+            StringBuilder errorBuilder = new StringBuilder();
+            // Does the database include a category corresponding to this ID number?
+            try
+            {
+                budget.categories.GetCategoryFromId(category);
+            }
+            catch (Exception e)
+            {
+                errorBuilder.AppendLine(e.Message);
+            }
+
+            // Is the description blank?
+            if (String.IsNullOrEmpty(description))
+                errorBuilder.AppendLine("\'Description\' is a required field.");
+
+            //If any error messages were appended to the error builder, call the ShowError() method and return false.
+            if (!String.IsNullOrEmpty(errorBuilder.ToString()))
+            {
+                viewable.ShowError(errorBuilder.ToString());
+                return false;
+            }
+
+            return true;
         }
     }
 }
