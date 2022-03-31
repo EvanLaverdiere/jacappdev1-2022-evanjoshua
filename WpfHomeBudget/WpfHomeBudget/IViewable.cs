@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WpfHomeBudget
 {
-    interface ViewInterface
+    interface IViewable
     {
         // Show items in the main window
         void ShowBudgetItems();
