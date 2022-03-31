@@ -7,7 +7,7 @@ using Budget;
 
 namespace WpfHomeBudget
 {
-    class Presenter
+    public class Presenter
     {
         // backing fields
         private IViewable viewable;
@@ -86,6 +86,11 @@ namespace WpfHomeBudget
             }
 
             return true;
+        }
+
+        public List<Category> GetCategories()
+        {
+            return budget.categories.List();
         }
     }
 }

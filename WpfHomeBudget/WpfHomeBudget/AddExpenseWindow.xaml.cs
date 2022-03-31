@@ -24,6 +24,7 @@ namespace WpfHomeBudget
         {
             InitializeComponent();
             this.presenter = presenter;
+            cmbCategory.ItemsSource = presenter.GetCategories();
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
