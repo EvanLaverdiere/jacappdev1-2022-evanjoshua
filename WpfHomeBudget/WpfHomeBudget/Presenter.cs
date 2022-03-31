@@ -45,12 +45,12 @@ namespace WpfHomeBudget
         /// </remarks>
         /// <param name="date">The date of the Expense.</param>
         /// <param name="category">The ID of the Expense's corresponding Category.</param>
-        /// <param name="amount">The monetary amount of the Expense.</param>
+        /// <param name="amount">The monetary amount of the Expense. Must be a number that can be parsed as a double.</param>
         /// <param name="description">A brief description of the Expense.</param>
-        public void CreateNewExpense(DateTime date, int category, double amount, string description)
+        public void CreateNewExpense(DateTime? date, int category, string amount, string description)
         {
-            if(ValidateExpenseInput(category, description))
-                budget.expenses.Add(date, category, amount, description);
+            if(ValidateExpenseInput(date, category, amount, description))
+                budget.expenses.Add(date.Value, category, double.Parse(amount), description);
         }
 
         /// <summary>
@@ -60,9 +60,14 @@ namespace WpfHomeBudget
         /// <param name="category">The ID of the desired Category.</param>
         /// <param name="description">A brief description of the Expense.</param>
         /// <returns>True if the data is valid, false otherwise.</returns>
-        private bool ValidateExpenseInput(int category, string description)
+        private bool ValidateExpenseInput(DateTime? date, int category, string amount, string description)
         {
             StringBuilder errorBuilder = new StringBuilder();
+
+            // Did the user enter a date?
+            if (!date.HasValue)
+                errorBuilder.AppendLine("\'Date\' is a required field.");
+
             // Does the database include a category corresponding to this ID number?
             try
             {
@@ -74,12 +79,19 @@ namespace WpfHomeBudget
                 errorBuilder.AppendLine(e.Message);
             }
 
+            // Did the amount field contain anything?
+            if (string.IsNullOrEmpty(amount))
+                errorBuilder.AppendLine("\'Amount\' is a required field.");
+            // If so, does it contain an actual number?
+            else if (!double.TryParse(amount, out _))
+                errorBuilder.AppendLine("\'Amount\' must contain a number. Do not enter letters or special characters.");
+
             // Is the description blank?
             if (string.IsNullOrEmpty(description))
                 errorBuilder.AppendLine("\'Description\' is a required field.");
 
             //If any error messages were appended to the error builder, call the view's ShowError() method and return false.
-            if (!String.IsNullOrEmpty(errorBuilder.ToString()))
+            if (!string.IsNullOrEmpty(errorBuilder.ToString()))
             {
                 viewable.ShowError(errorBuilder.ToString());
                 return false;

@@ -31,7 +31,7 @@ namespace WpfHomeBudget
         {
             DateTime? date = dateExpDate.SelectedDate;
             int categoryId = cmbCategory.SelectedIndex;
-            double amount = txtExpAmount.Text;
+            string amount = txtExpAmount.Text;
             string description = txtExpDescription.Text;
             // Must wait until view interface has been implemented in the main window before more can be done with this.
             presenter.CreateNewExpense(date, categoryId, amount, description);
