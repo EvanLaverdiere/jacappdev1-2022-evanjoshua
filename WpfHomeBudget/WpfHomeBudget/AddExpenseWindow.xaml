@@ -7,6 +7,11 @@
         mc:Ignorable="d"
         Title="AddExpenseWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="219*"/>
+            <RowDefinition Height="215*"/>
+        </Grid.RowDefinitions>
+        <ComboBox Name="ComboBox1" Width="200" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,0,0">
+        </ComboBox>
     </Grid>
 </Window>

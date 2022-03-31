@@ -88,7 +88,7 @@
             </Grid>
 
             <!--Add item: column 1-->
-            <Button Grid.Column="1" Content="add expense" Width="100"></Button>
+            <Button Grid.Column="1" Content="add expense" Width="100" x:Name="addExpense" Click="addExpense_Click"></Button>
 
             <!--Remove item: column 2-->
             <Button Grid.Column="2" Content="remove expense" Width="100"></Button>

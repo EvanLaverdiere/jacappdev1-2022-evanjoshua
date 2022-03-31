@@ -35,5 +35,11 @@ namespace WpfHomeBudget
                 cancelEventArgs.Cancel = true;
             }
         }
+
+        private void addExpense_Click(object sender, RoutedEventArgs e)
+        {
+            AddExpenseWindow addExpense = new AddExpenseWindow();
+            addExpense.Show();
+        }
     }
 }

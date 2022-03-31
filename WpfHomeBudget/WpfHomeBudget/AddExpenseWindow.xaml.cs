@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Budget;
 
 namespace WpfHomeBudget
 {
@@ -19,9 +20,12 @@ namespace WpfHomeBudget
     /// </summary>
     public partial class AddExpenseWindow : Window
     {
+        private string[] categories = new string[] { "Expense", "Credit", "Savings", "Income" };
+
         public AddExpenseWindow()
         {
             InitializeComponent();
+            ComboBox1.ItemsSource = categories;
         }
     }
 }
