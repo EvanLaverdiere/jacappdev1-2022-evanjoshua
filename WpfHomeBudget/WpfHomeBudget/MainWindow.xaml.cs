@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,15 @@ namespace WpfHomeBudget
         public MainWindow()
         {
             InitializeComponent();
+            Closing += confirmClose;
+        }
+
+        private void confirmClose(object sender, CancelEventArgs cancelEventArgs)
+        {
+            if (MessageBox.Show(this, "Are you sure you want to close the application?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+            {
+                cancelEventArgs.Cancel = true;
+            }
         }
     }
 }
