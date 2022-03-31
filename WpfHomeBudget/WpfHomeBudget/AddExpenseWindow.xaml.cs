@@ -23,5 +23,13 @@ namespace WpfHomeBudget
         {
             InitializeComponent();
         }
+
+        private void btnSubmit_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime? date = dateExpDate.SelectedDate;
+
+            string description = txtExpDescription.Text;
+            // Must wait until view interface has been implemented in the main window before more can be done with this.
+        }
     }
 }

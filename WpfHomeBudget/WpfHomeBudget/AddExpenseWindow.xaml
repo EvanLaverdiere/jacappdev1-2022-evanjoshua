@@ -10,21 +10,31 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Expense Date"/>
-        <DatePicker Grid.Row="1" x:Name="dateExpDate"/>
-        <TextBlock Grid.Row="2" Text="Expense's Category"/>
-        <TextBox Grid.Row="3" x:Name="txtExpCategory"/>
-        <TextBlock Grid.Row="4" Text="Expense Amount"/>
-        <TextBox Grid.Row="5" x:Name="txtExpAmount"/>
-        <TextBlock Grid.Row="6" Text="Description"/>
-        <TextBox Grid.Row="7" x:Name="txtExpDescription"/>
+            <TextBlock Grid.Row="0" Text="Expense Date"/>
+            <DatePicker Grid.Row="1" x:Name="dateExpDate"/>
+            <TextBlock Grid.Row="2" Text="Expense's Category"/>
+            <TextBox Grid.Row="3" x:Name="txtExpCategory"/>
+            <TextBlock Grid.Row="4" Text="Expense Amount"/>
+            <TextBox Grid.Row="5" x:Name="txtExpAmount"/>
+            <TextBlock Grid.Row="6" Text="Description"/>
+            <TextBox Grid.Row="7" x:Name="txtExpDescription"/>
+
+        </Grid>
+
+        <Button Grid.Row="1" x:Name="btnSubmit" Content="Confirm and Save" Click="btnSubmit_Click"/>
     </Grid>
 </Window>
