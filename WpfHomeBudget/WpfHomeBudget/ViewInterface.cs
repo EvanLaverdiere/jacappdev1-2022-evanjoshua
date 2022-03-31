@@ -12,7 +12,7 @@ namespace WpfHomeBudget
         void ShowBudgetItems();
 
         // Display an error message if something goes wrong
-        void ShowError();
+        void ShowError(string error);
 
         // Clear error messages 
         void ClearError();
