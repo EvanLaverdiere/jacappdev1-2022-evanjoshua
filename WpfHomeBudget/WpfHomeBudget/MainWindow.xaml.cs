@@ -41,6 +41,7 @@ namespace WpfHomeBudget
             InitializeComponent();
 
             presenter = new Presenter(this);
+            presenter.CreateBudget(directory, entryWindow.IsNewDatabase);
             Closing += confirmClose;
         }
 
