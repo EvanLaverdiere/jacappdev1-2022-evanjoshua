@@ -41,7 +41,7 @@ namespace WpfHomeBudget
             InitializeComponent();
 
             presenter = new Presenter(this);
-            presenter.CreateBudget(directory, entryWindow.IsNewDatabase);
+            //presenter.CreateBudget(directory, entryWindow.IsNewDatabase); [UNCOMMENT ME LATER WHEN WE HAVE A WAY TO PASS AN ACTUAL FILE TO THE DATABASE]
             Closing += confirmClose;
         }
 

@@ -24,7 +24,7 @@ namespace WpfHomeBudget
         {
             InitializeComponent();
             this.presenter = presenter;
-            cmbCategory.ItemsSource = presenter.GetCategories();
+            //cmbCategory.ItemsSource = presenter.GetCategories(); [UNCOMMENT ME ONCE WE CAN ACTUALLY INITIALIZE A HOMEBUDGET]
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
@@ -34,6 +34,7 @@ namespace WpfHomeBudget
             string amount = txtExpAmount.Text;
             string description = txtExpDescription.Text;
             // Must wait until view interface has been implemented in the main window before more can be done with this.
+            // [Program will crash here because the HomeBudget has not been initialized yet.]
             presenter.CreateNewExpense(date, categoryId, amount, description);
         }
     }
