@@ -38,9 +38,16 @@ namespace WpfHomeBudget
             presenter.CreateNewExpense(date, categoryId, amount, description);
         }
 
+        /// <summary>
+        /// Prompts user to confirm that they want to cancel adding a new expense to the budget.
+        /// If user chooses yes, method closes this window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-
+            if (MessageBox.Show("Are you sure you want to cancel adding this new expense?", "CONFIRM CANCELATION", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                this.Close();
         }
     }
 }
