@@ -8,6 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\documents.png" />
+    <None Remove="images\folder.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\documents.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="images\folder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Team_Budget">
       <HintPath>dlls\Team_Budget.dll</HintPath>
     </Reference>

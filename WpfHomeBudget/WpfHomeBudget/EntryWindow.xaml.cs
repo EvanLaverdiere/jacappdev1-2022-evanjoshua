@@ -22,7 +22,7 @@ namespace WpfHomeBudget
     /// </summary>
     public partial class EntryWindow : Window
     {
-        public string dbDirectory;
+        public string dbLocation;
         public EntryWindow()
         {
             InitializeComponent();
@@ -33,7 +33,7 @@ namespace WpfHomeBudget
             // Create a new FolderBrowserDialog object
             FolderBrowserDialog openFolderDlg = new FolderBrowserDialog()
             {
-                RootFolder = Environment.SpecialFolder.MyDocuments,
+                RootFolder = Environment.SpecialFolder.MyDocuments, //userprofile maybe
                 Description = "Select the folder in which you want to store your new Budget",
                 UseDescriptionForTitle = true,
             };
@@ -47,14 +47,33 @@ namespace WpfHomeBudget
             //Check if the folder exists and if it does set it as the dbDirectory
             if (Directory.Exists(obtainedDirectory))
             {
-                dbDirectory = obtainedDirectory;
+                dbLocation = obtainedDirectory;
                 this.Close();
             }
         }
 
         private void ExistingDbBtn_Click(object sender, RoutedEventArgs e)
         {
+            // Create a new OpenFileDialog object
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                CheckFileExists = true,
+                CheckPathExists = true,
+                DefaultExt = "dll",
+                Filter = "DLL files (*.dll)|*.dll",
+                FilterIndex = 1,
+                InitialDirectory = Regex.Replace(Directory.GetCurrentDirectory(), @"(\\.[^\\]*){4}$", "TestFolder"),
+                Title = "Select a dll file"
+            };
 
+            // Show the OpenFileDialog by calling ShowDialog method
+            _ = openFileDialog.ShowDialog();
+
+            // Get the selected file name
+            dbLocation = openFileDialog.FileName;
+
+            // Close the window
+            this.Close();
         }
     }
 }

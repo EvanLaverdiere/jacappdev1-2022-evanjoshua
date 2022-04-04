@@ -41,16 +41,70 @@
             <!-- Buffer Zone: row 1-->
             <!-- New Database: row 2-->
             <Button x:Name="createDbBtn" Grid.Row="2" Padding="15" Cursor="Hand" Click="CreateDbBtn_Click">
-                <Viewbox>
-                    <TextBlock Text="Create New Budget"/>
-                </Viewbox>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="20*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- file logo: col 0-->
+                    <Image Source="images\documents.png"/>
+
+                    <!-- Buffer zone: col 1-->
+
+                    <!-- Option information: col 2-->
+                    <Grid Grid.Column="2"  Margin="51,0,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="2*"/>
+                        </Grid.RowDefinitions>
+
+                        <!--Option title-->
+                        <Viewbox VerticalAlignment="Top" HorizontalAlignment="Left">
+                            <TextBlock Text="Create New Budget"/>
+                        </Viewbox>
+
+                        <!-- Option description-->
+                        <Viewbox Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left">
+                            <TextBlock Text="Create a new database with new expenses and new categories"/>
+                        </Viewbox>
+                    </Grid>
+                </Grid>
             </Button>
             <!-- Buffer Zone: row 3-->
             <!-- Existing database: row 4-->
             <Button x:Name="existingDbBtn" Grid.Row="4" Padding="15" Cursor="Hand" Click="ExistingDbBtn_Click">
-                <Viewbox>
-                    <TextBlock Text="Use Existing Budget"/>
-                </Viewbox>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="20*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- file logo: col 0-->
+                    <Image Source="images\folder.png"/>
+
+                    <!-- Buffer zone: col 1-->
+
+                    <!-- Option information: col 2-->
+                    <Grid Grid.Column="2"  Margin="51,0,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="2*"/>
+                        </Grid.RowDefinitions>
+
+                        <!--Option title-->
+                        <Viewbox VerticalAlignment="Top" HorizontalAlignment="Left">
+                            <TextBlock Text="Use Existing Budget"/>
+                        </Viewbox>
+
+                        <!-- Option description-->
+                        <Viewbox Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left">
+                            <TextBlock Text="Browse, add and modify expenses in an existing budget"/>
+                        </Viewbox>
+                    </Grid>
+                </Grid>
             </Button>
         </Grid>
         <!-- Buffer Zone: row 2-->

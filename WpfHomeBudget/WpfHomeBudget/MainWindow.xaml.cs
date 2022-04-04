@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace WpfHomeBudget
     /// </summary>
     public partial class MainWindow : Window
     {
-        string directory;
+        string location;
         public MainWindow()
         {
             // Create the entry window
@@ -33,10 +34,15 @@ namespace WpfHomeBudget
             // Open the new entry window
             _ = entryWindow.ShowDialog();
 
-            // Get the directory that the user gave in
-            directory = entryWindow.dbDirectory;
+
+            // The following chunk of code is to get the result of the startup window
+            //// Get the location specified by the user
+            //location = entryWindow.dbLocation;
+
 
             InitializeComponent();
+
+
             Closing += confirmClose;
         }
 
@@ -47,6 +53,5 @@ namespace WpfHomeBudget
                 cancelEventArgs.Cancel = true;
             }
         }
-
     }
 }
