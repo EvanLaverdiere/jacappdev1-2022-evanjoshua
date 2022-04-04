@@ -23,6 +23,12 @@ namespace WpfHomeBudget
     public partial class EntryWindow : Window
     {
         public string dbLocation;
+        public string dbDirectory;
+
+        /// <summary>
+        /// True if the window is creating a new database, false if it is loading an existing one.
+        /// </summary>
+        public bool IsNewDatabase { get; private set; }
         public EntryWindow()
         {
             InitializeComponent();
@@ -47,7 +53,8 @@ namespace WpfHomeBudget
             //Check if the folder exists and if it does set it as the dbDirectory
             if (Directory.Exists(obtainedDirectory))
             {
-                dbLocation = obtainedDirectory;
+                dbDirectory = obtainedDirectory;
+                IsNewDatabase = true;
                 this.Close();
             }
         }

@@ -23,9 +23,12 @@ namespace WpfHomeBudget
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IViewable
     {
         string location;
+        string directory;
+
+        private Presenter presenter;
         public MainWindow()
         {
             // Create the entry window
@@ -52,6 +55,17 @@ namespace WpfHomeBudget
             {
                 cancelEventArgs.Cancel = true;
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
+            expenseWindow.ShowDialog();
+        }
+
+        public void ShowBudgetItems()
+        {
+            throw new NotImplementedException();
         }
     }
 }

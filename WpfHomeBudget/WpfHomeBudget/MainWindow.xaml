@@ -42,18 +42,17 @@
 
         <!--Buffer Zone: row 1-->
         <!-- View Title: row 2 -->
-        <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3">Placeholder</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" FontWeight="Bold" FontSize="14">Expenses</TextBlock>
 
         <!--Buffer Zone: row 3-->
         <!--Medicine Data: row 4-->
         <DataGrid Grid.Row="4" Grid.ColumnSpan="5" AutoGenerateColumns="False" IsReadOnly="True" Margin="16,6,16,6" Grid.RowSpan="2">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Displayeable" />
-                <DataGridTextColumn Header="Displayeable"/>
-                <DataGridTextColumn Header="Displayeable"/>
-                <DataGridTextColumn Header="Displayeable"/>
-                <DataGridTextColumn Header="Displayeable"/>
-                <DataGridTextColumn Header="Displayeable"/>
+                <DataGridTextColumn Header="Id" />
+                <DataGridTextColumn Header="Date"/>
+                <DataGridTextColumn Header="Description"/>
+                <DataGridTextColumn Header="Amount"/>
+                <DataGridTextColumn Header="Category"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -87,7 +86,7 @@
             </Grid>
 
             <!--Add item: column 1-->
-            <Button Grid.Column="1" Content="add expense" Width="100"></Button>
+            <Button Grid.Column="1" Content="add expense" Width="100" Click="Button_Click"></Button>
 
             <!--Remove item: column 2-->
             <Button Grid.Column="2" Content="remove expense" Width="100"></Button>
