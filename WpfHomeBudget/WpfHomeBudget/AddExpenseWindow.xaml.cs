@@ -37,5 +37,10 @@ namespace WpfHomeBudget
             // [Program will crash here because the HomeBudget has not been initialized yet.]
             presenter.CreateNewExpense(date, categoryId, amount, description);
         }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
