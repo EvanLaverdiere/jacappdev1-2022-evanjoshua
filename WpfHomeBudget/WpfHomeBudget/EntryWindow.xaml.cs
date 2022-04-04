@@ -23,6 +23,11 @@ namespace WpfHomeBudget
     public partial class EntryWindow : Window
     {
         public string dbDirectory;
+
+        /// <summary>
+        /// True if the window is creating a new database, false if it is loading an existing one.
+        /// </summary>
+        public bool IsNewDatabase { get; private set; }
         public EntryWindow()
         {
             InitializeComponent();
@@ -48,6 +53,7 @@ namespace WpfHomeBudget
             if (Directory.Exists(obtainedDirectory))
             {
                 dbDirectory = obtainedDirectory;
+                IsNewDatabase = true;
                 this.Close();
             }
         }
