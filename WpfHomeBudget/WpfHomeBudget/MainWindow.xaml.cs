@@ -14,8 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Budget;
-
-
+using System.IO;
 
 namespace WpfHomeBudget
 {
@@ -35,13 +34,17 @@ namespace WpfHomeBudget
             // Open the new entry window
             _ = entryWindow.ShowDialog();
 
-            // Get the directory that the user gave in
-            directory = entryWindow.dbDirectory;
+
+            // The following chunk of code is to get the result of the startup window
+            //// Get the location specified by the user
+            //location = entryWindow.dbLocation;
 
             InitializeComponent();
 
             presenter = new Presenter(this);
+
             //presenter.CreateBudget(directory, entryWindow.IsNewDatabase); [UNCOMMENT ME LATER WHEN WE HAVE A WAY TO PASS AN ACTUAL FILE TO THE DATABASE]
+            
             Closing += confirmClose;
         }
 
