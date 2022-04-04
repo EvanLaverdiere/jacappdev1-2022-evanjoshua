@@ -50,7 +50,12 @@ namespace WpfHomeBudget
         public void CreateNewExpense(DateTime? date, int category, string amount, string description)
         {
             if(ValidateExpenseInput(date, category, amount, description))
+            {
                 budget.expenses.Add(date.Value, category, double.Parse(amount), description);
+                // Display some kind of message indicating the Expense was successfully added?
+                // Clear the form afterward.
+                viewable.ClearForm();
+            }
         }
 
         /// <summary>
@@ -99,6 +104,7 @@ namespace WpfHomeBudget
                 return false;
             }
 
+            // If no messages were appended, everything is good. Return true.
             return true;
         }
 
