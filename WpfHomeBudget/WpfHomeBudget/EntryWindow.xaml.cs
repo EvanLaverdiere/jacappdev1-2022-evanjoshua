@@ -65,11 +65,11 @@ namespace WpfHomeBudget
             {
                 CheckFileExists = true,
                 CheckPathExists = true,
-                DefaultExt = "dll",
-                Filter = "DLL files (*.dll)|*.dll",
+                DefaultExt = "db",
+                Filter = "DB files (*.db)|*.db",
                 FilterIndex = 1,
                 InitialDirectory = Regex.Replace(Directory.GetCurrentDirectory(), @"(\\.[^\\]*){4}$", "TestFolder"),
-                Title = "Select a dll file"
+                Title = "Select a database file"
             };
 
             // Show the OpenFileDialog by calling ShowDialog method
