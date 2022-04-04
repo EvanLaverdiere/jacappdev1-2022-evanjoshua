@@ -66,7 +66,8 @@ namespace WpfHomeBudget
 
         public void ShowError(string error)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            MessageBox.Show(error, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public void ClearError()
