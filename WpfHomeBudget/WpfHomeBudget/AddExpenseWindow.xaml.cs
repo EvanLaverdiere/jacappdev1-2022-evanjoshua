@@ -25,6 +25,7 @@ namespace WpfHomeBudget
             InitializeComponent();
             this.presenter = presenter;
             //cmbCategory.ItemsSource = presenter.GetCategories(); [UNCOMMENT ME ONCE WE CAN ACTUALLY INITIALIZE A HOMEBUDGET]
+            dateExpDate.SelectedDate = DateTime.Today;
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
