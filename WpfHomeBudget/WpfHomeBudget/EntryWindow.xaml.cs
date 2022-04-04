@@ -22,7 +22,7 @@ namespace WpfHomeBudget
     /// </summary>
     public partial class EntryWindow : Window
     {
-        public string dbDirectory;
+        public string dbLocation;
 
         /// <summary>
         /// True if the window is creating a new database, false if it is loading an existing one.
@@ -52,7 +52,7 @@ namespace WpfHomeBudget
             //Check if the folder exists and if it does set it as the dbDirectory
             if (Directory.Exists(obtainedDirectory))
             {
-                dbDirectory = obtainedDirectory;
+                dbLocation = obtainedDirectory;
                 IsNewDatabase = true;
                 this.Close();
             }
@@ -60,7 +60,26 @@ namespace WpfHomeBudget
 
         private void ExistingDbBtn_Click(object sender, RoutedEventArgs e)
         {
+            // Create a new OpenFileDialog object
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                CheckFileExists = true,
+                CheckPathExists = true,
+                DefaultExt = "dll",
+                Filter = "DLL files (*.dll)|*.dll",
+                FilterIndex = 1,
+                InitialDirectory = Regex.Replace(Directory.GetCurrentDirectory(), @"(\\.[^\\]*){4}$", "TestFolder"),
+                Title = "Select a dll file"
+            };
 
+            // Show the OpenFileDialog by calling ShowDialog method
+            _ = openFileDialog.ShowDialog();
+
+            // Get the selected file name
+            dbLocation = openFileDialog.FileName;
+
+            // Close the window
+            this.Close();
         }
     }
 }
