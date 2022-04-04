@@ -22,9 +22,11 @@ namespace WpfHomeBudget
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IViewable
     {
         string directory;
+
+        private Presenter presenter;
         public MainWindow()
         {
             // Create the entry window
@@ -37,6 +39,9 @@ namespace WpfHomeBudget
             directory = entryWindow.dbDirectory;
 
             InitializeComponent();
+
+            presenter = new Presenter(this);
+            //presenter.CreateBudget(directory, entryWindow.IsNewDatabase); [UNCOMMENT ME LATER WHEN WE HAVE A WAY TO PASS AN ACTUAL FILE TO THE DATABASE]
             Closing += confirmClose;
         }
 
@@ -48,5 +53,40 @@ namespace WpfHomeBudget
             }
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
+            expenseWindow.ShowDialog();
+        }
+
+        public void ShowBudgetItems()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowError(string error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ClearError()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Refresh()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ClearForm()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ClearSelection()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

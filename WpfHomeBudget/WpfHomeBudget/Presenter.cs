@@ -7,7 +7,7 @@ using Budget;
 
 namespace WpfHomeBudget
 {
-    class Presenter
+    public class Presenter
     {
         // backing fields
         private IViewable viewable;
@@ -36,15 +36,38 @@ namespace WpfHomeBudget
             budget.categories.Add(categoryName, (Category.CategoryType)categoryType);
         }
 
-        public void CreateNewExpense(DateTime date, int category, Double amount, string description)
+        /// <summary>
+        /// Tells the HomeBudget model to create a new Expense object.
+        /// </summary>
+        /// <remarks>
+        /// Database is updated only if the passed data is valid. 
+        /// If any data is invalid, the View will display an error message.
+        /// </remarks>
+        /// <param name="date">The date of the Expense.</param>
+        /// <param name="category">The ID of the Expense's corresponding Category.</param>
+        /// <param name="amount">The monetary amount of the Expense. Must be a number that can be parsed as a double.</param>
+        /// <param name="description">A brief description of the Expense.</param>
+        public void CreateNewExpense(DateTime? date, int category, string amount, string description)
         {
             if(ValidateExpenseInput(date, category, amount, description))
-                budget.expenses.Add(date, category, amount, description);
+                budget.expenses.Add(date.Value, category, double.Parse(amount), description);
         }
 
-        private bool ValidateExpenseInput(DateTime date, int category, double amount, string description)
+        /// <summary>
+        /// Validates data that is meant to be used to create an Expense object.
+        /// If any of the data is invalid, method tells the View to display an appropriate error message.
+        /// </summary>
+        /// <param name="category">The ID of the desired Category.</param>
+        /// <param name="description">A brief description of the Expense.</param>
+        /// <returns>True if the data is valid, false otherwise.</returns>
+        private bool ValidateExpenseInput(DateTime? date, int category, string amount, string description)
         {
             StringBuilder errorBuilder = new StringBuilder();
+
+            // Did the user enter a date?
+            if (!date.HasValue)
+                errorBuilder.AppendLine("\'Date\' is a required field.");
+
             // Does the database include a category corresponding to this ID number?
             try
             {
@@ -52,21 +75,34 @@ namespace WpfHomeBudget
             }
             catch (Exception e)
             {
+                // GetCategoryFromId will throw an exception if no matching ID is found in the Categories table.
                 errorBuilder.AppendLine(e.Message);
             }
 
+            // Did the amount field contain anything?
+            if (string.IsNullOrEmpty(amount))
+                errorBuilder.AppendLine("\'Amount\' is a required field.");
+            // If so, does it contain an actual number?
+            else if (!double.TryParse(amount, out _))
+                errorBuilder.AppendLine("\'Amount\' must contain a number. Do not enter letters or special characters.");
+
             // Is the description blank?
-            if (String.IsNullOrEmpty(description))
+            if (string.IsNullOrEmpty(description))
                 errorBuilder.AppendLine("\'Description\' is a required field.");
 
-            //If any error messages were appended to the error builder, call the ShowError() method and return false.
-            if (!String.IsNullOrEmpty(errorBuilder.ToString()))
+            //If any error messages were appended to the error builder, call the view's ShowError() method and return false.
+            if (!string.IsNullOrEmpty(errorBuilder.ToString()))
             {
                 viewable.ShowError(errorBuilder.ToString());
                 return false;
             }
 
             return true;
+        }
+
+        public List<Category> GetCategories()
+        {
+            return budget.categories.List();
         }
     }
 }
