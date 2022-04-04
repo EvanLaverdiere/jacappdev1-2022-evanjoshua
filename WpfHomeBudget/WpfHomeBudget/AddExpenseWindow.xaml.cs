@@ -35,7 +35,7 @@ namespace WpfHomeBudget
             string amount = txtExpAmount.Text;
             string description = txtExpDescription.Text;
             // Must wait until view interface has been implemented in the main window before more can be done with this.
-            // [Program will crash here because the HomeBudget has not been initialized yet.]
+            // [Program will crash here because the HomeBudget has not been initialized yet.] [04/04/2022: Disregard. Program does not crash thanks to try-catch block.]
             presenter.CreateNewExpense(date, categoryId, amount, description);
         }
 
