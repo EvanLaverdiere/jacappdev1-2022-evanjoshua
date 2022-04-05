@@ -19,9 +19,12 @@ namespace WpfHomeBudget
     /// </summary>
     public partial class AddCategoryWindow : Window
     {
-        public AddCategoryWindow()
+        private Presenter presenter;
+        public AddCategoryWindow(Presenter presenter)
         {
             InitializeComponent();
+            this.presenter = presenter;
+            //cmbCategoryType.ItemsSource = presenter.GetCategories();
         }
     }
 }
