@@ -50,14 +50,21 @@ namespace WpfHomeBudget
         public void CreateNewExpense(DateTime? date, int category, string amount, string description)
         {
             if(ValidateExpenseInput(date, category, amount, description))
+            {
                 budget.expenses.Add(date.Value, category, double.Parse(amount), description);
+                // Display some kind of message indicating the Expense was successfully added?
+                //// Clear the form afterward.
+                //viewable.ClearForm();
+            }
         }
 
         /// <summary>
         /// Validates data that is meant to be used to create an Expense object.
         /// If any of the data is invalid, method tells the View to display an appropriate error message.
         /// </summary>
+        /// <param name="date">The date of the Expense.</param>
         /// <param name="category">The ID of the desired Category.</param>
+        /// <param name="amount">The monetary amount of the expense. Must be in a numerical format that can be parsed as a double.</param>
         /// <param name="description">A brief description of the Expense.</param>
         /// <returns>True if the data is valid, false otherwise.</returns>
         private bool ValidateExpenseInput(DateTime? date, int category, string amount, string description)
@@ -97,6 +104,7 @@ namespace WpfHomeBudget
                 return false;
             }
 
+            // If no messages were appended, everything is good. Return true.
             return true;
         }
 
