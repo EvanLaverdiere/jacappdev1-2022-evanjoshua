@@ -17,11 +17,26 @@ namespace WpfHomeBudget
     /// <summary>
     /// Interaction logic for AddCategoryWindow.xaml
     /// </summary>
+    ///
     public partial class AddCategoryWindow : Window
     {
-        public AddCategoryWindow()
+        private Presenter presenter;
+
+        public AddCategoryWindow(Presenter presenter)
         {
             InitializeComponent();
+            this.presenter = presenter;
+            cmbCategoryType.ItemsSource = presenter.GetCategoryTypes();
+        }
+
+        private void addButton_Click(object sender, RoutedEventArgs e)
+        {
+            string description = descriptionBox.Text;
+            int categoryType = cmbCategoryType.SelectedIndex;
+
+            presenter.CreateNewCategory(description, categoryType);
+            descriptionBox.Clear();
+            cmbCategoryType.SelectedIndex = -1;
         }
     }
 }

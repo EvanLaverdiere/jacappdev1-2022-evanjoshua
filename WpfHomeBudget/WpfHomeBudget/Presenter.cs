@@ -31,9 +31,24 @@ namespace WpfHomeBudget
             budget = new HomeBudget(dbName, newDatabase);
         }
 
-        public void CreateNewCategory(string categoryName, int categoryType)
+        public void CreateNewCategory(string description, int categoryType)
         {
-            budget.categories.Add(categoryName, (Category.CategoryType)categoryType);
+            string error;
+
+            if (string.IsNullOrEmpty(description))
+            {
+                error = "Error: Please enter a valid description";
+                viewable.ShowError(error);
+            }
+            else if (categoryType == -1)
+            {
+                error = "Error: Please select a valid category type";
+                viewable.ShowError(error);
+            }
+            else
+            {
+                budget.categories.Add(description, (Category.CategoryType)categoryType);
+            }
         }
 
         /// <summary>
@@ -111,6 +126,18 @@ namespace WpfHomeBudget
         public List<Category> GetCategories()
         {
             return budget.categories.List();
+        }
+
+        public List<string> GetCategoryTypes()
+        {
+            List<string> categoryTypes = new List<string>();
+
+            foreach (string type in Enum.GetNames(typeof (Category.CategoryType)))
+            {
+                categoryTypes.Add(type);
+            }
+
+            return categoryTypes;
         }
     }
 }
