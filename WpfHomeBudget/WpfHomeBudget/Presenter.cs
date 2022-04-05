@@ -119,5 +119,17 @@ namespace WpfHomeBudget
         {
             return budget.categories.List();
         }
+
+        public List<string> GetCategoryTypes()
+        {
+            List<string> categoryTypes = new List<string>();
+
+            foreach (string type in Enum.GetNames(typeof (Category.CategoryType)))
+            {
+                categoryTypes.Add(type);
+            }
+
+            return categoryTypes;
+        }
     }
 }

@@ -21,13 +21,12 @@ namespace WpfHomeBudget
     public partial class AddCategoryWindow : Window
     {
         private Presenter presenter;
-        private string[] categoryTypes = new string[] { "Income", "Expense", "Credit", "Savings" };
 
         public AddCategoryWindow(Presenter presenter)
         {
             InitializeComponent();
             this.presenter = presenter;
-            cmbCategoryType.ItemsSource = categoryTypes;
+            cmbCategoryType.ItemsSource = presenter.GetCategoryTypes();
         }
 
         private void addButton_Click(object sender, RoutedEventArgs e)
