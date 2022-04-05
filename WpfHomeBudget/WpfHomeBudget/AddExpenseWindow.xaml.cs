@@ -50,5 +50,10 @@ namespace WpfHomeBudget
             if (MessageBox.Show("Are you sure you want to cancel adding this new expense?", "CONFIRM CANCELATION", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 this.Close();
         }
+
+        private void btnNewCategory_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
