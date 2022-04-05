@@ -31,7 +31,7 @@ namespace WpfHomeBudget
             budget = new HomeBudget(dbName, newDatabase);
         }
 
-        public void CreateNewCategory(string description, int categoryType)
+        public bool CreateNewCategory(string description, int categoryType, bool close=false)
         {
             string error;
 
@@ -48,7 +48,14 @@ namespace WpfHomeBudget
             else
             {
                 budget.categories.Add(description, (Category.CategoryType)categoryType);
+
+                if (close == true)
+                {
+                    return true;
+                }
             }
+
+            return false;
         }
 
         /// <summary>
