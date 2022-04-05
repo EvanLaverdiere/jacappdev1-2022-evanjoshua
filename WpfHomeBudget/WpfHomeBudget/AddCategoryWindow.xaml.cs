@@ -35,27 +35,9 @@ namespace WpfHomeBudget
             string description = descriptionBox.Text;
             int categoryType = cmbCategoryType.SelectedIndex;
 
-            if (string.IsNullOrEmpty(description))
-            {
-                MessageBox.Show("Error: Please enter a valid description");
-            }
-            else if (cmbCategoryType.SelectedItem == null)
-            {
-                MessageBox.Show("Error: Please select a valid category type");
-            }
-            else
-            {
-                try
-                {
-                    presenter.CreateNewCategory(description, categoryType);
-                    descriptionBox.Clear();
-                    cmbCategoryType.SelectedIndex = -1;
-                }
-                catch (Exception)
-                {
-                    throw new SystemException();
-                }
-            }
+            presenter.CreateNewCategory(description, categoryType);
+            descriptionBox.Clear();
+            cmbCategoryType.SelectedIndex = -1;
         }
     }
 }
