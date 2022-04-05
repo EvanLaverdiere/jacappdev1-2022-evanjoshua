@@ -28,7 +28,14 @@
             <DatePicker Grid.Row="1" x:Name="dateExpDate"/>
             <TextBlock Grid.Row="2" Text="Expense's Category"/>
             <!--<TextBox Grid.Row="3" x:Name="txtExpCategory"/>-->
-            <ComboBox Grid.Row="3" x:Name="cmbCategory"/>
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox Grid.Column="0" x:Name="cmbCategory" Margin="5"/>
+                <Button Grid.Column="1" x:Name="btnNewCategory" Margin="5" Content="Add New Category" Click="btnNewCategory_Click"/>
+            </Grid>
             <TextBlock Grid.Row="4" Text="Expense Amount"/>
             <TextBox Grid.Row="5" x:Name="txtExpAmount"/>
             <TextBlock Grid.Row="6" Text="Description"/>
