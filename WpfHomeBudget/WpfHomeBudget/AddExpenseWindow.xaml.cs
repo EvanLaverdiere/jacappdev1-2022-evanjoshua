@@ -51,6 +51,11 @@ namespace WpfHomeBudget
                 this.Close();
         }
 
+        /// <summary>
+        /// Opens a dialog window to let the user add a new Category to the database.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnNewCategory_Click(object sender, RoutedEventArgs e)
         {
 
