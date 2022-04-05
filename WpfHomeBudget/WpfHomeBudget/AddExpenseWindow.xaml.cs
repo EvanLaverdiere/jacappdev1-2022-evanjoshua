@@ -61,6 +61,8 @@ namespace WpfHomeBudget
         {
             AddCategoryWindow addCategory = new AddCategoryWindow(presenter);
             addCategory.ShowDialog();
+            // Refresh the list of categories.
+            cmbCategory.ItemsSource = presenter.GetCategories();
         }
 
         /// <summary>
