@@ -1,0 +1,92 @@
+﻿<Window x:Class="WpfHomeBudget.NewBudgetWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfHomeBudget"
+        mc:Ignorable="d"
+        Title="NewBudgetWindow"
+        Height="600" Width="700"
+        MinHeight="550" MinWidth="650"
+        WindowStartupLocation="CenterScreen"
+        >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <!--Buffer zone: row 0-->
+
+        <!--Buffer zone: row 1-->
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title: row 0-->
+            <Viewbox VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Padding="2" Text="Configure new Budget"/>
+            </Viewbox>
+
+            <!-- Label 1: row 1-->
+            <Viewbox Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Padding="2" Text="Budget name"/>
+            </Viewbox>
+
+            <!-- File name Input: row 2-->
+            <TextBox Padding="10" x:Name="inputName" Grid.Row="2" TextWrapping="Wrap" VerticalContentAlignment="Center"/>
+
+            <!-- label 2: row 3-->
+            <Viewbox Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Padding="2" Text="Location"/>
+            </Viewbox>
+
+            <!--Location picker: row 4-->
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- current location-->
+                <TextBox Padding="10" x:Name="inputLocation" TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+
+                <!-- browse button-->
+                <Button x:Name="browseFoldersBtn" Grid.Column="1" Content="..." Click="browseFoldersBtn_Click" Padding="0,10,0,10" FontWeight="Bold" Cursor="Hand"/>
+            </Grid>
+
+            <!-- Buffer Zone: row 5-->
+
+            <!-- next and cancel button: row 6 col1-->
+            <Grid Grid.Row="6" Grid.Column="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="cancelCreateBudgetBtn" Content="Cancel" Margin="5" Cursor="Hand" Click="cancelCreateBudgetBtn_Click"/>
+                    <Button x:Name="proceedCreateBudgetBtn" Grid.Column="1" Content="Next" Margin="5" Cursor="Hand" Click="proceedCreateBudgetBtn_Click"/>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!--Buffer zone: row 2-->
+    </Grid>
+</Window>

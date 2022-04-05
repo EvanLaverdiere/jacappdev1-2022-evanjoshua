@@ -11,9 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace WpfHomeBudget
 {
@@ -22,7 +22,7 @@ namespace WpfHomeBudget
     /// </summary>
     public partial class EntryWindow : Window
     {
-        public string dbDirectory;
+        public string dbLocation { get; private set; }
 
         /// <summary>
         /// True if the window is creating a new database, false if it is loading an existing one.
@@ -35,24 +35,11 @@ namespace WpfHomeBudget
 
         private void CreateDbBtn_Click(object sender, RoutedEventArgs e)
         {
-            // Create a new FolderBrowserDialog object
-            FolderBrowserDialog openFolderDlg = new FolderBrowserDialog()
+            NewBudgetWindow newBudgetWindow = new NewBudgetWindow();
+            newBudgetWindow.ShowDialog();
+            if (newBudgetWindow.path != string.Empty)
             {
-                RootFolder = Environment.SpecialFolder.MyDocuments,
-                Description = "Select the folder in which you want to store your new Budget",
-                UseDescriptionForTitle = true,
-            };
-
-            // Show the FolderBrowserDialog by calling ShowDialog method
-            _ = openFolderDlg.ShowDialog();
-
-            // Get the selected file name
-            string obtainedDirectory = openFolderDlg.SelectedPath;
-
-            //Check if the folder exists and if it does set it as the dbDirectory
-            if (Directory.Exists(obtainedDirectory))
-            {
-                dbDirectory = obtainedDirectory;
+                dbLocation = newBudgetWindow.path;
                 IsNewDatabase = true;
                 this.Close();
             }
@@ -60,7 +47,29 @@ namespace WpfHomeBudget
 
         private void ExistingDbBtn_Click(object sender, RoutedEventArgs e)
         {
+            // Create a new OpenFileDialog object
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                CheckFileExists = true,
+                CheckPathExists = true,
+                DefaultExt = "db",
+                Filter = "DB files (*.db)|*.db",
+                FilterIndex = 1,
+                InitialDirectory = Regex.Replace(Directory.GetCurrentDirectory(), @"(\\.[^\\]*){4}$", "TestFolder"),
+                Title = "Select a database file"
+            };
 
+            // Show the OpenFileDialog by calling ShowDialog method
+            _ = openFileDialog.ShowDialog();
+
+            // Get the selected file name
+            dbLocation = openFileDialog.FileName;
+
+            if (dbLocation != string.Empty)
+            {
+                IsNewDatabase = false;
+                this.Close();
+            }
         }
     }
 }
