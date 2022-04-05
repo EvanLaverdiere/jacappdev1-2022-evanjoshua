@@ -23,8 +23,6 @@ namespace WpfHomeBudget
     /// </summary>
     public partial class MainWindow : Window, IViewable
     {
-        string directory;
-
         private Presenter presenter;
         public MainWindow()
         {
@@ -35,16 +33,17 @@ namespace WpfHomeBudget
             _ = entryWindow.ShowDialog();
 
 
-            // The following chunk of code is to get the result of the startup window
-            //// Get the location specified by the user
-            //location = entryWindow.dbLocation;
+            if (entryWindow.dbLocation == null)
+            {
+                this.Close();
+            }
 
             InitializeComponent();
 
             presenter = new Presenter(this);
 
-            //presenter.CreateBudget(directory, entryWindow.IsNewDatabase); [UNCOMMENT ME LATER WHEN WE HAVE A WAY TO PASS AN ACTUAL FILE TO THE DATABASE]
-            
+            presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
+
             Closing += confirmClose;
         }
 
