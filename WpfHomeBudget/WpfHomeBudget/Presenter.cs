@@ -53,8 +53,8 @@ namespace WpfHomeBudget
             {
                 budget.expenses.Add(date.Value, category, double.Parse(amount), description);
                 // Display some kind of message indicating the Expense was successfully added?
-                // Clear the form afterward.
-                viewable.ClearForm();
+                //// Clear the form afterward.
+                //viewable.ClearForm();
             }
         }
 

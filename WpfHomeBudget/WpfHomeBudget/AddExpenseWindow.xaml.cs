@@ -37,6 +37,7 @@ namespace WpfHomeBudget
             // Must wait until view interface has been implemented in the main window before more can be done with this.
             // [Program will crash here because the HomeBudget has not been initialized yet.] [04/04/2022: Disregard. Program does not crash thanks to try-catch block.]
             presenter.CreateNewExpense(date, categoryId, amount, description);
+            ClearExpenseForm();
         }
 
         /// <summary>
@@ -59,6 +60,17 @@ namespace WpfHomeBudget
         private void btnNewCategory_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        /// <summary>
+        /// Clears the Add Expense form so that the same Expense cannot be added multiple times.
+        /// </summary>
+        private void ClearExpenseForm()
+        {
+            dateExpDate.SelectedDate = DateTime.Today;
+            cmbCategory.SelectedIndex = -1;
+            txtExpAmount.Clear();
+            txtExpDescription.Clear();
         }
     }
 }
