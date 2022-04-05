@@ -59,7 +59,10 @@ namespace WpfHomeBudget
         /// <param name="e"></param>
         private void btnNewCategory_Click(object sender, RoutedEventArgs e)
         {
-
+            AddCategoryWindow addCategory = new AddCategoryWindow(presenter);
+            addCategory.ShowDialog();
+            // Refresh the list of categories.
+            cmbCategory.ItemsSource = presenter.GetCategories();
         }
 
         /// <summary>
