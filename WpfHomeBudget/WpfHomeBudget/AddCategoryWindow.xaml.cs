@@ -17,14 +17,45 @@ namespace WpfHomeBudget
     /// <summary>
     /// Interaction logic for AddCategoryWindow.xaml
     /// </summary>
+    ///
     public partial class AddCategoryWindow : Window
     {
         private Presenter presenter;
+        private string[] categoryTypes = new string[] { "Income", "Expense", "Credit", "Savings" };
+
         public AddCategoryWindow(Presenter presenter)
         {
             InitializeComponent();
             this.presenter = presenter;
-            //cmbCategoryType.ItemsSource = presenter.GetCategories();
+            cmbCategoryType.ItemsSource = categoryTypes;
+        }
+
+        private void addButton_Click(object sender, RoutedEventArgs e)
+        {
+            string description = descriptionBox.Text;
+            int categoryType = cmbCategoryType.SelectedIndex;
+
+            if (string.IsNullOrEmpty(description))
+            {
+                MessageBox.Show("Error: Please enter a valid description");
+            }
+            else if (cmbCategoryType.SelectedItem == null)
+            {
+                MessageBox.Show("Error: Please select a valid category type");
+            }
+            else
+            {
+                try
+                {
+                    presenter.CreateNewCategory(description, categoryType);
+                    descriptionBox.Clear();
+                    cmbCategoryType.SelectedIndex = -1;
+                }
+                catch (Exception)
+                {
+                    throw new SystemException();
+                }
+            }
         }
     }
 }

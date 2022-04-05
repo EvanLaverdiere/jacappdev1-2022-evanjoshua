@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfHomeBudget"
         mc:Ignorable="d"
-        Title="AddCategoryWindow" Height="450" Width="500">
+        Title="New Category" Height="450" Width="500">
     <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -26,7 +26,7 @@
         <TextBox Grid.Row="4" Grid.Column="1" x:Name="descriptionBox"/>
         <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" FontSize="14">Category Type</TextBlock>
         <ComboBox Grid.Row="8" Grid.Column="1" x:Name="cmbCategoryType"/>
-        <Button Grid.Row="9" Grid.Column="1" Content="Add" FontWeight="Bold" FontSize="14" Height="40" Width="75" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0, 15"/>
+        <Button Grid.Row="9" Grid.Column="1" Content="Add" FontWeight="Bold" FontSize="14" Height="40" Width="75" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0, 15" Click="addButton_Click"/>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
