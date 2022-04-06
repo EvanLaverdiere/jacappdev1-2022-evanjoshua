@@ -15,17 +15,26 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Budget;
 using System.IO;
+using Windows.UI.Xaml;
+using Application = Windows.UI.Xaml.Application;
 
 namespace WpfHomeBudget
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IViewable
+    public partial class MainWindow : System.Windows.Window, IViewable
     {
         private Presenter presenter;
+        private bool isDarkMode;
         public MainWindow()
         {
+            isDarkMode = ShouldSystemUseDarkMode();
+            if (isDarkMode)
+            {
+                turnDark();
+            }
+
             // Create the entry window
             EntryWindow entryWindow = new EntryWindow();
 
@@ -47,6 +56,9 @@ namespace WpfHomeBudget
             Closing += confirmClose;
         }
 
+        [System.Runtime.InteropServices.DllImport("UXTheme.dll", SetLastError = true, EntryPoint = "#138")]
+        public static extern bool ShouldSystemUseDarkMode();
+
         private void confirmClose(object sender, CancelEventArgs cancelEventArgs)
         {
             if (MessageBox.Show(this, "Are you sure you want to close the application?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
@@ -55,7 +67,7 @@ namespace WpfHomeBudget
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
             expenseWindow.ShowDialog();
@@ -90,6 +102,20 @@ namespace WpfHomeBudget
         public void ClearSelection()
         {
             throw new NotImplementedException();
+        }
+
+        public void turnDark()
+        {
+            Properties.Settings.Default.ThemeColor = "DarkMode";
+
+            Properties.Settings.Default.Save();
+        }
+
+        public void turnLight()
+        {
+            Properties.Settings.Default.ThemeColor = "LightMode";
+
+            Properties.Settings.Default.Save();
         }
     }
 }

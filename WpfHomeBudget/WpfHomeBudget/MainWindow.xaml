@@ -5,9 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfHomeBudget"
         mc:Ignorable="d"
+        Width="692"
         MinWidth="500" MinHeight="400"
-        WindowStartupLocation= "CenterScreen"
-        Title="BudgetApplication" Width="692" WindowState="Maximized">
+        WindowState="Maximized"
+        Style="{StaticResource WindowStyle}"
+        Title="BudgetApplication" 
+        >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -31,14 +34,11 @@
         </Grid.ColumnDefinitions>
 
         <!--Menu: row 0-->
-        <Menu Grid.ColumnSpan="5">
-            <MenuItem Header="_Option" />
-            <MenuItem Header="_Option">
-                <MenuItem Header="_Option" />
-                <MenuItem Header="_Option" />
-            </MenuItem>
-            <MenuItem Header="_Settings" />
-        </Menu>
+        <MenuItem Grid.ColumnSpan="2" HorizontalAlignment="Left" Grid.Column="3" Margin="210,0,0,0" Width="24">
+            <MenuItem.Icon >
+                <Image x:Name="ThemeLogo" Source="images/DarkTheme.png"/>
+            </MenuItem.Icon>
+        </MenuItem>
 
         <!--Buffer Zone: row 1-->
         <!-- View Title: row 2 -->

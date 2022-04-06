@@ -25,5 +25,12 @@ namespace WpfHomeBudget
 
         // In case we need to unselect an option - TBD
         void ClearSelection();
+
+        // Change the color scheme to dark mode
+        void turnDark();
+
+        // Change the color scheme to the colorfull one
+
+        void turnLight();
     }
 }
