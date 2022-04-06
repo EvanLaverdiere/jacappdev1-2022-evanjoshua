@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WpfHomeBudget;
+using Xunit;
 
 namespace TestProject
 {
@@ -45,7 +46,14 @@ namespace TestProject
             throw new NotImplementedException();
         }
     }
-    class TestPresenter
+    public class TestPresenter
     {
+        [Fact]
+        public void TestConstructor()
+        {
+            TestView testView = new TestView();
+            Presenter presenter = new Presenter(testView);
+            Assert.IsType<Presenter>(presenter);
+        }
     }
 }
