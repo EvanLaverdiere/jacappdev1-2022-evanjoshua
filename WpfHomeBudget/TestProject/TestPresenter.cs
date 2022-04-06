@@ -50,11 +50,17 @@ namespace TestProject
 
         public void ShowSuccess(string message)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            calledShowSuccess = true;
         }
     }
     public class TestPresenter
     {
+        private const string TEST_DB_INPUT_FILE = "testDBInput.db";
+"
+
+
+
         [Fact]
         public void TestConstructor()
         {
@@ -95,6 +101,25 @@ namespace TestProject
 
             // Assert
             Assert.True(testView.calledShowError);
+        }
+
+        [Fact]
+        public void Test_CreateNewExpenseCallsShowSuccessForSuccessfulOperation()
+        {
+            // Arrange
+            // 
+            TestView testView = new TestView();
+            Presenter presenter = new Presenter(testView);
+            DateTime? date = DateTime.Today; // get the current date
+            int categoryId = 1; // In default Categories table, this value corresponds to the Utilities category.
+            string amount = "49.99"; // The CreateNewExpense() method will try to parse this as a double.
+            string description = "Hydro Bill";
+
+            // Act
+            presenter.CreateNewExpense(date, categoryId, amount, description);
+
+            // Assert
+            Assert.True(testView.calledShowSuccess);
         }
     }
 }
