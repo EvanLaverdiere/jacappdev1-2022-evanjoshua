@@ -9,6 +9,12 @@ namespace TestProject
 {
     public class TestView : IViewable
     {
+        public bool calledClearError;
+        public bool calledClearForm;
+        public bool calledClearSelection;
+        public bool calledRefresh;
+        public bool calledShowBudgetItems;
+        public bool calledShowError;
         public void ClearError()
         {
             throw new NotImplementedException();
