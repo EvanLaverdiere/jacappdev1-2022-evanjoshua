@@ -38,5 +38,20 @@ namespace WpfHomeBudget
             descriptionBox.Clear();
             cmbCategoryType.SelectedIndex = -1;
         }
+
+        private void addCloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            string description = descriptionBox.Text;
+            int categoryType = cmbCategoryType.SelectedIndex;
+
+            bool toClose = presenter.CreateNewCategory(description, categoryType, true);
+            descriptionBox.Clear();
+            cmbCategoryType.SelectedIndex = -1;
+
+            if(toClose == true)
+            {
+                Close();
+            }
+        }
     }
 }
