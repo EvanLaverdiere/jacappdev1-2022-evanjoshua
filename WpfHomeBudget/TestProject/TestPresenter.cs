@@ -130,5 +130,30 @@ namespace TestProject
             // Assert
             Assert.True(testView.calledShowSuccess);
         }
+
+        [Fact]
+        public void Test_CreateNewCategoryCallsShowSuccessForSuccessfulOperation()
+        {
+            // Arrange
+            // Initialize the view & presenter.
+            TestView testView = new TestView();
+            Presenter presenter = new Presenter(testView);
+
+            // manually create a database. Copied from one of Sandy's HomeBudget_GetBudgetItemsByMonth tests.
+            string folder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\"));
+            String goodDB = $"{folder}\\{TEST_DB_INPUT_FILE}";
+            String messyDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, messyDB, true);
+            presenter.CreateBudget(messyDB, false);
+
+            string description = "Garply Category";
+            int categoryType = 2;
+
+            // Act
+            presenter.CreateNewCategory(description, categoryType);
+
+            // Assert
+            Assert.True(testView.calledShowSuccess);
+        }
     }
 }
