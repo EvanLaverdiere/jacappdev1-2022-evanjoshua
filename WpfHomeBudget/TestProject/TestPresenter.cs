@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,7 +58,6 @@ namespace TestProject
     public class TestPresenter
     {
         private const string TEST_DB_INPUT_FILE = "testDBInput.db";
-"
 
 
 
@@ -107,9 +107,18 @@ namespace TestProject
         public void Test_CreateNewExpenseCallsShowSuccessForSuccessfulOperation()
         {
             // Arrange
-            // 
+            // Initialize the view & presenter.
             TestView testView = new TestView();
             Presenter presenter = new Presenter(testView);
+
+            // manually create a database. Copied from one of Sandy's HomeBudget_GetBudgetItemsByMonth tests.
+            string folder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\"));
+            String goodDB = $"{folder}\\{TEST_DB_INPUT_FILE}";
+            String messyDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, messyDB, true);
+            presenter.CreateBudget(messyDB, false);
+
+
             DateTime? date = DateTime.Today; // get the current date
             int categoryId = 1; // In default Categories table, this value corresponds to the Utilities category.
             string amount = "49.99"; // The CreateNewExpense() method will try to parse this as a double.
