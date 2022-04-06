@@ -7,6 +7,10 @@ using Budget;
 
 namespace WpfHomeBudget
 {
+    /// <summary>
+    /// Handles the presentation logic in the application. 
+    /// Contains methods for generating a user interface to work with the budget.
+    /// </summary>
     public class Presenter
     {
         // backing fields
