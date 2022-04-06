@@ -16,6 +16,7 @@ namespace TestProject
         public bool calledRefresh;
         public bool calledShowBudgetItems;
         public bool calledShowError;
+        public bool calledShowSuccess;
         public void ClearError()
         {
             throw new NotImplementedException();
@@ -45,6 +46,11 @@ namespace TestProject
         {
             //throw new NotImplementedException();
             calledShowError = true;
+        }
+
+        public void ShowSuccess(string message)
+        {
+            throw new NotImplementedException();
         }
     }
     public class TestPresenter
