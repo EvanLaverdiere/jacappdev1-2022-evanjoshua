@@ -8,10 +8,9 @@
     <Application.Resources>
         <Style TargetType="{x:Type Window}" x:Key="WindowStyle">
             <Style.Triggers>
-
                 <!-- DarkMode Styling-->
                 <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=ThemeColor}" Value="DarkMode">
-                    <Setter Property="Background" Value="Black"/>
+                    <Setter Property="Background" Value="#242424"/>
                     <Setter Property="Foreground" Value="White"/>
                 </DataTrigger>
 
@@ -20,7 +19,22 @@
                     <Setter Property="Background" Value="white"/>
                     <Setter Property="Foreground" Value="Black"/>
                 </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
+        <Style TargetType="{x:Type Button}">
+            <Style.Triggers>
+                <!-- DarkMode Styling-->
+                <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=ThemeColor}" Value="DarkMode">
+                    <Setter Property="Background" Value="#3D3D3D"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </DataTrigger>
+
+                <!-- LightMode Styling-->
+                <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=ThemeColor}" Value="LightMode">
+                    <Setter Property="Background" Value="white"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </DataTrigger>
             </Style.Triggers>
         </Style>
     </Application.Resources>

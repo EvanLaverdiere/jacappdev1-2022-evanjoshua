@@ -14,9 +14,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Budget;
-using System.IO;
-using Windows.UI.Xaml;
-using Application = Windows.UI.Xaml.Application;
 
 namespace WpfHomeBudget
 {
@@ -29,12 +26,6 @@ namespace WpfHomeBudget
         private bool isDarkMode;
         public MainWindow()
         {
-            isDarkMode = ShouldSystemUseDarkMode();
-            if (isDarkMode)
-            {
-                turnDark();
-            }
-
             // Create the entry window
             EntryWindow entryWindow = new EntryWindow();
 
@@ -48,6 +39,14 @@ namespace WpfHomeBudget
             }
 
             InitializeComponent();
+
+
+            isDarkMode = ShouldSystemUseDarkMode();
+            if (isDarkMode)
+            {
+                turnDark();
+            }
+
 
             presenter = new Presenter(this);
 
@@ -109,6 +108,17 @@ namespace WpfHomeBudget
             Properties.Settings.Default.ThemeColor = "DarkMode";
 
             Properties.Settings.Default.Save();
+
+            isDarkMode = true;
+
+            Image themeLogo = (Image)this.FindName("ThemeLogo");
+
+            BitmapImage bitImage = new BitmapImage();
+            bitImage.BeginInit();
+
+            bitImage.UriSource = new Uri("images\\LightTheme.png", UriKind.Relative);
+
+            themeLogo.Source = bitImage;
         }
 
         public void turnLight()
@@ -116,6 +126,27 @@ namespace WpfHomeBudget
             Properties.Settings.Default.ThemeColor = "LightMode";
 
             Properties.Settings.Default.Save();
+
+            isDarkMode = true;
+
+
+        }
+
+        private void Button_MouseEnter(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void theme_Click(object sender, RoutedEventArgs e)
+        {
+            if (isDarkMode)
+            {
+                turnLight();
+            }
+            else
+            {
+                turnDark();
+            }
         }
     }
 }

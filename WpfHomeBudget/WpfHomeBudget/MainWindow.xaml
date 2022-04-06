@@ -34,12 +34,13 @@
         </Grid.ColumnDefinitions>
 
         <!--Menu: row 0-->
-        <MenuItem Grid.ColumnSpan="2" HorizontalAlignment="Left" Grid.Column="3" Margin="210,0,0,0" Width="24">
-            <MenuItem.Icon >
-                <Image x:Name="ThemeLogo" Source="images/DarkTheme.png"/>
-            </MenuItem.Icon>
-        </MenuItem>
-
+        <Menu Grid.ColumnSpan="5" >
+            <MenuItem x:Name="theme" Grid.Column="3" Click="theme_Click">
+                <MenuItem.Icon >
+                    <Image x:Name="ThemeLogo" Source="images/DarkTheme.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </Menu>
         <!--Buffer Zone: row 1-->
         <!-- View Title: row 2 -->
         <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" FontWeight="Bold" FontSize="14">Expenses</TextBlock>

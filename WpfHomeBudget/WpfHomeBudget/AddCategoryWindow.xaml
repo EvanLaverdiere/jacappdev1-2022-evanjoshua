@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfHomeBudget"
         mc:Ignorable="d"
+         Style="{StaticResource WindowStyle}"
         Title="New Category" Height="450" Width="500">
-    <Grid Background="AliceBlue">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="30"/>

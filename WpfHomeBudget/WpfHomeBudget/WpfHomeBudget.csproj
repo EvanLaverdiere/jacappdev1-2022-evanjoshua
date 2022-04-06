@@ -11,6 +11,7 @@
     <None Remove="images\DarkTheme.png" />
     <None Remove="images\documents.png" />
     <None Remove="images\folder.png" />
+    <None Remove="images\LightTheme.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="images\LightTheme.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="images\DarkTheme.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
