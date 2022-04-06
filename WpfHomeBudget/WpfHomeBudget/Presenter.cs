@@ -31,6 +31,13 @@ namespace WpfHomeBudget
             budget = new HomeBudget(dbName, newDatabase);
         }
 
+        /// <summary>
+        /// Creates a new category for expenses with the provided description and category type.
+        /// </summary>
+        /// <param name="description">The category description.</param>
+        /// <param name="categoryType">The category type.</param>
+        /// <param name="close">Default to false if the user clicks 'Add'. True if the user clicks 'Add and Close'.</param>
+        /// <returns></returns>
         public bool CreateNewCategory(string description, int categoryType, bool close=false)
         {
             string error;
@@ -129,12 +136,20 @@ namespace WpfHomeBudget
             // If no messages were appended, everything is good. Return true.
             return true;
         }
-
+        
+        /// <summary>
+        /// Retrieves a list of categories in the Home Budget.
+        /// </summary>
+        /// <returns>The list of categories.</returns>
         public List<Category> GetCategories()
         {
             return budget.categories.List();
         }
 
+        /// <summary>
+        /// Retrieves a list of category types for classifying expenses.
+        /// </summary>
+        /// <returns>The list of category types.</returns>
         public List<string> GetCategoryTypes()
         {
             List<string> categoryTypes = new List<string>();
