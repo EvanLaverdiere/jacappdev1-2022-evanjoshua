@@ -58,7 +58,7 @@ namespace TestProject
         }
 
         [Fact]
-        public void Test_CreateBudgetCallsShowErrorForBadInput()
+        public void Test_CreateNewExpenseCallsShowErrorForBadInput()
         {
             // Arrange
             TestView testView = new TestView();
@@ -70,6 +70,22 @@ namespace TestProject
 
             // Act
             presenter.CreateNewExpense(badDate, badCategory, noAmount, noDescription);
+
+            // Assert
+            Assert.True(testView.calledShowError);
+        }
+
+        [Fact]
+        public void Test_CreateNewCategoryCallsShowErrorForBadInput()
+        {
+            // Arrange
+            TestView testView = new TestView();
+            Presenter presenter = new Presenter(testView);
+            string badDescription = "";
+            int badCategoryType = -1;
+
+            // Act
+            presenter.CreateNewCategory(badDescription, badCategoryType);
 
             // Assert
             Assert.True(testView.calledShowError);
