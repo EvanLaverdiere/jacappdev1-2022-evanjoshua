@@ -45,6 +45,8 @@ namespace WpfHomeBudget
             presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
 
             Closing += confirmClose;
+
+            txtStatusBar.Text = entryWindow.dbLocation;
         }
 
         private void confirmClose(object sender, CancelEventArgs cancelEventArgs)

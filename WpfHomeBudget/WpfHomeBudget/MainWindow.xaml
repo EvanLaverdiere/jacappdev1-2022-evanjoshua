@@ -20,6 +20,8 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -103,5 +105,6 @@
         </Grid>
 
         <!--Buffer Zone: row 9-->
+        <TextBlock Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" x:Name="txtStatusBar" FontWeight="Bold"/>
     </Grid>
 </Window>
