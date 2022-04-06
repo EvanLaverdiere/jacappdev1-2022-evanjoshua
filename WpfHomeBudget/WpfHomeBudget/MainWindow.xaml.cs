@@ -47,12 +47,6 @@ namespace WpfHomeBudget
             Closing += confirmClose;
         }
 
-
-        /// <summary>
-        /// Requests confirmation from the user to close the application.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="cancelEventArgs"></param>
         private void confirmClose(object sender, CancelEventArgs cancelEventArgs)
         {
             if (MessageBox.Show(this, "Are you sure you want to close the application?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
@@ -61,11 +55,6 @@ namespace WpfHomeBudget
             }
         }
 
-        /// <summary>
-        /// Creates and opens a new window for adding expenses to the budget.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
@@ -77,10 +66,6 @@ namespace WpfHomeBudget
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Displays a message box alerting the user of an error.
-        /// </summary>
-        /// <param name="error">The error encountered.</param>
         public void ShowError(string error)
         {
             //throw new NotImplementedException();
@@ -107,11 +92,6 @@ namespace WpfHomeBudget
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Creates and opens a window for adding new categories to the budget.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void addCategory(object sender, RoutedEventArgs e)
         {
             AddCategoryWindow categoryWindow = new AddCategoryWindow(presenter);
