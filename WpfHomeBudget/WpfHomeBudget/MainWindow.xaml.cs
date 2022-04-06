@@ -91,5 +91,11 @@ namespace WpfHomeBudget
         {
             throw new NotImplementedException();
         }
+
+        private void addCategory(object sender, RoutedEventArgs e)
+        {
+            AddCategoryWindow categoryWindow = new AddCategoryWindow(presenter);
+            categoryWindow.ShowDialog();
+        }
     }
 }

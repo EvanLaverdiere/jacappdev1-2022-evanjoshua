@@ -27,7 +27,8 @@
         <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" FontSize="14">Category Type</TextBlock>
         <ComboBox Grid.Row="8" Grid.Column="1" x:Name="cmbCategoryType"/>
         <Button Grid.Row="9" Grid.Column="1" Content="Add" FontWeight="Bold" FontSize="14" Height="40" Width="75" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0, 15" Click="addButton_Click"/>
-
+        <Button Grid.Row="9" Grid.Column="1" Content="Add and Close" FontWeight="Bold" FontSize="14" Height="40" Width="125" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100, 15" Click="addCloseButton_Click"/>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
             <ColumnDefinition Width="*"/>
