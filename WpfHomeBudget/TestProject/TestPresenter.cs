@@ -43,7 +43,8 @@ namespace TestProject
 
         public void ShowError(string error)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            calledShowError = true;
         }
     }
     public class TestPresenter
@@ -54,6 +55,24 @@ namespace TestProject
             TestView testView = new TestView();
             Presenter presenter = new Presenter(testView);
             Assert.IsType<Presenter>(presenter);
+        }
+
+        [Fact]
+        public void Test_CreateBudgetCallsShowErrorForBadInput()
+        {
+            // Arrange
+            TestView testView = new TestView();
+            Presenter presenter = new Presenter(testView);
+            DateTime? badDate = null;
+            int badCategory = -1;
+            string noAmount = "";
+            string noDescription = "";
+
+            // Act
+            presenter.CreateNewExpense(badDate, badCategory, noAmount, noDescription);
+
+            // Assert
+            Assert.True(testView.calledShowError);
         }
     }
 }
