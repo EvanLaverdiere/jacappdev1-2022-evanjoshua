@@ -5,52 +5,103 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfHomeBudget"
         mc:Ignorable="d"
-        Title="AddExpenseWindow" Height="450" Width="800">
+         Style="{StaticResource WindowStyle}" Icon="/LightModeIcon.png"
+        Title="AddExpenseWindow"
+        Height="450" Width="600"
+        MinHeight="500" MinWidth="570">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        
-        <Grid Grid.Row="0">
+
+        <!--Buffer zone: row 0-->
+
+        <!--Content: row 1-->
+        <Grid Grid.Row="1" Grid.Column="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" Text="Expense Date"/>
-            <DatePicker Grid.Row="1" x:Name="dateExpDate"/>
-            <TextBlock Grid.Row="2" Text="Expense's Category"/>
-            <!--<TextBox Grid.Row="3" x:Name="txtExpCategory"/>-->
-            <Grid Grid.Row="3">
+            <!-- Title: row 0-->
+            <Viewbox VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Padding="2" Text="New Expense"/>
+            </Viewbox>
+
+            <!-- Label 1: row 1-->
+            <Viewbox Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Padding="2" Text="Date"/>
+            </Viewbox>
+
+            <!-- Date picker: row 2-->
+            <DatePicker Margin="5,0,5,0" Grid.Row="2" x:Name="dateExpDate"/>
+
+            <!-- label 2: row 3-->
+            <Viewbox Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Padding="2" Text="Category"/>
+            </Viewbox>
+
+            <!-- Category picker: row 4-->
+            <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <ComboBox Grid.Column="0" x:Name="cmbCategory" Margin="5"/>
-                <Button Grid.Column="1" x:Name="btnNewCategory" Margin="5" Content="Add New Category" Click="btnNewCategory_Click"/>
+
+                <!-- Categories: col 0-->
+                <ComboBox x:Name="cmbCategory" Margin="3"/>
+
+                <!-- New Category: col 1-->
+                <Button Grid.Column="1" x:Name="btnNewCategory" Content="Add New Category" Margin="3" Cursor="Hand" Click="btnNewCategory_Click"/>
             </Grid>
-            <TextBlock Grid.Row="4" Text="Expense Amount"/>
-            <TextBox Grid.Row="5" x:Name="txtExpAmount"/>
-            <TextBlock Grid.Row="6" Text="Description"/>
-            <TextBox Grid.Row="7" x:Name="txtExpDescription"/>
 
-        </Grid>
+            <!-- label 3: row 5-->
+            <Viewbox Grid.Row="5" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Padding="2" Text="Amount"/>
+            </Viewbox>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" x:Name="btnSubmit" Content="Add New Expense" Margin="5" Click="btnSubmit_Click"/>
-            <Button Grid.Column="1" x:Name="btnCancel" Content="Cancel" Margin="5" Click="btnCancel_Click"/>
+            <!-- amount input: row 6-->
+            <TextBox Padding="10" x:Name="txtExpAmount" Grid.Row="6" TextWrapping="Wrap" VerticalContentAlignment="Center"/>
+
+            <!-- label 4: row 7-->
+            <Viewbox Grid.Row="7" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Padding="2" Text="Description"/>
+            </Viewbox>
+
+            <!-- Description input: row 8-->
+            <TextBox Padding="10" x:Name="txtExpDescription" Grid.Row="8" TextWrapping="Wrap" VerticalContentAlignment="Center"/>
+
+            <!-- next and cancel button: row 6 col1-->
+            <Grid Grid.Row="10" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" x:Name="btnSubmit" Content="Add New Expense" Margin="5" Click="btnSubmit_Click"/>
+                <Button Grid.Column="1" x:Name="btnCancel" Content="Cancel" Margin="5" Click="btnCancel_Click"/>
+            </Grid>
         </Grid>
+        <!--Buffer zone: row 2-->
     </Grid>
 </Window>

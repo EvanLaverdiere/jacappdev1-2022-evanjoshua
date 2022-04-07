@@ -14,47 +14,59 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Budget;
-using System.IO;
 
 namespace WpfHomeBudget
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IViewable
+    public partial class MainWindow : System.Windows.Window, IViewable
     {
         private Presenter presenter;
+        private bool isDarkMode;
         public MainWindow()
         {
+            isDarkMode = ShouldSystemUseDarkMode();
+
             // Create the entry window
-            EntryWindow entryWindow = new EntryWindow();
+            EntryWindow entryWindow = new EntryWindow(isDarkMode);
 
             // Open the new entry window
             _ = entryWindow.ShowDialog();
-
 
             if (entryWindow.dbLocation == null)
             {
                 this.Close();
             }
+            else
+            {
+                InitializeComponent();
 
-            InitializeComponent();
+                if (isDarkMode)
+                {
+                    turnDark();
+                }
 
-            presenter = new Presenter(this);
+                presenter = new Presenter(this);
 
-            presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
+                presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
 
-            Closing += confirmClose;
+                Closing += confirmClose;
 
-            txtStatusBar.Text = entryWindow.dbLocation;
+                txtStatusBar.Text = entryWindow.dbLocation;
+            }
         }
 
+        [System.Runtime.InteropServices.DllImport("UXTheme.dll", SetLastError = true, EntryPoint = "#138")]
+        public static extern bool ShouldSystemUseDarkMode();
 
         /// <summary>
         /// Requests confirmation from the user to close the application.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="cancelEventArgs"></param>
+
+
         private void confirmClose(object sender, CancelEventArgs cancelEventArgs)
         {
             if (MessageBox.Show(this, "Are you sure you want to close the application?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
@@ -68,7 +80,7 @@ namespace WpfHomeBudget
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
             expenseWindow.ShowDialog();
@@ -107,6 +119,54 @@ namespace WpfHomeBudget
         public void ClearSelection()
         {
             throw new NotImplementedException();
+        }
+
+        public void turnDark()
+        {
+            Properties.Settings.Default.ThemeColor = "DarkMode";
+
+            Properties.Settings.Default.Save();
+
+            isDarkMode = true;
+
+            Image themeLogo = (Image)this.FindName("ThemeLogo");
+
+            BitmapImage bitImage = new BitmapImage();
+            bitImage.BeginInit();
+
+            bitImage.UriSource = new Uri("images\\LightTheme.png", UriKind.Relative);
+
+            themeLogo.Source = bitImage;
+        }
+
+        public void turnLight()
+        {
+            Properties.Settings.Default.ThemeColor = "LightMode";
+
+            Properties.Settings.Default.Save();
+
+            isDarkMode = false;
+
+            Image themeLogo = (Image)this.FindName("ThemeLogo");
+
+            BitmapImage bitImage = new BitmapImage();
+            bitImage.BeginInit();
+
+            bitImage.UriSource = new Uri("images\\LightTheme.png", UriKind.Relative);
+
+            themeLogo.Source = bitImage;
+        }
+
+        private void theme_Click(object sender, RoutedEventArgs e)
+        {
+            if (isDarkMode)
+            {
+                turnLight();
+            }
+            else
+            {
+                turnDark();
+            }
         }
 
         /// <summary>
