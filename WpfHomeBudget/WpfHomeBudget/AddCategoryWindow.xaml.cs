@@ -27,8 +27,14 @@ namespace WpfHomeBudget
             InitializeComponent();
             this.presenter = presenter;
             cmbCategoryType.ItemsSource = presenter.GetCategoryTypes();
+            Closing += ConfirmExit;
         }
 
+        /// <summary>
+        /// Adds a new category to the budget with the provided user input.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
             string description = descriptionBox.Text;
@@ -39,6 +45,12 @@ namespace WpfHomeBudget
             cmbCategoryType.SelectedIndex = -1;
         }
 
+        /// <summary>
+        /// Adds a new category to the budget and then closes the window. 
+        /// Must have entered all required data before closing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addCloseButton_Click(object sender, RoutedEventArgs e)
         {
             string description = descriptionBox.Text;
@@ -48,9 +60,25 @@ namespace WpfHomeBudget
             descriptionBox.Clear();
             cmbCategoryType.SelectedIndex = -1;
 
-            if(toClose == true)
+            if (toClose == true)
             {
                 Close();
+            }
+        }
+
+        /// <summary>
+        /// Prompts the user to confirm closing the window if there are unsaved changes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="cancelEventArgs"></param>
+        private void ConfirmExit(object sender, System.ComponentModel.CancelEventArgs cancelEventArgs)
+        {
+            if (descriptionBox.Text != string.Empty || cmbCategoryType.SelectedIndex != -1)
+            {
+                if (MessageBox.Show(this, "There are unsaved changes. Do you wish to proceed?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                {
+                    cancelEventArgs.Cancel = true;
+                }
             }
         }
     }
