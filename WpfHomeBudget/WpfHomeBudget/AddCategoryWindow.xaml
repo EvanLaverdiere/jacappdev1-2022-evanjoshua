@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfHomeBudget"
         mc:Ignorable="d"
-         Style="{StaticResource WindowStyle}"
+         Style="{StaticResource WindowStyle}" Icon="/LightModeIcon.png"
         Title="New Category" 
         Height="450" Width="700"
         MinHeight="400" MinWidth="700">

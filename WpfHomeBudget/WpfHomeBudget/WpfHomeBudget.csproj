@@ -12,6 +12,7 @@
     <None Remove="images\documents.png" />
     <None Remove="images\folder.png" />
     <None Remove="images\LightTheme.png" />
+    <None Remove="LightModeIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +39,7 @@
     <Resource Include="images\folder.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="LightModeIcon.png" />
   </ItemGroup>
 
   <ItemGroup>

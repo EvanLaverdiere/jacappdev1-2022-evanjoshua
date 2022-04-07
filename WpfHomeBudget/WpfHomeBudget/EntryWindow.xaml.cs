@@ -34,7 +34,7 @@ namespace WpfHomeBudget
             {
                 turnDark();
             }
-            
+
             InitializeComponent();
         }
 

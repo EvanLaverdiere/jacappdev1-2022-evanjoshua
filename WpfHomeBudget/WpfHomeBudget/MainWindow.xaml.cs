@@ -38,21 +38,23 @@ namespace WpfHomeBudget
             {
                 this.Close();
             }
-
-            InitializeComponent();
-
-            if (isDarkMode)
+            else
             {
-                turnDark();
+                InitializeComponent();
+
+                if (isDarkMode)
+                {
+                    turnDark();
+                }
+
+                presenter = new Presenter(this);
+
+                presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
+
+                Closing += confirmClose;
+
+                txtStatusBar.Text = entryWindow.dbLocation;
             }
-
-            presenter = new Presenter(this);
-
-            presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
-
-            Closing += confirmClose;
-
-            txtStatusBar.Text = entryWindow.dbLocation;
         }
 
         [System.Runtime.InteropServices.DllImport("UXTheme.dll", SetLastError = true, EntryPoint = "#138")]

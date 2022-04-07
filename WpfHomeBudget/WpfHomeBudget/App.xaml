@@ -30,6 +30,11 @@
                     <Setter Property="Foreground" Value="White"/>
                 </DataTrigger>
 
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#333333"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+
                 <!-- LightMode Styling-->
                 <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=ThemeColor}" Value="LightMode">
                     <Setter Property="Background" Value="white"/>
