@@ -23,6 +23,8 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -73,6 +75,7 @@
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
 
             <!--Search bar: column 0-->
@@ -95,10 +98,14 @@
             <!--Modify item: column 3-->
             <Button Grid.Column="3" Content="modify expense" Width="100"></Button>
 
-            <!--Save: column 4-->
-            <Button Grid.Column="4" Content="save" Width="100"></Button>
+            <!-- New category: columm 4 -->
+            <Button Grid.Column="4" Content="New Category" Width="100" Click="addCategory"/>
+
+            <!--Save: column 5-->
+            <Button Grid.Column="5" Content="save" Width="100"></Button>
         </Grid>
 
         <!--Buffer Zone: row 9-->
+        <TextBlock Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="3" x:Name="txtStatusBar" FontWeight="Bold"/>
     </Grid>
 </Window>

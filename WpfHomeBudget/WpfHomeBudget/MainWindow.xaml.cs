@@ -53,10 +53,19 @@ namespace WpfHomeBudget
             presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
 
             Closing += confirmClose;
+
+            txtStatusBar.Text = entryWindow.dbLocation;
         }
 
         [System.Runtime.InteropServices.DllImport("UXTheme.dll", SetLastError = true, EntryPoint = "#138")]
         public static extern bool ShouldSystemUseDarkMode();
+
+        /// <summary>
+        /// Requests confirmation from the user to close the application.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="cancelEventArgs"></param>
+
 
         private void confirmClose(object sender, CancelEventArgs cancelEventArgs)
         {
@@ -66,6 +75,11 @@ namespace WpfHomeBudget
             }
         }
 
+        /// <summary>
+        /// Creates and opens a new window for adding expenses to the budget.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
@@ -77,6 +91,10 @@ namespace WpfHomeBudget
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Displays a message box alerting the user of an error.
+        /// </summary>
+        /// <param name="error">The error encountered.</param>
         public void ShowError(string error)
         {
             //throw new NotImplementedException();
@@ -147,6 +165,23 @@ namespace WpfHomeBudget
             {
                 turnDark();
             }
+        }
+
+        /// <summary>
+        /// Creates and opens a window for adding new categories to the budget.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void addCategory(object sender, RoutedEventArgs e)
+        {
+            AddCategoryWindow categoryWindow = new AddCategoryWindow(presenter);
+            categoryWindow.ShowDialog();
+        }
+
+        public void ShowSuccess(string message)
+        {
+            //throw new NotImplementedException();
+            MessageBox.Show(message, "SUCCESSFUL INSERTION", MessageBoxButton.OK);
         }
     }
 }
