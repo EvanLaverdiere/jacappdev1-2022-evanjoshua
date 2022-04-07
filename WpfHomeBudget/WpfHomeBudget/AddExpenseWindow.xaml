@@ -81,7 +81,7 @@
             </Viewbox>
 
             <!-- amount input: row 6-->
-            <TextBox Padding="10" x:Name="txtExpAmount" Grid.Row="6" TextChanged="txtExpAmount_TextChanged" TextWrapping="Wrap" VerticalContentAlignment="Center"/>
+            <TextBox Padding="10" x:Name="txtExpAmount" Grid.Row="6" TextWrapping="Wrap" VerticalContentAlignment="Center"/>
 
             <!-- label 4: row 7-->
             <Viewbox Grid.Row="7" VerticalAlignment="Top" HorizontalAlignment="Left">
