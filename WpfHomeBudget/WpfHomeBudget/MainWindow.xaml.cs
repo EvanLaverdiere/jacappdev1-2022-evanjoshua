@@ -119,5 +119,11 @@ namespace WpfHomeBudget
             AddCategoryWindow categoryWindow = new AddCategoryWindow(presenter);
             categoryWindow.ShowDialog();
         }
+
+        public void ShowSuccess(string message)
+        {
+            //throw new NotImplementedException();
+            MessageBox.Show(message, "SUCCESSFUL INSERTION", MessageBoxButton.OK);
+        }
     }
 }
