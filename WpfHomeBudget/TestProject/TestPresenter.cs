@@ -9,6 +9,9 @@ using Xunit;
 
 namespace TestProject
 {
+    /// <summary>
+    /// Mock class representing a View object which implements the IViewable interface.
+    /// </summary>
     public class TestView : IViewable
     {
         public bool calledClearError;
@@ -55,8 +58,15 @@ namespace TestProject
             calledShowSuccess = true;
         }
     }
+    /// <summary>
+    /// Class for testing the UI functionality of the Presenter object.
+    /// </summary>
     public class TestPresenter
     {
+        /// <summary>
+        /// The filename to be used as a test database. 
+        /// </summary>
+        /// <remarks>Must be manually added to the TestProject folder, as it is not tracked in GitHub.</remarks>
         private const string TEST_DB_INPUT_FILE = "testDBInput.db";
 
 
