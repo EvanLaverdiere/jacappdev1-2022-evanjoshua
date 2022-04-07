@@ -56,14 +56,12 @@ namespace WpfHomeBudget
             string description = descriptionBox.Text;
             int categoryType = cmbCategoryType.SelectedIndex;
 
-            bool toClose = presenter.CreateNewCategory(description, categoryType, true);
+            presenter.CreateNewCategory(description, categoryType, true);
             descriptionBox.Clear();
             cmbCategoryType.SelectedIndex = -1;
 
-            if (toClose == true)
-            {
-                Close();
-            }
+            Close();
+
         }
 
         /// <summary>
