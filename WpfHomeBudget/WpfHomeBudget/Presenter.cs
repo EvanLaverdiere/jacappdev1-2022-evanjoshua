@@ -7,6 +7,10 @@ using Budget;
 
 namespace WpfHomeBudget
 {
+    /// <summary>
+    /// Handles the presentation logic in the application. 
+    /// Contains methods for generating a user interface to work with the budget.
+    /// </summary>
     public class Presenter
     {
         // backing fields
@@ -31,7 +35,14 @@ namespace WpfHomeBudget
             budget = new HomeBudget(dbName, newDatabase);
         }
 
-        public bool CreateNewCategory(string description, int categoryType, bool close=false)
+        /// <summary>
+        /// Creates a new category for expenses with the provided description and category type.
+        /// </summary>
+        /// <param name="description">The category description.</param>
+        /// <param name="categoryType">The category type.</param>
+        /// <param name="close">Default to false if the user clicks 'Add'. True if the user clicks 'Add and Close'.</param>
+        /// <returns></returns>
+        public bool CreateNewCategory(string description, int categoryType, bool close = false)
         {
             string error;
 
@@ -48,6 +59,8 @@ namespace WpfHomeBudget
             else
             {
                 budget.categories.Add(description, (Category.CategoryType)categoryType);
+                // Show the user that the operation was completed successfully.
+                viewable.ShowSuccess($"Successfully added \'{description}\' category to the database.");
 
                 if (close == true)
                 {
@@ -71,10 +84,12 @@ namespace WpfHomeBudget
         /// <param name="description">A brief description of the Expense.</param>
         public void CreateNewExpense(DateTime? date, int category, string amount, string description)
         {
-            if(ValidateExpenseInput(date, category, amount, description))
+            if (ValidateExpenseInput(date, category, amount, description))
             {
                 budget.expenses.Add(date.Value, category, double.Parse(amount), description);
-                // Display some kind of message indicating the Expense was successfully added?
+                
+                // Display some kind of message indicating the Expense was successfully added.
+                viewable.ShowSuccess($"Successfully added \'{description}\' expense to the database.");
                 //// Clear the form afterward.
                 //viewable.ClearForm();
             }
@@ -130,16 +145,24 @@ namespace WpfHomeBudget
             return true;
         }
 
+        /// <summary>
+        /// Retrieves a list of categories in the Home Budget.
+        /// </summary>
+        /// <returns>The list of categories.</returns>
         public List<Category> GetCategories()
         {
             return budget.categories.List();
         }
 
+        /// <summary>
+        /// Retrieves a list of category types for classifying expenses.
+        /// </summary>
+        /// <returns>The list of category types.</returns>
         public List<string> GetCategoryTypes()
         {
             List<string> categoryTypes = new List<string>();
 
-            foreach (string type in Enum.GetNames(typeof (Category.CategoryType)))
+            foreach (string type in Enum.GetNames(typeof(Category.CategoryType)))
             {
                 categoryTypes.Add(type);
             }

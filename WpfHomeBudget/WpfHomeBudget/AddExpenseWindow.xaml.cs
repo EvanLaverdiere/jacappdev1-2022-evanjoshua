@@ -26,6 +26,7 @@ namespace WpfHomeBudget
             this.presenter = presenter;
             cmbCategory.ItemsSource = presenter.GetCategories(); //[UNCOMMENT ME ONCE WE CAN ACTUALLY INITIALIZE A HOMEBUDGET]
             dateExpDate.SelectedDate = DateTime.Today;
+            Closing += ConfirmExit;
         }
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
@@ -74,6 +75,23 @@ namespace WpfHomeBudget
             cmbCategory.SelectedIndex = -1;
             txtExpAmount.Clear();
             txtExpDescription.Clear();
+        }
+
+        /// <summary>
+        /// Prompts the user to confirm closing the window if there are unsaved changes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="cancelEventArgs"></param>
+        private void ConfirmExit(object sender, System.ComponentModel.CancelEventArgs cancelEventArgs)
+        {
+            if (cmbCategory.SelectedIndex != -1 || txtExpAmount.Text != string.Empty || txtExpDescription.Text != string.Empty)
+            {
+                if (MessageBox.Show(this, "There are unsaved changes. Do you wish to proceed?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                {
+                    cancelEventArgs.Cancel = true;
+                }
+            }
+
         }
     }
 }
