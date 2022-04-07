@@ -37,5 +37,84 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+
+        <Style TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <!-- DarkMode Styling-->
+                <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=ThemeColor}" Value="DarkMode">
+                    <Setter Property="Background" Value="#1F1F1F"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </DataTrigger>
+
+                <!-- LightMode Styling-->
+                <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=ThemeColor}" Value="LightMode">
+                    <Setter Property="Background" Value="white"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type DataGrid}">
+            <Style.Triggers>
+                <!-- DarkMode Styling-->
+                <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=ThemeColor}" Value="DarkMode">
+                    <Setter Property="Background" Value="#1F1F1F"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </DataTrigger>
+
+                <!-- LightMode Styling-->
+                <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=ThemeColor}" Value="LightMode">
+                    <Setter Property="Background" Value="white"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type DataGridTextColumn}">
+            <Style.Triggers>
+                <!-- DarkMode Styling-->
+                <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=ThemeColor}" Value="DarkMode">
+                    <Setter Property="Foreground" Value="Black"/>
+                </DataTrigger>
+
+                <!-- LightMode Styling-->
+                <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=ThemeColor}" Value="LightMode">
+                    <Setter Property="Foreground" Value="Black"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type DatePicker}">
+            <Style.Triggers>
+                <!-- DarkMode Styling-->
+                <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=ThemeColor}" Value="DarkMode">
+                    <Setter Property="Background" Value="white"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </DataTrigger>
+
+                <!-- LightMode Styling-->
+                <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=ThemeColor}" Value="LightMode">
+                    <Setter Property="Background" Value="white"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type ComboBox}">
+            <Style.Triggers>
+                <!-- DarkMode Styling-->
+                <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=ThemeColor}" Value="DarkMode">
+                    <Setter Property="Background" Value="#3D3D3D"/>
+                    <Setter Property="Foreground" Value="white"/>
+                </DataTrigger>
+
+                <!-- LightMode Styling-->
+                <DataTrigger Binding="{Binding Source={x:Static properties:Settings.Default}, Path=ThemeColor}" Value="LightMode">
+                    <Setter Property="Background" Value="white"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
     </Application.Resources>
 </Application>

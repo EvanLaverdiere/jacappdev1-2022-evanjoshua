@@ -8,7 +8,7 @@
          Style="{StaticResource WindowStyle}"
         Title="AddExpenseWindow"
         Height="450" Width="600"
-        MinHeight="400" MinWidth="600">
+        MinHeight="500" MinWidth="570">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>

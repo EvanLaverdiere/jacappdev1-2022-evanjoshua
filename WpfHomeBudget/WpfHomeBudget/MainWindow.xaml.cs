@@ -26,12 +26,13 @@ namespace WpfHomeBudget
         private bool isDarkMode;
         public MainWindow()
         {
+            isDarkMode = ShouldSystemUseDarkMode();
+
             // Create the entry window
-            EntryWindow entryWindow = new EntryWindow();
+            EntryWindow entryWindow = new EntryWindow(isDarkMode);
 
             // Open the new entry window
             _ = entryWindow.ShowDialog();
-
 
             if (entryWindow.dbLocation == null)
             {
@@ -40,13 +41,10 @@ namespace WpfHomeBudget
 
             InitializeComponent();
 
-
-            isDarkMode = ShouldSystemUseDarkMode();
             if (isDarkMode)
             {
                 turnDark();
             }
-
 
             presenter = new Presenter(this);
 
@@ -145,14 +143,16 @@ namespace WpfHomeBudget
 
             Properties.Settings.Default.Save();
 
-            isDarkMode = true;
+            isDarkMode = false;
 
+            Image themeLogo = (Image)this.FindName("ThemeLogo");
 
-        }
+            BitmapImage bitImage = new BitmapImage();
+            bitImage.BeginInit();
 
-        private void Button_MouseEnter(object sender, MouseEventArgs e)
-        {
+            bitImage.UriSource = new Uri("images\\LightTheme.png", UriKind.Relative);
 
+            themeLogo.Source = bitImage;
         }
 
         private void theme_Click(object sender, RoutedEventArgs e)

@@ -28,8 +28,13 @@ namespace WpfHomeBudget
         /// True if the window is creating a new database, false if it is loading an existing one.
         /// </summary>
         public bool IsNewDatabase { get; private set; }
-        public EntryWindow()
+        public EntryWindow(bool isDarMode)
         {
+            if (isDarMode)
+            {
+                turnDark();
+            }
+            
             InitializeComponent();
         }
 
@@ -70,6 +75,13 @@ namespace WpfHomeBudget
                 IsNewDatabase = false;
                 this.Close();
             }
+        }
+
+        public void turnDark()
+        {
+            Properties.Settings.Default.ThemeColor = "DarkMode";
+
+            Properties.Settings.Default.Save();
         }
     }
 }
