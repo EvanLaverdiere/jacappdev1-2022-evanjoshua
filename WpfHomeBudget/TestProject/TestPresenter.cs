@@ -57,6 +57,16 @@ namespace TestProject
             //throw new NotImplementedException();
             calledShowSuccess = true;
         }
+
+        public void turnDark()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void turnLight()
+        {
+            throw new NotImplementedException();
+        }
     }
     /// <summary>
     /// Class for testing the UI functionality of the Presenter object.
