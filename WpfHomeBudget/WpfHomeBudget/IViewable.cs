@@ -12,7 +12,17 @@ namespace WpfHomeBudget
         void ShowBudgetItems();
 
         // Display an error message if something goes wrong
+        /// <summary>
+        /// Displays an error message.
+        /// </summary>
+        /// <param name="error">The message to be displayed.</param>
         void ShowError(string error);
+
+        /// <summary>
+        /// Displays a message confirming a successful database operation.
+        /// </summary>
+        /// <param name="message">The message to be displayed.</param>
+        void ShowSuccess(string message);
 
         // Clear error messages 
         void ClearError();
