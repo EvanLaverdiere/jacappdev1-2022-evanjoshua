@@ -30,6 +30,11 @@ namespace WpfHomeBudget
             Closing += ConfirmExit;
         }
 
+        /// <summary>
+        /// Adds a new category to the budget with the provided user input.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
             string description = descriptionBox.Text;
@@ -40,6 +45,12 @@ namespace WpfHomeBudget
             cmbCategoryType.SelectedIndex = -1;
         }
 
+        /// <summary>
+        /// Adds a new category to the budget and then closes the window. 
+        /// Must have entered all required data before closing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addCloseButton_Click(object sender, RoutedEventArgs e)
         {
             string description = descriptionBox.Text;
