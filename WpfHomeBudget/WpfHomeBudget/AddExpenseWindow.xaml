@@ -94,12 +94,13 @@
             <!-- next and cancel button: row 6 col1-->
             <Grid Grid.Row="10" Grid.Column="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
 
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" x:Name="btnSubmit" Content="Add New Expense" Margin="5" Click="btnSubmit_Click"/>
-                <Button Grid.Column="1" x:Name="btnCancel" Content="Cancel" Margin="5" Click="btnCancel_Click"/>
+                <Button Grid.Column="0" x:Name="btnCancel" Content="Cancel" Margin="5" Click="btnCancel_Click"/>
+                <Button Grid.Column="1" x:Name="btnSubmit" Content="Add New Expense" Margin="5" Click="btnSubmit_Click"/>
+
             </Grid>
         </Grid>
         <!--Buffer zone: row 2-->
