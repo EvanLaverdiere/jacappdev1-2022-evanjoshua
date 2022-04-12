@@ -19,7 +19,7 @@
 
         <!-- Menu bar: row 0-->
         <Menu HorizontalContentAlignment="Right">
-            <MenuItem x:Name="theme" Click="theme_Click">
+            <MenuItem x:Name="theme" Click="theme_Click" Cursor="Hand">
                 <MenuItem.Icon>
                     <Image x:Name="ThemeLogo" Source="images/DarkTheme.png"/>
                 </MenuItem.Icon>
@@ -82,24 +82,24 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBox/>
-                        <Button Grid.Column="1" Content="Search" Padding="3"/>
+                        <Button Grid.Column="1" Cursor="Hand"  Content="Search" Padding="3"/>
                     </Grid>
 
 
                     <!--Add item: column 1-->
-                    <Button Grid.Column="1" Content="add expense" Click="Button_Click" Margin="5"></Button>
+                    <Button Grid.Column="1" Content="add expense" Cursor="Hand" Click="Button_Click" Margin="5"></Button>
 
 
                     <!--Remove item: column 2-->
-                    <Button Grid.Column="2" Content="remove expense" Margin="5" ></Button>
+                    <Button Grid.Column="2" Content="remove expense"  Cursor="Hand" Margin="5" ></Button>
 
 
                     <!--Modify item: column 3-->
-                    <Button Grid.Column="3" Content="modify expense" Margin="5"></Button>
+                    <Button Grid.Column="3" Content="modify expense"  Cursor="Hand" Margin="5"></Button>
 
 
                     <!-- New category: columm 4 -->
-                    <Button Grid.Column="4" Content="New Category" Margin="5" Click="addCategory"/>
+                    <Button Grid.Column="4" Content="New Category" Cursor="Hand" Margin="5" Click="addCategory"/>
 
 
                     <!--Save: column 5-->
