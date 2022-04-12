@@ -39,6 +39,11 @@ namespace TestProject
             calledShowSuccess = true;
         }
 
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
         public void turnDark()
         {
             throw new NotImplementedException();

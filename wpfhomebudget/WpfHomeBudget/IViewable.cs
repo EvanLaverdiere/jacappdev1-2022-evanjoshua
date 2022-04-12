@@ -24,6 +24,9 @@ namespace WpfHomeBudget
         /// <param name="message">The message to be displayed.</param>
         void ShowSuccess(string message);
 
+        // One clearing method for potential future use
+        void Clear();
+
         // Change the color scheme to dark mode
         void turnDark();
 

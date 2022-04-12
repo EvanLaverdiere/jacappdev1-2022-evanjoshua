@@ -160,6 +160,11 @@ namespace WpfHomeBudget
             categoryWindow.ShowDialog();
         }
 
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
         public void ShowSuccess(string message)
         {
             //throw new NotImplementedException();
