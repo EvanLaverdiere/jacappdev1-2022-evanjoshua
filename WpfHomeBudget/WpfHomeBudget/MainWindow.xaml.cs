@@ -24,6 +24,7 @@ namespace WpfHomeBudget
     {
         private Presenter presenter;
         private bool isDarkMode;
+        private bool attemptedChanges;
         public MainWindow()
         {
             isDarkMode = ShouldSystemUseDarkMode();
@@ -51,6 +52,11 @@ namespace WpfHomeBudget
 
                 presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
 
+                if (attemptedChanges == true)
+                {
+                    Closing += confirmClose;
+                }
+
                 Closing += confirmClose;
 
                 txtStatusBar.Text = entryWindow.dbLocation;
@@ -69,9 +75,12 @@ namespace WpfHomeBudget
 
         private void confirmClose(object sender, CancelEventArgs cancelEventArgs)
         {
-            if (MessageBox.Show(this, "Are you sure you want to close the application?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+            if (attemptedChanges)
             {
-                cancelEventArgs.Cancel = true;
+                if (MessageBox.Show(this, "Are you sure you want to close the application?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                {
+                    cancelEventArgs.Cancel = true;
+                }
             }
         }
 
@@ -84,6 +93,7 @@ namespace WpfHomeBudget
         {
             AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
             expenseWindow.ShowDialog();
+            attemptedChanges = true;
         }
 
         public void ShowBudgetItems()
@@ -99,6 +109,11 @@ namespace WpfHomeBudget
         {
             //throw new NotImplementedException();
             MessageBox.Show(error, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
         }
 
         public void turnDark()
@@ -158,11 +173,7 @@ namespace WpfHomeBudget
         {
             AddCategoryWindow categoryWindow = new AddCategoryWindow(presenter);
             categoryWindow.ShowDialog();
-        }
-
-        public void Clear()
-        {
-            throw new NotImplementedException();
+            attemptedChanges = true;
         }
 
         public void ShowSuccess(string message)
