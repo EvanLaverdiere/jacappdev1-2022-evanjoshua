@@ -21,25 +21,6 @@ namespace TestProject
         public bool calledShowBudgetItems;
         public bool calledShowError;
         public bool calledShowSuccess;
-        public void ClearError()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ClearForm()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ClearSelection()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Refresh()
-        {
-            throw new NotImplementedException();
-        }
 
         public void ShowBudgetItems()
         {
@@ -56,6 +37,11 @@ namespace TestProject
         {
             //throw new NotImplementedException();
             calledShowSuccess = true;
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
         }
 
         public void turnDark()
