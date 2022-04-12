@@ -71,8 +71,12 @@
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
 
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+
                     <!--Search bar: column 0-->
-                    <Grid Margin="0, 5, 5,5">
+                    <!--<Grid Margin="0, 5, 5,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*" />
                             <ColumnDefinition Width="auto" />
@@ -80,7 +84,7 @@
 
                         <TextBox/>
                         <Button Grid.Column="1" Content="Search" Padding="3"/>
-                    </Grid>
+                    </Grid>-->
 
                     <!--Add item: column 1-->
                     <Button Grid.Column="1" Content="New Expense" Click="Button_Click" Margin="5"></Button>
