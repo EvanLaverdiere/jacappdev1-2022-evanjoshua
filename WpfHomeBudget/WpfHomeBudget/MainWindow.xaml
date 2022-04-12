@@ -69,9 +69,6 @@
                         <ColumnDefinition Width="3*" />
                         <ColumnDefinition Width="1*" />
                         <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
 
                     <!--Search bar: column 0-->
@@ -85,25 +82,11 @@
                         <Button Grid.Column="1" Content="Search" Padding="3"/>
                     </Grid>
 
-
                     <!--Add item: column 1-->
-                    <Button Grid.Column="1" Content="add expense" Click="Button_Click" Margin="5"></Button>
+                    <Button Grid.Column="1" Content="New Expense" Click="Button_Click" Margin="5"></Button>
 
-
-                    <!--Remove item: column 2-->
-                    <Button Grid.Column="2" Content="remove expense" Margin="5" ></Button>
-
-
-                    <!--Modify item: column 3-->
-                    <Button Grid.Column="3" Content="modify expense" Margin="5"></Button>
-
-
-                    <!-- New category: columm 4 -->
-                    <Button Grid.Column="4" Content="New Category" Margin="5" Click="addCategory"/>
-
-
-                    <!--Save: column 5-->
-                    <Button Grid.Column="5" Content="save" Margin="5,5,0,5"></Button>
+                    <!-- New category: columm 2 -->
+                    <Button Grid.Column="2" Content="New Category" Margin="5" Click="addCategory"/>
 
                 </Grid>
 

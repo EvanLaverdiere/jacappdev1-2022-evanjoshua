@@ -67,7 +67,7 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="cancelCreateBudgetBtn" Content="Add and Close" Margin="5" Cursor="Hand" Click="addCloseButton_Click"/>
+                    <Button x:Name="cancelCreateBudgetBtn" Content="Close" Margin="5" Cursor="Hand" Click="closeButton_Click"/>
                     <Button x:Name="proceedCreateBudgetBtn" Grid.Column="1" Content="Add" Margin="5" Cursor="Hand" Click="addButton_Click"/>
                 </Grid>
             </Grid>
