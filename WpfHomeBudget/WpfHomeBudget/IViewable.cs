@@ -9,7 +9,7 @@ namespace WpfHomeBudget
     public interface IViewable
     {
         // Show items in the main window
-        void ShowBudgetItems();
+        void ShowBudgetItems<T>(List<T> budgetItems);
 
         // Display an error message if something goes wrong
         /// <summary>

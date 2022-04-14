@@ -186,5 +186,11 @@ namespace WpfHomeBudget
         {
             return budget.GetBudgetItems(start, end, filterFlag, categoryId);
         }
+
+        public void GetBudgetItemsv2(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
+        {
+            List<BudgetItem> budgetItems = budget.GetBudgetItems(start, end, filterFlag, categoryId);
+            viewable.ShowBudgetItems<BudgetItem>(budgetItems);
+        }
     }
 }

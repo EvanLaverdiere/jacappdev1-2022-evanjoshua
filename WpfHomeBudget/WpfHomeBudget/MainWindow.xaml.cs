@@ -172,5 +172,10 @@ namespace WpfHomeBudget
             //throw new NotImplementedException();
             MessageBox.Show(message, "SUCCESS", MessageBoxButton.OK);
         }
+
+        public void ShowBudgetItems<T>(List<T> budgetItems)
+        {
+            //throw new NotImplementedException();
+        }
     }
 }
