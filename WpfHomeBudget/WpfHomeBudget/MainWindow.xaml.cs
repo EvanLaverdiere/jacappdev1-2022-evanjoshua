@@ -52,6 +52,11 @@ namespace WpfHomeBudget
 
                 presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
 
+                if (attemptedChanges == true)
+                {
+                    Closing += confirmClose;
+                }
+
                 Closing += confirmClose;
 
                 txtStatusBar.Text = entryWindow.dbLocation;
@@ -70,7 +75,7 @@ namespace WpfHomeBudget
 
         private void confirmClose(object sender, CancelEventArgs cancelEventArgs)
         {
-            if (presenter.Modified())
+            if (attemptedChanges)
             {
                 if (MessageBox.Show(this, "Are you sure you want to close the application?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
                 {
