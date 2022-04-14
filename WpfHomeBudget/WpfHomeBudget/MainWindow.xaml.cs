@@ -60,7 +60,8 @@ namespace WpfHomeBudget
                 filterFlag = false;
                 categoryId = 0;
 
-                mainDisplayGrid.ItemsSource = presenter.GetBudgetItems(start, end, filterFlag, categoryId);
+                //mainDisplayGrid.ItemsSource = presenter.GetBudgetItems(start, end, filterFlag, categoryId);
+                presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
 
                 Closing += confirmClose;
 
