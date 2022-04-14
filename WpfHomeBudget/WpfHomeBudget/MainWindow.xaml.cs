@@ -190,6 +190,45 @@ namespace WpfHomeBudget
         {
             //throw new NotImplementedException();
             mainDisplayGrid.ItemsSource = budgetItems;
+            // Clear out the existing columns.
+            mainDisplayGrid.Columns.Clear();
+
+            // If passed list is a list of BudgetItems, configure the grid's columns as follows.
+            if(typeof(T) == typeof(Budget.BudgetItem))
+            {
+                var idColumn = new DataGridTextColumn();
+                idColumn.Header = "Expense ID";
+                //idColumn.Binding = new Binding("ExpenseId");
+                idColumn.Binding = new Binding("ExpenseID");
+                mainDisplayGrid.Columns.Add(idColumn);
+
+                var dateColumn = new DataGridTextColumn();
+                dateColumn.Header = "Date";
+                dateColumn.Binding = new Binding("Date");
+                mainDisplayGrid.Columns.Add(dateColumn);
+
+                var categoryColumn = new DataGridTextColumn();
+                categoryColumn.Header = "Category";
+                categoryColumn.Binding = new Binding("Category");
+                mainDisplayGrid.Columns.Add(categoryColumn);
+
+                var descriptionColumn = new DataGridTextColumn();
+                descriptionColumn.Header = "Description";
+                descriptionColumn.Binding = new Binding("ShortDescription");
+                mainDisplayGrid.Columns.Add(descriptionColumn);
+
+                var amountColumn = new DataGridTextColumn();
+                amountColumn.Header = "Amount";
+                amountColumn.Binding = new Binding("Amount");
+                amountColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(amountColumn);
+
+                var balanceColumn = new DataGridTextColumn();
+                balanceColumn.Header = "Budget Balance";
+                balanceColumn.Binding = new Binding("Balance");
+                balanceColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(balanceColumn);
+            }
         }
     }
 }

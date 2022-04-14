@@ -54,7 +54,7 @@
 
                 <!-- Database view: row 1-->
                 <!-- TO DO: Clear out some of these columns, find way to make Amount & Balance display as currency -->
-                <DataGrid x:Name="mainDisplayGrid" Grid.Row="1"  AutoGenerateColumns="True" IsReadOnly="True">
+                <DataGrid x:Name="mainDisplayGrid" Grid.Row="1"  AutoGenerateColumns="False" IsReadOnly="True">
                     <!--<DataGrid.Columns>
                         <DataGridTextColumn Header="Id" />
                         <DataGridTextColumn Header="Date"/>
