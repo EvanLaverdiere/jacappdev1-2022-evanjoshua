@@ -9,6 +9,11 @@ namespace WpfHomeBudget
     public interface IViewable
     {
         // Show items in the main window
+        /// <summary>
+        /// Displays a list of the budget's items.
+        /// </summary>
+        /// <typeparam name="T">The generic Type of the budget items. Could be BudgetItem, BudgetItemByCategory, BudgetItemByMonth, or something else.</typeparam>
+        /// <param name="budgetItems">The list of budget items to be displayed.</param>
         void ShowBudgetItems<T>(List<T> budgetItems);
 
         // Display an error message if something goes wrong
