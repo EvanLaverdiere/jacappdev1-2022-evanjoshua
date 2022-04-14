@@ -12,7 +12,7 @@ namespace WpfHomeBudget
         /// <summary>
         /// Displays a list of the budget's items.
         /// </summary>
-        /// <typeparam name="T">The generic Type of budget item. Could be BudgetItem, BudgetItemByCategory, BudgetItemByMonth, or something else.</typeparam>
+        /// <typeparam name="T">The generic Type of the budget items. Could be BudgetItem, BudgetItemByCategory, BudgetItemByMonth, or something else.</typeparam>
         /// <param name="budgetItems">The list of budget items to be displayed.</param>
         void ShowBudgetItems<T>(List<T> budgetItems);
 
