@@ -51,6 +51,8 @@ namespace WpfHomeBudget
 
                 presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
 
+                mainDisplayGrid.ItemsSource = presenter.GetBudgetItems(null, null, false, 0);
+
                 Closing += confirmClose;
 
                 txtStatusBar.Text = entryWindow.dbLocation;
