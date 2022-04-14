@@ -170,6 +170,18 @@ namespace WpfHomeBudget
             return categoryTypes;
         }
 
+        /// <summary>
+        /// Retrieves a list of all budget items from the Home Budget, based on passed parameters.
+        /// </summary>
+        /// <remarks>
+        /// The list can be filtered to display budget items from within a specific time frame,
+        /// budget items belonging to a specific category, or both.
+        /// </remarks>
+        /// <param name="start">The beginning of the desired time frame. Can be null.</param>
+        /// <param name="end">The end of the desired time frame. Can be null.</param>
+        /// <param name="filterFlag">True if the results are to be filtered by category, false otherwise.</param>
+        /// <param name="categoryId">The ID of the desired category.</param>
+        /// <returns></returns>
         public List<BudgetItem> GetBudgetItems(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
         {
             return budget.GetBudgetItems(start, end, filterFlag, categoryId);
