@@ -101,26 +101,6 @@ namespace WpfHomeBudget
             MessageBox.Show(error, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        public void ClearError()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Refresh()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ClearForm()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ClearSelection()
-        {
-            throw new NotImplementedException();
-        }
-
         public void turnDark()
         {
             Properties.Settings.Default.ThemeColor = "DarkMode";
@@ -178,6 +158,11 @@ namespace WpfHomeBudget
         {
             AddCategoryWindow categoryWindow = new AddCategoryWindow(presenter);
             categoryWindow.ShowDialog();
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
         }
 
         public void ShowSuccess(string message)

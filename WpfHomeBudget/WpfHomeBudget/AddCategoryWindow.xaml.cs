@@ -51,17 +51,9 @@ namespace WpfHomeBudget
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void addCloseButton_Click(object sender, RoutedEventArgs e)
+        private void closeButton_Click(object sender, RoutedEventArgs e)
         {
-            string description = descriptionBox.Text;
-            int categoryType = cmbCategoryType.SelectedIndex;
-
-            presenter.CreateNewCategory(description, categoryType, true);
-            descriptionBox.Clear();
-            cmbCategoryType.SelectedIndex = -1;
-
             Close();
-
         }
 
         /// <summary>
