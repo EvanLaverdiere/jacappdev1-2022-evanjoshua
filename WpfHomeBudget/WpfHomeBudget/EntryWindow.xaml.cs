@@ -61,7 +61,7 @@ namespace WpfHomeBudget
                 Filter = "DB files (*.db)|*.db",
                 FilterIndex = 1,
                 InitialDirectory = Regex.Replace(Directory.GetCurrentDirectory(), @"(\\.[^\\]*){4}$", "TestFolder"),
-                Title = "Select a database file"
+                Title = "Select a db file"
             };
 
             // Show the OpenFileDialog by calling ShowDialog method
