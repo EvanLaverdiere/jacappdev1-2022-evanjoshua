@@ -24,7 +24,7 @@ namespace WpfHomeBudget
     {
         private Presenter presenter;
         private bool isDarkMode;
-        private bool attemptedChanges;
+
         public MainWindow()
         {
             isDarkMode = ShouldSystemUseDarkMode();
@@ -88,7 +88,6 @@ namespace WpfHomeBudget
         {
             AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
             expenseWindow.ShowDialog();
-            attemptedChanges = true;
         }
 
         public void ShowBudgetItems()
@@ -168,7 +167,6 @@ namespace WpfHomeBudget
         {
             AddCategoryWindow categoryWindow = new AddCategoryWindow(presenter);
             categoryWindow.ShowDialog();
-            attemptedChanges = true;
         }
 
         public void ShowSuccess(string message)
