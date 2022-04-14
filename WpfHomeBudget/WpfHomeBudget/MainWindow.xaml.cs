@@ -168,7 +168,7 @@ namespace WpfHomeBudget
         public void ShowSuccess(string message)
         {
             //throw new NotImplementedException();
-            MessageBox.Show(message, "SUCCESSFUL INSERTION", MessageBoxButton.OK);
+            MessageBox.Show(message, "SUCCESS", MessageBoxButton.OK);
         }
     }
 }
