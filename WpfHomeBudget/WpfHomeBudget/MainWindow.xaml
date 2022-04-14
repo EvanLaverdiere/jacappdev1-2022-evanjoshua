@@ -55,13 +55,13 @@
                 <!-- Database view: row 1-->
                 <!-- TO DO: Clear out some of these columns, find way to make Amount & Balance display as currency -->
                 <DataGrid x:Name="mainDisplayGrid" Grid.Row="1"  AutoGenerateColumns="True" IsReadOnly="True">
-                    <DataGrid.Columns>
+                    <!--<DataGrid.Columns>
                         <DataGridTextColumn Header="Id" />
                         <DataGridTextColumn Header="Date"/>
                         <DataGridTextColumn Header="Description"/>
                         <DataGridTextColumn Header="Amount"/>
                         <DataGridTextColumn Header="Category"/>
-                    </DataGrid.Columns>
+                    </DataGrid.Columns>-->
                 </DataGrid>
 
                 <!-- options: row 2-->
