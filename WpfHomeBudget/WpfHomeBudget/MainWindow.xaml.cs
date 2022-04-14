@@ -24,6 +24,10 @@ namespace WpfHomeBudget
     {
         private Presenter presenter;
         private bool isDarkMode;
+        private DateTime? start;
+        private DateTime? end;
+        private bool filterFlag;
+        private int categoryId;
         public MainWindow()
         {
             isDarkMode = ShouldSystemUseDarkMode();
@@ -51,7 +55,12 @@ namespace WpfHomeBudget
 
                 presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
 
-                mainDisplayGrid.ItemsSource = presenter.GetBudgetItems(null, null, false, 0);
+                // By default, these fields will have the following values:
+                start = end = null;
+                filterFlag = false;
+                categoryId = 0;
+
+                mainDisplayGrid.ItemsSource = presenter.GetBudgetItems(start, end, filterFlag, categoryId);
 
                 Closing += confirmClose;
 
@@ -86,6 +95,8 @@ namespace WpfHomeBudget
         {
             AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
             expenseWindow.ShowDialog();
+            // The presenter should update the view after an expense is added.
+            presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
         }
 
         public void ShowBudgetItems()
@@ -160,6 +171,8 @@ namespace WpfHomeBudget
         {
             AddCategoryWindow categoryWindow = new AddCategoryWindow(presenter);
             categoryWindow.ShowDialog();
+            // Tell the presenter to update the view after a successful operation.
+            presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
         }
 
         public void Clear()
@@ -176,6 +189,7 @@ namespace WpfHomeBudget
         public void ShowBudgetItems<T>(List<T> budgetItems)
         {
             //throw new NotImplementedException();
+            mainDisplayGrid.ItemsSource = budgetItems;
         }
     }
 }
