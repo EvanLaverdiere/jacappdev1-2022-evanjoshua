@@ -169,5 +169,10 @@ namespace WpfHomeBudget
 
             return categoryTypes;
         }
+
+        public List<BudgetItem> GetBudgetItems(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
+        {
+            return budget.GetBudgetItems(start, end, filterFlag, categoryId);
+        }
     }
 }
