@@ -24,6 +24,7 @@ namespace WpfHomeBudget
     {
         private Presenter presenter;
         private bool isDarkMode;
+
         public MainWindow()
         {
             isDarkMode = ShouldSystemUseDarkMode();
@@ -69,9 +70,12 @@ namespace WpfHomeBudget
 
         private void confirmClose(object sender, CancelEventArgs cancelEventArgs)
         {
-            if (MessageBox.Show(this, "Are you sure you want to close the application?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+            if (presenter.Modified())
             {
-                cancelEventArgs.Cancel = true;
+                if (MessageBox.Show(this, "Are you sure you want to close the application?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                {
+                    cancelEventArgs.Cancel = true;
+                }
             }
         }
 
@@ -99,6 +103,11 @@ namespace WpfHomeBudget
         {
             //throw new NotImplementedException();
             MessageBox.Show(error, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
         }
 
         public void turnDark()
@@ -158,11 +167,6 @@ namespace WpfHomeBudget
         {
             AddCategoryWindow categoryWindow = new AddCategoryWindow(presenter);
             categoryWindow.ShowDialog();
-        }
-
-        public void Clear()
-        {
-            throw new NotImplementedException();
         }
 
         public void ShowSuccess(string message)
