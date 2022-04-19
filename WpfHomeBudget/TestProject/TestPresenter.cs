@@ -53,6 +53,12 @@ namespace TestProject
         {
             throw new NotImplementedException();
         }
+
+        public void ShowBudgetItems<T>(List<T> budgetItems)
+        {
+            //throw new NotImplementedException();
+            calledShowBudgetItems = true;
+        }
     }
     /// <summary>
     /// Class for testing the UI functionality of the Presenter object.
@@ -160,6 +166,27 @@ namespace TestProject
 
             // Assert
             Assert.True(testView.calledShowSuccess);
+        }
+
+        [Fact]
+        public void Test_GetBudgetItemsv2CallsShowBudgetItems()
+        {
+            // Arrange
+            TestView testView = new TestView();
+            Presenter presenter = new Presenter(testView);
+
+            // Manually create a database so the Presenter can actually retrieve something.
+            string folder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\"));
+            String goodDB = $"{folder}\\{TEST_DB_INPUT_FILE}";
+            String messyDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, messyDB, true);
+            presenter.CreateBudget(messyDB, false);
+
+            // Assert
+            presenter.GetBudgetItemsv2(null, null, false, 0);
+
+            // Act
+            Assert.True(testView.calledShowBudgetItems);
         }
     }
 }
