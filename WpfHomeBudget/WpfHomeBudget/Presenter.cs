@@ -177,7 +177,7 @@ namespace WpfHomeBudget
         public bool Modified()
         {
             return modified;
-
+        }
         /// <summary>
         /// Retrieves a list of all budget items from the Home Budget, based on passed parameters.
         /// </summary>
