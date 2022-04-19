@@ -89,7 +89,7 @@
                     </Viewbox>
 
                     <!-- Category input-->
-                    <ComboBox Grid.Row="5" Grid.Column="2" x:Name="cmb_Categories" />
+                    <ComboBox Grid.Row="5" Grid.Column="2" x:Name="cmb_Categories" SelectionChanged="startDate_SelectedDateChanged"/>
                 </Grid>
 
                 <!-- Title: row 0-->
