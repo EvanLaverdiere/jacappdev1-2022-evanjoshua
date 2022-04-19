@@ -251,7 +251,7 @@ namespace WpfHomeBudget
             DateTime? start = startDate.SelectedDate; // Specified by a DatePicker.
             DateTime? end = endDate.SelectedDate;   // Specified by a second DatePicker.
             bool filterFlag = false;    // Specified by a checkbox, or by picking a value from the list of categories?
-            int categoryId = 0;     // Specified by a drop-down list of categories?
+            int categoryId = cmb_Categories.SelectedIndex;     // Specified by a drop-down list of categories?
 
             presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
         }
