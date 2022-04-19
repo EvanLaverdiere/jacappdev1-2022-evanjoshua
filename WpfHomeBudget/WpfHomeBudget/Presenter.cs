@@ -58,13 +58,20 @@ namespace WpfHomeBudget
             }
             else
             {
-                budget.categories.Add(description, (Category.CategoryType)categoryType);
-                // Show the user that the operation was completed successfully.
-                viewable.ShowSuccess($"Successfully added \'{description}\' category to the Budget.");
-
-                if (close == true)
+                try
                 {
-                    return true;
+                    budget.categories.Add(description, (Category.CategoryType)categoryType);
+                    // Show the user that the operation was completed successfully.
+                    viewable.ShowSuccess($"Successfully added \'{description}\' category to the database.");
+
+                    if (close == true)
+                    {
+                        return true;
+                    }
+                }
+                catch (Exception e)
+                {
+                    viewable.ShowError("Error adding category: " + e.ToString());
                 }
             }
 
@@ -86,12 +93,19 @@ namespace WpfHomeBudget
         {
             if (ValidateExpenseInput(date, category, amount, description))
             {
-                budget.expenses.Add(date.Value, category, double.Parse(amount), description);
+                try
+                {
+                    budget.expenses.Add(date.Value, category, double.Parse(amount), description);
 
-                // Display some kind of message indicating the Expense was successfully added.
-                viewable.ShowSuccess($"Successfully added \'{description}\' expense to the Budget.");
-                //// Clear the form afterward.
-                //viewable.ClearForm();
+                    // Display some kind of message indicating the Expense was successfully added.
+                    viewable.ShowSuccess($"Successfully added \'{description}\' expense to the database.");
+                    //// Clear the form afterward.
+                    //viewable.ClearForm();
+                }
+                catch (Exception e)
+                {
+                    viewable.ShowError("Error adding expense: " + e.ToString());
+                }
             }
         }
 
