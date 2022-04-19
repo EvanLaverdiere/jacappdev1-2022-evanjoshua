@@ -86,6 +86,24 @@
                         <TextBox/>
                         <Button Grid.Column="1" Content="Search" Padding="3"/>
                     </Grid>-->
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Start Date" FontWeight="Bold"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="End Date" FontWeight="Bold"/>
+
+                        <DatePicker Grid.Row="1" Grid.Column="0" x:Name="startDate"/>
+                        <DatePicker Grid.Row="1" Grid.Column="1" x:Name="endDate"/>
+                        <ComboBox Grid.Row="1" Grid.Column="2" x:Name="cmb_Categories"/>
+                    </Grid>
 
                     <!--Add item: column 1-->
                     <Button Grid.Column="1" Content="New Expense" Click="Button_Click" Margin="5"></Button>
