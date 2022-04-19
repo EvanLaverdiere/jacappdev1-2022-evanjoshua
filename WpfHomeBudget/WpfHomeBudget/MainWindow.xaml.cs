@@ -66,6 +66,8 @@ namespace WpfHomeBudget
                 //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
                 UpdateGrid();
 
+                cmb_Categories.ItemsSource = presenter.GetCategories();
+
                 Closing += confirmClose;
 
                 txtStatusBar.Text = entryWindow.dbLocation;
