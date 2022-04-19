@@ -67,8 +67,16 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="cancelCreateBudgetBtn" Content="Cancel" Margin="5" Cursor="Hand" Click="closeButton_Click"/>
-                    <Button x:Name="proceedCreateBudgetBtn" Grid.Column="1" Content="Add" Margin="5" Cursor="Hand" Click="addButton_Click"/>
+                    <Button x:Name="cancelCreateBudgetBtn"  Margin="0,0,1,0" Cursor="Hand" Click="closeButton_Click">
+                        <Viewbox>
+                            <TextBlock Padding="3" Text="Cancel"/>
+                        </Viewbox>
+                    </Button>
+                    <Button x:Name="proceedCreateBudgetBtn" Grid.Column="1" Margin="1,0,0,0" Cursor="Hand" Click="addButton_Click">
+                        <Viewbox>
+                            <TextBlock Padding="3" Text="Add"/>
+                        </Viewbox>
+                    </Button>
                 </Grid>
             </Grid>
         </Grid>
