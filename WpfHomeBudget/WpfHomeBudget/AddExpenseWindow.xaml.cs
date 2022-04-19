@@ -103,9 +103,5 @@ namespace WpfHomeBudget
 
         }
 
-        private void txtExpAmount_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
     }
 }
