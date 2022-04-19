@@ -34,7 +34,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="5*"/>
@@ -70,7 +70,11 @@
                 <TextBox Padding="10" x:Name="inputLocation" TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
 
                 <!-- browse button-->
-                <Button x:Name="browseFoldersBtn" Grid.Column="1" Content="..." Click="browseFoldersBtn_Click" Padding="0,10,0,10" FontWeight="Bold" Cursor="Hand"/>
+                <Button x:Name="browseFoldersBtn" Grid.Column="1" Click="browseFoldersBtn_Click" FontWeight="Bold" Cursor="Hand">
+                    <Viewbox>
+                        <TextBlock Padding="3,3,3,7" Text="..."/>
+                    </Viewbox>
+                </Button>
             </Grid>
 
             <!-- Buffer Zone: row 5-->
@@ -82,8 +86,16 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="cancelCreateBudgetBtn" Content="Cancel" Margin="5" Cursor="Hand" Click="cancelCreateBudgetBtn_Click"/>
-                    <Button x:Name="proceedCreateBudgetBtn" Grid.Column="1" Content="Next" Margin="5" Cursor="Hand" Click="proceedCreateBudgetBtn_Click"/>
+                    <Button x:Name="cancelCreateBudgetBtn" Margin="5" Cursor="Hand" Click="cancelCreateBudgetBtn_Click">
+                        <Viewbox>
+                            <TextBlock Padding="3" Text="Cancel"/>
+                        </Viewbox>
+                    </Button>
+                    <Button x:Name="proceedCreateBudgetBtn" Grid.Column="1" Margin="5" Cursor="Hand" Click="proceedCreateBudgetBtn_Click">
+                        <Viewbox>
+                            <TextBlock Padding="3" Text="Next"/>
+                        </Viewbox>
+                    </Button>
                 </Grid>
             </Grid>
         </Grid>
