@@ -25,10 +25,10 @@ namespace WpfHomeBudget
         private Presenter presenter;
         private bool isDarkMode;
 
-        private DateTime? start;
-        private DateTime? end;
-        private bool filterFlag;
-        private int categoryId;
+        //private DateTime? start;
+        //private DateTime? end;
+        //private bool filterFlag;
+        //private int categoryId;
 
         public MainWindow()
         {
@@ -57,13 +57,14 @@ namespace WpfHomeBudget
 
                 presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
 
-                // By default, these fields will have the following values:
-                start = end = null;
-                filterFlag = false;
-                categoryId = 0;
+                //// By default, these fields will have the following values:
+                //start = end = null;
+                //filterFlag = false;
+                //categoryId = 0;
 
                 //mainDisplayGrid.ItemsSource = presenter.GetBudgetItems(start, end, filterFlag, categoryId);
-                presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
+                //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
+                UpdateGrid();
 
                 Closing += confirmClose;
 
@@ -102,7 +103,8 @@ namespace WpfHomeBudget
             AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
             expenseWindow.ShowDialog();
             // The presenter should update the view after an expense is added.
-            presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
+            //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
+            UpdateGrid();
         }
 
         public void ShowBudgetItems()
@@ -183,7 +185,8 @@ namespace WpfHomeBudget
             AddCategoryWindow categoryWindow = new AddCategoryWindow(presenter);
             categoryWindow.ShowDialog();
             // Tell the presenter to update the view after a successful operation.
-            presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
+            //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
+            UpdateGrid();
         }
 
         public void ShowSuccess(string message)
@@ -235,6 +238,20 @@ namespace WpfHomeBudget
                 balanceColumn.Binding.StringFormat = "C";
                 mainDisplayGrid.Columns.Add(balanceColumn);
             }
+        }
+
+        /// <summary>
+        /// Passes information about current filters to the Presenter, so the Presenter can update the grid.
+        /// </summary>
+        private void UpdateGrid()
+        {
+            // These variables have fixed values at the moment because the UI elements needed to set them have not been implemented yet.
+            DateTime? start = null; // Specified by a DatePicker.
+            DateTime? end = null;   // Specified by a second DatePicker.
+            bool filterFlag = false;    // Specified by a checkbox, or by picking a value from the list of categories?
+            int categoryId = 0;     // Specified by a drop-down list of categories?
+
+            presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
         }
     }
 }
