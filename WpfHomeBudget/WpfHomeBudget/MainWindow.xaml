@@ -29,7 +29,7 @@
         <!-- Content: row 1-->
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="20*"/>
+                <RowDefinition Height="30*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -42,7 +42,7 @@
             <!-- DB content: row 0-->
             <Grid Grid.Column="1" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition  Height="1*"/>
+                    <RowDefinition  Height="2*"/>
                     <RowDefinition  Height="10*"/>
                     <RowDefinition  Height="1*"/>
                 </Grid.RowDefinitions>
@@ -107,17 +107,27 @@
                     </Grid>
 
                     <!--Add item: column 1-->
-                    <Button Grid.Column="1" Content="New Expense" Click="Button_Click" Margin="5"></Button>
+                    <Button Grid.Column="1" Click="Button_Click" Margin="5">
+                        <Viewbox>
+                            <TextBlock Padding="3" Text="New Expense"/>
+                        </Viewbox>
+                    </Button>
 
                     <!-- New category: columm 2 -->
-                    <Button Grid.Column="2" Content="New Category" Margin="5" Click="addCategory"/>
+                    <Button Grid.Column="2" Margin="5" Click="addCategory">
+                        <Viewbox>
+                            <TextBlock Padding="3" Text="New Category"/>
+                        </Viewbox>
+                    </Button>
 
                 </Grid>
 
             </Grid>
 
             <!-- Status bar: row 1 -->
-            <TextBlock x:Name="txtStatusBar" Grid.Row="1" Grid.ColumnSpan="2"/>
+            <Viewbox Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
+                <TextBlock x:Name="txtStatusBar"  VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+            </Viewbox>
         </Grid>
 
     </Grid>
