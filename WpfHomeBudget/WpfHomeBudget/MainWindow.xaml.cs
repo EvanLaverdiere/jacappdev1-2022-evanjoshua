@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -24,6 +24,11 @@ namespace WpfHomeBudget
     {
         private Presenter presenter;
         private bool isDarkMode;
+
+        private DateTime? start;
+        private DateTime? end;
+        private bool filterFlag;
+        private int categoryId;
 
         public MainWindow()
         {
@@ -51,6 +56,14 @@ namespace WpfHomeBudget
                 presenter = new Presenter(this);
 
                 presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
+
+                // By default, these fields will have the following values:
+                start = end = null;
+                filterFlag = false;
+                categoryId = 0;
+
+                //mainDisplayGrid.ItemsSource = presenter.GetBudgetItems(start, end, filterFlag, categoryId);
+                presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
 
                 Closing += confirmClose;
 
@@ -88,6 +101,8 @@ namespace WpfHomeBudget
         {
             AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
             expenseWindow.ShowDialog();
+            // The presenter should update the view after an expense is added.
+            presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
         }
 
         public void ShowBudgetItems()
@@ -167,12 +182,59 @@ namespace WpfHomeBudget
         {
             AddCategoryWindow categoryWindow = new AddCategoryWindow(presenter);
             categoryWindow.ShowDialog();
+            // Tell the presenter to update the view after a successful operation.
+            presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
         }
 
         public void ShowSuccess(string message)
         {
             //throw new NotImplementedException();
             MessageBox.Show(message, "SUCCESS", MessageBoxButton.OK);
+        }
+
+        public void ShowBudgetItems<T>(List<T> budgetItems)
+        {
+            //throw new NotImplementedException();
+            mainDisplayGrid.ItemsSource = budgetItems;
+            // Clear out the existing columns.
+            mainDisplayGrid.Columns.Clear();
+
+            // If passed list is a list of BudgetItems, configure the grid's columns as follows.
+            if(typeof(T) == typeof(Budget.BudgetItem))
+            {
+                var idColumn = new DataGridTextColumn();
+                idColumn.Header = "Expense ID";
+                //idColumn.Binding = new Binding("ExpenseId");
+                idColumn.Binding = new Binding("ExpenseID");
+                mainDisplayGrid.Columns.Add(idColumn);
+
+                var dateColumn = new DataGridTextColumn();
+                dateColumn.Header = "Date";
+                dateColumn.Binding = new Binding("Date");
+                mainDisplayGrid.Columns.Add(dateColumn);
+
+                var categoryColumn = new DataGridTextColumn();
+                categoryColumn.Header = "Category";
+                categoryColumn.Binding = new Binding("Category");
+                mainDisplayGrid.Columns.Add(categoryColumn);
+
+                var descriptionColumn = new DataGridTextColumn();
+                descriptionColumn.Header = "Description";
+                descriptionColumn.Binding = new Binding("ShortDescription");
+                mainDisplayGrid.Columns.Add(descriptionColumn);
+
+                var amountColumn = new DataGridTextColumn();
+                amountColumn.Header = "Amount";
+                amountColumn.Binding = new Binding("Amount");
+                amountColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(amountColumn);
+
+                var balanceColumn = new DataGridTextColumn();
+                balanceColumn.Header = "Budget Balance";
+                balanceColumn.Binding = new Binding("Balance");
+                balanceColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(balanceColumn);
+            }
         }
     }
 }
