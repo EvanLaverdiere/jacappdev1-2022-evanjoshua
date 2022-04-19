@@ -249,7 +249,7 @@ namespace WpfHomeBudget
         {
             // These variables have fixed values at the moment because the UI elements needed to set them have not been implemented yet.
             DateTime? start = startDate.SelectedDate; // Specified by a DatePicker.
-            DateTime? end = null;   // Specified by a second DatePicker.
+            DateTime? end = endDate.SelectedDate;   // Specified by a second DatePicker.
             bool filterFlag = false;    // Specified by a checkbox, or by picking a value from the list of categories?
             int categoryId = 0;     // Specified by a drop-down list of categories?
 
