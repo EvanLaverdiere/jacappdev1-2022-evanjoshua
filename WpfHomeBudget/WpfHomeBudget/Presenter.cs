@@ -16,6 +16,7 @@ namespace WpfHomeBudget
         // backing fields
         private IViewable viewable;
         HomeBudget budget;
+        private bool modified = false;
 
         // constructor
         public Presenter(IViewable view)
@@ -59,6 +60,7 @@ namespace WpfHomeBudget
             else
             {
                 budget.categories.Add(description, (Category.CategoryType)categoryType);
+                modified = true;
                 // Show the user that the operation was completed successfully.
                 viewable.ShowSuccess($"Successfully added \'{description}\' category to the Budget.");
 
@@ -87,6 +89,7 @@ namespace WpfHomeBudget
             if (ValidateExpenseInput(date, category, amount, description))
             {
                 budget.expenses.Add(date.Value, category, double.Parse(amount), description);
+                modified = true;
 
                 // Display some kind of message indicating the Expense was successfully added.
                 viewable.ShowSuccess($"Successfully added \'{description}\' expense to the Budget.");
@@ -170,6 +173,11 @@ namespace WpfHomeBudget
             return categoryTypes;
         }
 
+
+        public bool Modified()
+        {
+            return modified;
+
         /// <summary>
         /// Retrieves a list of all budget items from the Home Budget, based on passed parameters.
         /// </summary>
@@ -191,6 +199,7 @@ namespace WpfHomeBudget
         {
             List<BudgetItem> budgetItems = budget.GetBudgetItems(start, end, filterFlag, categoryId);
             viewable.ShowBudgetItems<BudgetItem>(budgetItems);
+
         }
     }
 }

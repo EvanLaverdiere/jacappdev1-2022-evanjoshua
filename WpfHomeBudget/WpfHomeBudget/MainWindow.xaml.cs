@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -24,10 +24,12 @@ namespace WpfHomeBudget
     {
         private Presenter presenter;
         private bool isDarkMode;
+
         private DateTime? start;
         private DateTime? end;
         private bool filterFlag;
         private int categoryId;
+
         public MainWindow()
         {
             isDarkMode = ShouldSystemUseDarkMode();
@@ -81,9 +83,12 @@ namespace WpfHomeBudget
 
         private void confirmClose(object sender, CancelEventArgs cancelEventArgs)
         {
-            if (MessageBox.Show(this, "Are you sure you want to close the application?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+            if (presenter.Modified())
             {
-                cancelEventArgs.Cancel = true;
+                if (MessageBox.Show(this, "Are you sure you want to close the application?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                {
+                    cancelEventArgs.Cancel = true;
+                }
             }
         }
 
@@ -113,6 +118,11 @@ namespace WpfHomeBudget
         {
             //throw new NotImplementedException();
             MessageBox.Show(error, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
         }
 
         public void turnDark()
@@ -174,11 +184,6 @@ namespace WpfHomeBudget
             categoryWindow.ShowDialog();
             // Tell the presenter to update the view after a successful operation.
             presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
-        }
-
-        public void Clear()
-        {
-            throw new NotImplementedException();
         }
 
         public void ShowSuccess(string message)
