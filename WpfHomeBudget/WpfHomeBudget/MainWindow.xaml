@@ -88,8 +88,19 @@
                         <TextBlock Text="Filter by Category?" FontWeight="Bold"/>
                     </Viewbox>
 
+                    <!-- Category filter-->
+                    <Grid Grid.Row="5" Grid.Column="2" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="7*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox Margin="0,2,0,2" x:Name="cmb_Categories" SelectionChanged="startDate_SelectedDateChanged"/>
+                        <Viewbox Grid.Column="1">
+                            <CheckBox x:Name="chk_FilterCategories"/>
+                        </Viewbox>
+                    </Grid>
                     <!-- Category input-->
-                    <ComboBox Grid.Row="5" Grid.Column="2" x:Name="cmb_Categories" SelectionChanged="startDate_SelectedDateChanged"/>
                 </Grid>
 
                 <!-- Title: row 0-->
