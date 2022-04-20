@@ -83,8 +83,6 @@ namespace WpfHomeBudget
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="cancelEventArgs"></param>
-
-
         private void confirmClose(object sender, CancelEventArgs cancelEventArgs)
         {
             if (presenter.Modified())
@@ -168,14 +166,14 @@ namespace WpfHomeBudget
 
         private void theme_Click(object sender, RoutedEventArgs e)
         {
-            if (isDarkMode)
-            {
-                turnLight();
-            }
-            else
-            {
-                turnDark();
-            }
+            //if (isDarkMode)
+            //{
+            //    turnLight();
+            //}
+            //else
+            //{
+            //    turnDark();
+            //}
         }
 
         /// <summary>
