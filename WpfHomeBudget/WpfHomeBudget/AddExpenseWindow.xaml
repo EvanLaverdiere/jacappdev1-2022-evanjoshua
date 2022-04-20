@@ -7,8 +7,9 @@
         mc:Ignorable="d"
          Style="{StaticResource WindowStyle}" Icon="/LightModeIcon.png"
         Title="AddExpenseWindow"
-        Height="450" Width="600"
-        MinHeight="500" MinWidth="570">
+        Height="500" Width="500"
+        MinHeight="450" MinWidth="300"
+        >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -36,9 +37,9 @@
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="3*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
@@ -54,7 +55,9 @@
             </Viewbox>
 
             <!-- Date picker: row 2-->
-            <DatePicker Margin="5,0,5,0" Grid.Row="2" x:Name="dateExpDate"/>
+            <Viewbox Grid.Row="2" HorizontalAlignment="Left">
+                <DatePicker x:Name="dateExpDate"/>
+            </Viewbox>
 
             <!-- label 2: row 3-->
             <Viewbox Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Left">
@@ -64,15 +67,20 @@
             <!-- Category picker: row 4-->
             <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="43*"/>
+                    <ColumnDefinition Width="199*"/>
+                    <ColumnDefinition Width="121*"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Categories: col 0-->
-                <ComboBox x:Name="cmbCategory" Margin="3"/>
+                <ComboBox x:Name="cmbCategory" Margin="0,3,3,3" Grid.ColumnSpan="2"/>
 
                 <!-- New Category: col 1-->
-                <Button Grid.Column="1" x:Name="btnNewCategory" Content="Add New Category" Margin="3" Cursor="Hand" Click="btnNewCategory_Click"/>
+                <Button Grid.Column="2" x:Name="btnNewCategory" Margin="0,3,0,3" Cursor="Hand" Click="btnNewCategory_Click">
+                    <Viewbox>
+                        <TextBlock Padding="3" Text="Add New Category"/>
+                    </Viewbox>
+                </Button>
             </Grid>
 
             <!-- label 3: row 5-->
@@ -94,12 +102,21 @@
             <!-- next and cancel button: row 6 col1-->
             <Grid Grid.Row="10" Grid.Column="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
 
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" x:Name="btnSubmit" Content="Add New Expense" Margin="5" Click="btnSubmit_Click"/>
-                <Button Grid.Column="1" x:Name="btnCancel" Content="Cancel" Margin="5" Click="btnCancel_Click"/>
+                <Button Grid.Column="0" x:Name="btnCancel" Margin="0,0,1,0" Click="btnCancel_Click">
+                    <Viewbox>
+                        <TextBlock Padding="3" Text="Cancel"/>
+                    </Viewbox>
+                </Button>
+                <Button Grid.Column="1" x:Name="btnSubmit" Margin="1,0,0,0" Click="btnSubmit_Click">
+                    <Viewbox>
+                        <TextBlock Padding="3" Text="Add New Expense"/>
+                    </Viewbox>
+                </Button>
+
             </Grid>
         </Grid>
         <!--Buffer zone: row 2-->

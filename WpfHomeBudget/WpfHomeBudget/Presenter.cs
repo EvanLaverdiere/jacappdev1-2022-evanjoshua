@@ -16,6 +16,7 @@ namespace WpfHomeBudget
         // backing fields
         private IViewable viewable;
         HomeBudget budget;
+        private bool modified = false;
 
         // constructor
         public Presenter(IViewable view)
@@ -58,13 +59,20 @@ namespace WpfHomeBudget
             }
             else
             {
-                budget.categories.Add(description, (Category.CategoryType)categoryType);
-                // Show the user that the operation was completed successfully.
-                viewable.ShowSuccess($"Successfully added \'{description}\' category to the database.");
-
-                if (close == true)
+                try
                 {
-                    return true;
+                    budget.categories.Add(description, (Category.CategoryType)categoryType);
+                    // Show the user that the operation was completed successfully.
+                    viewable.ShowSuccess($"Successfully added \'{description}\' category to the database.");
+
+                    if (close == true)
+                    {
+                        return true;
+                    }
+                }
+                catch (Exception e)
+                {
+                    viewable.ShowError("Error adding category: " + e.ToString());
                 }
             }
 
@@ -86,12 +94,19 @@ namespace WpfHomeBudget
         {
             if (ValidateExpenseInput(date, category, amount, description))
             {
-                budget.expenses.Add(date.Value, category, double.Parse(amount), description);
-                
-                // Display some kind of message indicating the Expense was successfully added.
-                viewable.ShowSuccess($"Successfully added \'{description}\' expense to the database.");
-                //// Clear the form afterward.
-                //viewable.ClearForm();
+                try
+                {
+                    budget.expenses.Add(date.Value, category, double.Parse(amount), description);
+
+                    // Display some kind of message indicating the Expense was successfully added.
+                    viewable.ShowSuccess($"Successfully added \'{description}\' expense to the database.");
+                    //// Clear the form afterward.
+                    //viewable.ClearForm();
+                }
+                catch (Exception e)
+                {
+                    viewable.ShowError("Error adding expense: " + e.ToString());
+                }
             }
         }
 
@@ -168,6 +183,35 @@ namespace WpfHomeBudget
             }
 
             return categoryTypes;
+        }
+
+
+        public bool Modified()
+        {
+            return modified;
+        }
+        /// <summary>
+        /// Retrieves a list of all budget items from the Home Budget, based on passed parameters.
+        /// </summary>
+        /// <remarks>
+        /// The list can be filtered to display budget items from within a specific time frame,
+        /// budget items belonging to a specific category, or both.
+        /// </remarks>
+        /// <param name="start">The beginning of the desired time frame. Can be null.</param>
+        /// <param name="end">The end of the desired time frame. Can be null.</param>
+        /// <param name="filterFlag">True if the results are to be filtered by category, false otherwise.</param>
+        /// <param name="categoryId">The ID of the desired category.</param>
+        /// <returns></returns>
+        public List<BudgetItem> GetBudgetItems(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
+        {
+            return budget.GetBudgetItems(start, end, filterFlag, categoryId);
+        }
+
+        public void GetBudgetItemsv2(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
+        {
+            List<BudgetItem> budgetItems = budget.GetBudgetItems(start, end, filterFlag, categoryId);
+            viewable.ShowBudgetItems<BudgetItem>(budgetItems);
+
         }
     }
 }

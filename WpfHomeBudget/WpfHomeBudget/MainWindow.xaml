@@ -29,7 +29,7 @@
         <!-- Content: row 1-->
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="20*"/>
+                <RowDefinition Height="30*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -42,7 +42,7 @@
             <!-- DB content: row 0-->
             <Grid Grid.Column="1" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition  Height="1*"/>
+                    <RowDefinition  Height="2*"/>
                     <RowDefinition  Height="10*"/>
                     <RowDefinition  Height="1*"/>
                 </Grid.RowDefinitions>
@@ -53,14 +53,15 @@
                 </Viewbox>
 
                 <!-- Database view: row 1-->
-                <DataGrid Grid.Row="1"  AutoGenerateColumns="True" IsReadOnly="True">
-                    <DataGrid.Columns>
+                <!-- TO DO: Clear out some of these columns, find way to make Amount & Balance display as currency -->
+                <DataGrid x:Name="mainDisplayGrid" Grid.Row="1"  AutoGenerateColumns="False" IsReadOnly="True">
+                    <!--<DataGrid.Columns>
                         <DataGridTextColumn Header="Id" />
                         <DataGridTextColumn Header="Date"/>
                         <DataGridTextColumn Header="Description"/>
                         <DataGridTextColumn Header="Amount"/>
                         <DataGridTextColumn Header="Category"/>
-                    </DataGrid.Columns>
+                    </DataGrid.Columns>-->
                 </DataGrid>
 
                 <!-- options: row 2-->
@@ -69,13 +70,14 @@
                         <ColumnDefinition Width="3*" />
                         <ColumnDefinition Width="1*" />
                         <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
 
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+
                     <!--Search bar: column 0-->
-                    <Grid Margin="0, 5, 5,5">
+                    <!--<Grid Margin="0, 5, 5,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*" />
                             <ColumnDefinition Width="auto" />
@@ -83,34 +85,30 @@
 
                         <TextBox/>
                         <Button Grid.Column="1" Content="Search" Padding="3"/>
-                    </Grid>
-
+                    </Grid>-->
 
                     <!--Add item: column 1-->
-                    <Button Grid.Column="1" Content="add expense" Click="Button_Click" Margin="5"></Button>
+                    <Button Grid.Column="1" Click="Button_Click" Margin="5">
+                        <Viewbox>
+                            <TextBlock Padding="3" Text="New Expense"/>
+                        </Viewbox>
+                    </Button>
 
-
-                    <!--Remove item: column 2-->
-                    <Button Grid.Column="2" Content="remove expense" Margin="5" ></Button>
-
-
-                    <!--Modify item: column 3-->
-                    <Button Grid.Column="3" Content="modify expense" Margin="5"></Button>
-
-
-                    <!-- New category: columm 4 -->
-                    <Button Grid.Column="4" Content="New Category" Margin="5" Click="addCategory"/>
-
-
-                    <!--Save: column 5-->
-                    <Button Grid.Column="5" Content="save" Margin="5,5,0,5"></Button>
+                    <!-- New category: columm 2 -->
+                    <Button Grid.Column="2" Margin="5" Click="addCategory">
+                        <Viewbox>
+                            <TextBlock Padding="3" Text="New Category"/>
+                        </Viewbox>
+                    </Button>
 
                 </Grid>
 
             </Grid>
 
             <!-- Status bar: row 1 -->
-            <TextBlock x:Name="txtStatusBar" Grid.Row="1" Grid.ColumnSpan="2"/>
+            <Viewbox Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
+                <TextBlock x:Name="txtStatusBar"  VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+            </Viewbox>
         </Grid>
 
     </Grid>
