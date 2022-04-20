@@ -49,8 +49,17 @@ namespace WpfHomeBudget
         /// <param name="e"></param>
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to cancel adding this new expense?", "CONFIRM CANCELATION", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                this.Close();
+            if (cmbCategory.SelectedIndex != -1 || txtExpAmount.Text != string.Empty || txtExpDescription.Text != string.Empty)
+            {
+                if (MessageBox.Show("Are you sure you want to cancel adding this new expense?", "CONFIRM CANCELATION", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    // clear the form so we won't trigger the closing verification function.
+                    ClearExpenseForm();
+                    Close();
+                }
+            }
+            else
+                Close();
         }
 
         /// <summary>
@@ -93,5 +102,6 @@ namespace WpfHomeBudget
             }
 
         }
+
     }
 }

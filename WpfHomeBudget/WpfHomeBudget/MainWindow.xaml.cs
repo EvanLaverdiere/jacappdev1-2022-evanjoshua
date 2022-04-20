@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -23,10 +23,19 @@ namespace WpfHomeBudget
     public partial class MainWindow : System.Windows.Window, IViewable
     {
         private Presenter presenter;
+
         private bool isDarkMode;
+
+        //private DateTime? start;
+        //private DateTime? end;
+        //private bool filterFlag;
+        //private int categoryId;
+
         public MainWindow()
         {
-            isDarkMode = ShouldSystemUseDarkMode();
+            //Dark mode temporarily disabled
+            //isDarkMode = ShouldSystemUseDarkMode();
+            isDarkMode = false;
 
             // Create the entry window
             EntryWindow entryWindow = new EntryWindow(isDarkMode);
@@ -51,6 +60,15 @@ namespace WpfHomeBudget
 
                 presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
 
+                //// By default, these fields will have the following values:
+                //start = end = null;
+                //filterFlag = false;
+                //categoryId = 0;
+
+                //mainDisplayGrid.ItemsSource = presenter.GetBudgetItems(start, end, filterFlag, categoryId);
+                //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
+                UpdateGrid();
+
                 Closing += confirmClose;
 
                 txtStatusBar.Text = entryWindow.dbLocation;
@@ -69,9 +87,12 @@ namespace WpfHomeBudget
 
         private void confirmClose(object sender, CancelEventArgs cancelEventArgs)
         {
-            if (MessageBox.Show(this, "Are you sure you want to close the application?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+            if (presenter.Modified())
             {
-                cancelEventArgs.Cancel = true;
+                if (MessageBox.Show(this, "Are you sure you want to close the application?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                {
+                    cancelEventArgs.Cancel = true;
+                }
             }
         }
 
@@ -84,6 +105,9 @@ namespace WpfHomeBudget
         {
             AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
             expenseWindow.ShowDialog();
+            // The presenter should update the view after an expense is added.
+            //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
+            UpdateGrid();
         }
 
         public void ShowBudgetItems()
@@ -101,22 +125,7 @@ namespace WpfHomeBudget
             MessageBox.Show(error, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        public void ClearError()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Refresh()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ClearForm()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ClearSelection()
+        public void Clear()
         {
             throw new NotImplementedException();
         }
@@ -178,12 +187,74 @@ namespace WpfHomeBudget
         {
             AddCategoryWindow categoryWindow = new AddCategoryWindow(presenter);
             categoryWindow.ShowDialog();
+            // Tell the presenter to update the view after a successful operation.
+            //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
+            UpdateGrid();
         }
 
         public void ShowSuccess(string message)
         {
             //throw new NotImplementedException();
-            MessageBox.Show(message, "SUCCESSFUL INSERTION", MessageBoxButton.OK);
+            MessageBox.Show(message, "SUCCESS", MessageBoxButton.OK);
+        }
+
+        public void ShowBudgetItems<T>(List<T> budgetItems)
+        {
+            //throw new NotImplementedException();
+            mainDisplayGrid.ItemsSource = budgetItems;
+            // Clear out the existing columns.
+            mainDisplayGrid.Columns.Clear();
+
+            // If passed list is a list of BudgetItems, configure the grid's columns as follows.
+            if(typeof(T) == typeof(Budget.BudgetItem))
+            {
+                var idColumn = new DataGridTextColumn();
+                idColumn.Header = "Expense ID";
+                //idColumn.Binding = new Binding("ExpenseId");
+                idColumn.Binding = new Binding("ExpenseID");
+                mainDisplayGrid.Columns.Add(idColumn);
+
+                var dateColumn = new DataGridTextColumn();
+                dateColumn.Header = "Date";
+                dateColumn.Binding = new Binding("Date");
+                mainDisplayGrid.Columns.Add(dateColumn);
+
+                var categoryColumn = new DataGridTextColumn();
+                categoryColumn.Header = "Category";
+                categoryColumn.Binding = new Binding("Category");
+                mainDisplayGrid.Columns.Add(categoryColumn);
+
+                var descriptionColumn = new DataGridTextColumn();
+                descriptionColumn.Header = "Description";
+                descriptionColumn.Binding = new Binding("ShortDescription");
+                mainDisplayGrid.Columns.Add(descriptionColumn);
+
+                var amountColumn = new DataGridTextColumn();
+                amountColumn.Header = "Amount";
+                amountColumn.Binding = new Binding("Amount");
+                amountColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(amountColumn);
+
+                var balanceColumn = new DataGridTextColumn();
+                balanceColumn.Header = "Budget Balance";
+                balanceColumn.Binding = new Binding("Balance");
+                balanceColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(balanceColumn);
+            }
+        }
+
+        /// <summary>
+        /// Passes information about current filters to the Presenter, so the Presenter can update the grid.
+        /// </summary>
+        private void UpdateGrid()
+        {
+            // These variables have fixed values at the moment because the UI elements needed to set them have not been implemented yet.
+            DateTime? start = null; // Specified by a DatePicker.
+            DateTime? end = null;   // Specified by a second DatePicker.
+            bool filterFlag = false;    // Specified by a checkbox, or by picking a value from the list of categories?
+            int categoryId = 0;     // Specified by a drop-down list of categories?
+
+            presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
         }
     }
 }
