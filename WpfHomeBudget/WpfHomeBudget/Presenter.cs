@@ -111,6 +111,49 @@ namespace WpfHomeBudget
         }
 
         /// <summary>
+        /// Asks the HomeBudget model to edit an Expense.
+        /// </summary>
+        /// <param name="Id">The Id of the Expense.</param>
+        /// <param name="date">The date of the Expense.</param>
+        /// <param name="category">The category Id of the Expense.</param>
+        /// <param name="amount">The amount of the Expense.</param>
+        /// <param name="description">A description of the Expense.</param>
+        public void EditExpense(int Id, DateTime? date, int category, string amount, string description)
+        {
+            if (ValidateExpenseInput(date, category, amount, description))
+            {
+                try
+                {
+                    budget.expenses.UpdateProperties(Id, date.Value, category, double.Parse(amount), description);
+
+                    viewable.ShowSuccess("Successfully edited expense.");
+                }
+                catch (Exception e)
+                {
+                    viewable.ShowError("Error editing expense: " + e.Message.ToString());
+                }
+            }
+        }
+
+        /// <summary>
+        /// Asks the HomeBudget model to delete an Expense.
+        /// </summary>
+        /// <param name="Id">The Id of the Expense.</param>
+        public void DeleteExpense(int Id)
+        {
+            try
+            {
+                budget.expenses.Delete(Id);
+
+                viewable.ShowSuccess("Successfully delete expense from database.");
+            }
+            catch (Exception e)
+            {
+                viewable.ShowError("Error deleting expense: " + e.Message.ToString());
+            }
+        }
+
+        /// <summary>
         /// Validates data that is meant to be used to create an Expense object.
         /// If any of the data is invalid, method tells the View to display an appropriate error message.
         /// </summary>
