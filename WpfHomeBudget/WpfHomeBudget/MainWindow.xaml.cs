@@ -250,7 +250,7 @@ namespace WpfHomeBudget
             // These variables have fixed values at the moment because the UI elements needed to set them have not been implemented yet.
             DateTime? start = startDate.SelectedDate; // Specified by a DatePicker.
             DateTime? end = endDate.SelectedDate;   // Specified by a second DatePicker.
-            bool filterFlag = false;    // Specified by a checkbox, or by picking a value from the list of categories?
+            bool filterFlag = (bool)chk_FilterCategories.IsChecked;    // Specified by a checkbox, or by picking a value from the list of categories?
             int categoryId = cmb_Categories.SelectedIndex + 1;     // Specified by a drop-down list of categories. Offset is necessary, as indices start from 0 while the Category IDs start from 1.
 
             presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
