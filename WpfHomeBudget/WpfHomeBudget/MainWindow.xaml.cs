@@ -23,6 +23,7 @@ namespace WpfHomeBudget
     public partial class MainWindow : System.Windows.Window, IViewable
     {
         private Presenter presenter;
+
         private bool isDarkMode;
 
         //private DateTime? start;
@@ -32,7 +33,9 @@ namespace WpfHomeBudget
 
         public MainWindow()
         {
-            isDarkMode = ShouldSystemUseDarkMode();
+            //Dark mode temporarily disabled
+            //isDarkMode = ShouldSystemUseDarkMode();
+            isDarkMode = false;
 
             // Create the entry window
             EntryWindow entryWindow = new EntryWindow(isDarkMode);
@@ -82,8 +85,6 @@ namespace WpfHomeBudget
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="cancelEventArgs"></param>
-
-
         private void confirmClose(object sender, CancelEventArgs cancelEventArgs)
         {
             if (presenter.Modified())
@@ -167,14 +168,14 @@ namespace WpfHomeBudget
 
         private void theme_Click(object sender, RoutedEventArgs e)
         {
-            if (isDarkMode)
-            {
-                turnLight();
-            }
-            else
-            {
-                turnDark();
-            }
+            //if (isDarkMode)
+            //{
+            //    turnLight();
+            //}
+            //else
+            //{
+            //    turnDark();
+            //}
         }
 
         /// <summary>
