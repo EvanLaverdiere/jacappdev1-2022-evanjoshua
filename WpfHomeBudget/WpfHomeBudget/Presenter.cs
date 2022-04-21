@@ -213,5 +213,22 @@ namespace WpfHomeBudget
             viewable.ShowBudgetItems<BudgetItem>(budgetItems);
 
         }
+
+        /// <summary>
+        /// Retrieves a list of <see cref="Budget.BudgetItemsByMonth"/> and tells the view to display said list.
+        /// </summary>
+        /// <remarks>
+        /// The list can be filtered to display BudgetItemsByMonth from within a specific time frame,
+        /// BudgetItemsByMonth belonging to a specific category, or both.
+        /// </remarks>
+        /// <param name="start">The beginning of the desired time frame. Can be null.</param>
+        /// <param name="end">The end of the desired time frame. Can be null.</param>
+        /// <param name="filterFlag">True if the results are to be filtered by category, false otherwise.</param>
+        /// <param name="categoryId">The ID of the desired category.</param>
+        public void GetBudgetItemsByMonth(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
+        {
+            List<BudgetItemsByMonth> budgetItems = budget.GetBudgetItemsByMonth(start, end, filterFlag, categoryId);
+            viewable.ShowBudgetItems<BudgetItemsByMonth>(budgetItems);
+        }
     }
 }
