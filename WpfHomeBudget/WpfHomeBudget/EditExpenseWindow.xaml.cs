@@ -9,7 +9,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Budget;
 
 namespace WpfHomeBudget
 {
@@ -19,14 +18,13 @@ namespace WpfHomeBudget
     public partial class EditExpenseWindow : Window
     {
         private Presenter presenter;
-        private BudgetItem selected;
 
-        public EditExpenseWindow(Presenter presenter, BudgetItem selected)
+        public EditExpenseWindow(Presenter presenter)
         {
             InitializeComponent();
             this.presenter = presenter;
-            this.selected = selected;
-            SetData();
+            cmbCategory.ItemsSource = presenter.GetCategories();
+            dateExpDate.SelectedDate = DateTime.Today;
         }
 
         private void btnNewCategory_Click(object sender, RoutedEventArgs e)
@@ -55,25 +53,7 @@ namespace WpfHomeBudget
             int categoryId = cmbCategory.SelectedIndex + 1;
             string amount = txtExpAmount.Text;
             string description = txtExpDescription.Text;
-            presenter.EditExpense(selected.ExpenseID, date, categoryId, amount, description);
-        }
-
-        private void SetData()
-        {
-            cmbCategory.ItemsSource = presenter.GetCategories();
-
-            for (int i = 0; i < cmbCategory.Items.Count; i++)
-            {
-                if (cmbCategory.Items[i].ToString() == selected.Category)
-                {
-                    cmbCategory.SelectedIndex = i;
-                    break;
-                }
-            }
-
-            dateExpDate.SelectedDate = selected.Date;
-            txtExpAmount.Text = selected.Amount.ToString();
-            txtExpDescription.Text = selected.ShortDescription;
+            //presenter.EditExpense(date, categoryId, amount, description);
         }
     }
 }
