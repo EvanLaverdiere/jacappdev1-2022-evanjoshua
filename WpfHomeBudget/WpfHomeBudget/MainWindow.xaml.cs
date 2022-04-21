@@ -274,9 +274,16 @@ namespace WpfHomeBudget
             bool filterFlag = (bool)chk_FilterCategories.IsChecked;    // Specified by a checkbox, or by picking a value from the list of categories?
             int categoryId = cmb_Categories.SelectedIndex + 1;     // Specified by a drop-down list of categories. Offset is necessary, as indices start from 0 while the Category IDs start from 1.
 
-            if ((bool)chk_OrderByCategory.IsChecked)
+            bool orderByCategory = (bool)chk_OrderByCategory.IsChecked;
+            bool orderByMonth = (bool)chk_OrderByMonth.IsChecked;
+
+            if (orderByCategory && !orderByMonth)
             {
                 presenter.GetBudgetItemsByCategory(start, end, filterFlag, categoryId);
+            }
+            else if (orderByMonth && !orderByCategory)
+            {
+                presenter.GetBudgetItemsByMonth(start, end, filterFlag, categoryId);
             }
             else
             {
