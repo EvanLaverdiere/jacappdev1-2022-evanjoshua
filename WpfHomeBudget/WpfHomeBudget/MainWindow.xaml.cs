@@ -260,6 +260,16 @@ namespace WpfHomeBudget
             else if(typeof(T) == typeof(Budget.BudgetItemsByMonth))
             {
                 // format the display 
+                var monthColumn = new DataGridTextColumn();
+                monthColumn.Header = "Month";
+                monthColumn.Binding = new Binding("Month");
+                mainDisplayGrid.Columns.Add(monthColumn);
+
+                var totalsColumn = new DataGridTextColumn();
+                totalsColumn.Header = "Total";
+                totalsColumn.Binding = new Binding("Total");
+                totalsColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(totalsColumn);
             }
         }
 
