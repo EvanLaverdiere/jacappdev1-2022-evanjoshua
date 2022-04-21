@@ -241,6 +241,26 @@ namespace WpfHomeBudget
                 balanceColumn.Binding.StringFormat = "C";
                 mainDisplayGrid.Columns.Add(balanceColumn);
             }
+
+            else if(typeof(T) == typeof(Budget.BudgetItemsByCategory))
+            {
+                // do something
+                var categoryColumn = new DataGridTextColumn();
+                categoryColumn.Header = "Category";
+                categoryColumn.Binding = new Binding("Category");
+                mainDisplayGrid.Columns.Add(categoryColumn);
+
+                var totalsColumn = new DataGridTextColumn();
+                totalsColumn.Header = "Total";
+                totalsColumn.Binding = new Binding("Total");
+                totalsColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(totalsColumn);
+            }
+
+            else if(typeof(T) == typeof(Budget.BudgetItemsByMonth))
+            {
+                // format the display 
+            }
         }
 
         /// <summary>
@@ -254,7 +274,14 @@ namespace WpfHomeBudget
             bool filterFlag = (bool)chk_FilterCategories.IsChecked;    // Specified by a checkbox, or by picking a value from the list of categories?
             int categoryId = cmb_Categories.SelectedIndex + 1;     // Specified by a drop-down list of categories. Offset is necessary, as indices start from 0 while the Category IDs start from 1.
 
-            presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
+            if ((bool)chk_OrderByCategory.IsChecked)
+            {
+                presenter.GetBudgetItemsByCategory(start, end, filterFlag, categoryId);
+            }
+            else
+            {
+                presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
+            }
         }
 
         private void startDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
