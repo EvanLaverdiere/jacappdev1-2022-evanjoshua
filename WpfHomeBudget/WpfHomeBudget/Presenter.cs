@@ -230,5 +230,11 @@ namespace WpfHomeBudget
             List<BudgetItemsByMonth> budgetItems = budget.GetBudgetItemsByMonth(start, end, filterFlag, categoryId);
             viewable.ShowBudgetItems<BudgetItemsByMonth>(budgetItems);
         }
+
+        public void GetBudgetItemsByCategory(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
+        {
+            List<BudgetItemsByCategory> budgetItems = budget.GetBudgetItemsByCategory(start, end, filterFlag, categoryId);
+            viewable.ShowBudgetItems(budgetItems);
+        }
     }
 }
