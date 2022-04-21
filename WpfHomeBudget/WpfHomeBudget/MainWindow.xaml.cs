@@ -203,7 +203,7 @@ namespace WpfHomeBudget
             mainDisplayGrid.Columns.Clear();
 
             // If passed list is a list of BudgetItems, configure the grid's columns as follows.
-            if (typeof(T) == typeof(Budget.BudgetItem))
+            if(typeof(T) == typeof(Budget.BudgetItem))
             {
                 var idColumn = new DataGridTextColumn();
                 idColumn.Header = "Expense ID";
@@ -252,40 +252,6 @@ namespace WpfHomeBudget
             int categoryId = 0;     // Specified by a drop-down list of categories?
 
             presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
-        }
-
-        private void editItem_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            // the selected object will always be a of the type that was
-            // originally put in the ItemsSource
-            var selected = mainDisplayGrid.SelectedItem as BudgetItem;
-            if (selected != null)
-            {
-                MessageBox.Show("Hello");
-            }
-        }
-
-        private void deleteItem_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void editItem_Click(object sender, RoutedEventArgs e)
-        {
-            EditExpenseWindow editExpenseWindow = new EditExpenseWindow(presenter);
-            editExpenseWindow.ShowDialog();
-        }
-
-        private void deleteItem_Click(object sender, RoutedEventArgs e)
-        {
-            var selected = mainDisplayGrid.SelectedItem as Expense;
-
-            if (MessageBox.Show(this, "Are you sure you want to delete this expense?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
-            {
-                presenter.DeleteExpense(selected.Id);
-            }
-
-            UpdateGrid();
         }
     }
 }

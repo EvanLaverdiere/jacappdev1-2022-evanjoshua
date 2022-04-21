@@ -55,19 +55,13 @@
                 <!-- Database view: row 1-->
                 <!-- TO DO: Clear out some of these columns, find way to make Amount & Balance display as currency -->
                 <DataGrid x:Name="mainDisplayGrid" Grid.Row="1"  AutoGenerateColumns="False" IsReadOnly="True">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
-                        <DataGridTextColumn Header="Date" Binding="{Binding Date}"/>
-                        <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
-                        <DataGridTextColumn Header="Amount" Binding="{Binding Amount}"/>
-                        <DataGridTextColumn Header="Category" Binding="{Binding CategoryId}"/>
-                    </DataGrid.Columns>
-                    <DataGrid.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem x:Name="editItem" MouseRightButtonDown="editItem_MouseRightButtonDown" Header="Edit" Click="editItem_Click"></MenuItem>
-                            <MenuItem x:Name="deleteItem" MouseRightButtonDown="deleteItem_MouseRightButtonDown" Header="Delete" Click="deleteItem_Click"></MenuItem>
-                        </ContextMenu>
-                    </DataGrid.ContextMenu>
+                    <!--<DataGrid.Columns>
+                        <DataGridTextColumn Header="Id" />
+                        <DataGridTextColumn Header="Date"/>
+                        <DataGridTextColumn Header="Description"/>
+                        <DataGridTextColumn Header="Amount"/>
+                        <DataGridTextColumn Header="Category"/>
+                    </DataGrid.Columns>-->
                 </DataGrid>
 
                 <!-- options: row 2-->
