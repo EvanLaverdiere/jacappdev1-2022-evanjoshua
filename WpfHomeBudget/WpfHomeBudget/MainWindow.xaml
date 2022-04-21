@@ -19,7 +19,7 @@
 
         <!-- Menu bar: row 0-->
         <Menu HorizontalContentAlignment="Right">
-            <MenuItem x:Name="theme" Click="theme_Click">
+            <MenuItem x:Name="theme" Click="theme_Click" Cursor="Hand">
                 <MenuItem.Icon>
                     <Image x:Name="ThemeLogo" Source="images/DarkTheme.png"/>
                 </MenuItem.Icon>
