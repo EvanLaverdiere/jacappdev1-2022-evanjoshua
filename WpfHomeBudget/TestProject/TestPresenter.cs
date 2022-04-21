@@ -188,5 +188,48 @@ namespace TestProject
             // Act
             Assert.True(testView.calledShowBudgetItems);
         }
+
+        [Fact]
+        public void Test_EditExpenseSuccess()
+        {
+            // Arrange
+            TestView testView = new TestView();
+            Presenter presenter = new Presenter(testView);
+            string budgetName = "TestDB";
+            DateTime date = DateTime.Now;
+            int category = 1;
+            string amount = "50";
+            string description = "test item";
+
+            // Act
+            presenter.CreateBudget(budgetName, true);
+            presenter.CreateNewExpense(date, category, amount, description);
+            presenter.EditExpense(1, date, category, amount, description);
+
+            // Assert
+            Assert.True(testView.calledShowSuccess);
+            Assert.False(testView.calledShowError);
+        }
+
+        [Fact]
+        public void Test_EditExpenseFailure()
+        {
+            // Arrange
+            TestView testView = new TestView();
+            Presenter presenter = new Presenter(testView);
+            string budgetName = "TestDB";
+            DateTime date = DateTime.Now;
+            int category = 1;
+            string amount = "50";
+            string description = "test item";
+
+            // Act
+            presenter.CreateBudget(budgetName, true);
+            presenter.CreateNewExpense(date, category, amount, description);
+            presenter.EditExpense(4, date, category, amount, description); // Expense with ID=2 does not exist.
+
+            // Assert
+            Assert.True(testView.calledShowError);
+        }
     }
 }
