@@ -254,35 +254,23 @@ namespace WpfHomeBudget
             presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
         }
 
-        private void editItem_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            // the selected object will always be a of the type that was
-            // originally put in the ItemsSource
-            var selected = mainDisplayGrid.SelectedItem as BudgetItem;
-            if (selected != null)
-            {
-                MessageBox.Show("Hello");
-            }
-        }
-
-        private void deleteItem_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
         private void editItem_Click(object sender, RoutedEventArgs e)
         {
-            EditExpenseWindow editExpenseWindow = new EditExpenseWindow(presenter);
+            var selected = mainDisplayGrid.SelectedItem as BudgetItem;
+
+            EditExpenseWindow editExpenseWindow = new EditExpenseWindow(presenter, selected);
             editExpenseWindow.ShowDialog();
+
+            UpdateGrid();
         }
 
         private void deleteItem_Click(object sender, RoutedEventArgs e)
         {
-            var selected = mainDisplayGrid.SelectedItem as Expense;
+            var selected = mainDisplayGrid.SelectedItem as BudgetItem;
 
-            if (MessageBox.Show(this, "Are you sure you want to delete this expense?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+            if (MessageBox.Show(this, "Are you sure you want to delete this expense?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                presenter.DeleteExpense(selected.Id);
+                presenter.DeleteExpense(selected.ExpenseID);
             }
 
             UpdateGrid();
