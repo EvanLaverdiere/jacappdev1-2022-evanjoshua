@@ -69,6 +69,8 @@ namespace WpfHomeBudget
                 //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
                 UpdateGrid();
 
+                cmb_Categories.ItemsSource = presenter.GetCategories();
+
                 Closing += confirmClose;
 
                 txtStatusBar.Text = entryWindow.dbLocation;
@@ -247,12 +249,22 @@ namespace WpfHomeBudget
         private void UpdateGrid()
         {
             // These variables have fixed values at the moment because the UI elements needed to set them have not been implemented yet.
-            DateTime? start = null; // Specified by a DatePicker.
-            DateTime? end = null;   // Specified by a second DatePicker.
-            bool filterFlag = false;    // Specified by a checkbox, or by picking a value from the list of categories?
-            int categoryId = 0;     // Specified by a drop-down list of categories?
+            DateTime? start = startDate.SelectedDate; // Specified by a DatePicker.
+            DateTime? end = endDate.SelectedDate;   // Specified by a second DatePicker.
+            bool filterFlag = (bool)chk_FilterCategories.IsChecked;    // Specified by a checkbox, or by picking a value from the list of categories?
+            int categoryId = cmb_Categories.SelectedIndex + 1;     // Specified by a drop-down list of categories. Offset is necessary, as indices start from 0 while the Category IDs start from 1.
 
             presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
+        }
+
+        private void startDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateGrid();
+        }
+
+        private void chk_FilterCategories_Checked(object sender, RoutedEventArgs e)
+        {
+            UpdateGrid();
         }
     }
 }

@@ -29,7 +29,7 @@
         <!-- Content: row 1-->
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="30*"/>
+                <RowDefinition Height="20*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -42,19 +42,75 @@
             <!-- DB content: row 0-->
             <Grid Grid.Column="1" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition  Height="2*"/>
+                    <RowDefinition  Height="1*"/>
                     <RowDefinition  Height="10*"/>
                     <RowDefinition  Height="1*"/>
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Views -->
+                <Grid Grid.Row="1" Margin="0,0,15,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="15*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Start Date label-->
+                    <Viewbox Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="3">
+                        <TextBlock Text="Start Date" FontWeight="Bold"/>
+                    </Viewbox>
+
+                    <!-- Start date input-->
+                    <Viewbox Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left">
+                        <DatePicker x:Name="startDate" SelectedDateChanged="startDate_SelectedDateChanged"/>
+                    </Viewbox>
+
+                    <!-- End Date label -->
+                    <Viewbox Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="3">
+                        <TextBlock Text="End Date" FontWeight="Bold" HorizontalAlignment="Left"/>
+                    </Viewbox>
+
+                    <!-- End Date input-->
+                    <Viewbox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left">
+                        <DatePicker x:Name="endDate" SelectedDateChanged="startDate_SelectedDateChanged"/>
+                    </Viewbox>
+
+                    <!-- Category label -->
+                    <Viewbox Grid.Row="4" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="3">
+                        <TextBlock Text="Filter by Category?" FontWeight="Bold"/>
+                    </Viewbox>
+
+                    <!-- Category filter-->
+                    <Grid Grid.Row="5" Grid.Column="2" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="7*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox Margin="0,2,0,2" x:Name="cmb_Categories" SelectionChanged="startDate_SelectedDateChanged"/>
+                        <Viewbox Grid.Column="1">
+                            <CheckBox x:Name="chk_FilterCategories" Checked="chk_FilterCategories_Checked" Unchecked="chk_FilterCategories_Checked"/>
+                        </Viewbox>
+                    </Grid>
+                    <!-- Category input-->
+                </Grid>
 
                 <!-- Title: row 0-->
-                <Viewbox VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Viewbox Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left">
                     <TextBlock Padding="2" Text="Expense" FontWeight="Bold"/>
                 </Viewbox>
 
                 <!-- Database view: row 1-->
                 <!-- TO DO: Clear out some of these columns, find way to make Amount & Balance display as currency -->
-                <DataGrid x:Name="mainDisplayGrid" Grid.Row="1"  AutoGenerateColumns="False" IsReadOnly="True">
+                <DataGrid x:Name="mainDisplayGrid" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True">
                     <!--<DataGrid.Columns>
                         <DataGridTextColumn Header="Id" />
                         <DataGridTextColumn Header="Date"/>
@@ -65,7 +121,7 @@
                 </DataGrid>
 
                 <!-- options: row 2-->
-                <Grid Grid.Row="2">
+                <Grid Grid.Column ="1" Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*" />
                         <ColumnDefinition Width="1*" />
@@ -88,27 +144,15 @@
                     </Grid>-->
 
                     <!--Add item: column 1-->
-                    <Button Grid.Column="1" Click="Button_Click" Margin="5">
-                        <Viewbox>
-                            <TextBlock Padding="3" Text="New Expense"/>
-                        </Viewbox>
-                    </Button>
+                    <Button Grid.Column="1" Content="New Expense" Click="Button_Click" Margin="5"></Button>
 
                     <!-- New category: columm 2 -->
-                    <Button Grid.Column="2" Margin="5" Click="addCategory">
-                        <Viewbox>
-                            <TextBlock Padding="3" Text="New Category"/>
-                        </Viewbox>
-                    </Button>
-
+                    <Button Grid.Column="2" Content="New Category" Margin="5" Click="addCategory"/>
                 </Grid>
-
             </Grid>
 
             <!-- Status bar: row 1 -->
-            <Viewbox Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
-                <TextBlock x:Name="txtStatusBar"  VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-            </Viewbox>
+            <TextBlock x:Name="txtStatusBar" Grid.Row="1" Grid.ColumnSpan="2"/>
         </Grid>
 
     </Grid>
