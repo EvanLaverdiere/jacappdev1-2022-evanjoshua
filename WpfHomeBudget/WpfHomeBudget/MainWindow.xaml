@@ -97,7 +97,7 @@
 
                         <ComboBox Margin="0,2,0,2" x:Name="cmb_Categories" SelectionChanged="startDate_SelectedDateChanged"/>
                         <Viewbox Grid.Column="1">
-                            <CheckBox x:Name="chk_FilterCategories"/>
+                            <CheckBox x:Name="chk_FilterCategories" Checked="chk_FilterCategories_Checked" Unchecked="chk_FilterCategories_Checked"/>
                         </Viewbox>
                     </Grid>
                     <!-- Category input-->

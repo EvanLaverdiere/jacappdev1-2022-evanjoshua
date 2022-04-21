@@ -260,5 +260,10 @@ namespace WpfHomeBudget
         {
             UpdateGrid();
         }
+
+        private void chk_FilterCategories_Checked(object sender, RoutedEventArgs e)
+        {
+            UpdateGrid();
+        }
     }
 }
