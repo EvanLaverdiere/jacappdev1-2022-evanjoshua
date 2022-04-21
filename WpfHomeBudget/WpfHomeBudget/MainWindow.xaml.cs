@@ -271,6 +271,15 @@ namespace WpfHomeBudget
                 totalsColumn.Binding.StringFormat = "C";
                 mainDisplayGrid.Columns.Add(totalsColumn);
             }
+
+            else if(typeof(T) == typeof(Dictionary<string, object>))
+            {
+                List<Dictionary<string, object>> dictionaries = budgetItems as List<Dictionary<string, object>>;
+                foreach(string key in dictionaries[0].Keys)
+                {
+
+                }
+            }
         }
 
         /// <summary>
