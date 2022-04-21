@@ -295,6 +295,10 @@ namespace WpfHomeBudget
             {
                 presenter.GetBudgetItemsByMonth(start, end, filterFlag, categoryId);
             }
+            else if(orderByCategory && orderByMonth)
+            {
+                presenter.GetBudgetDictionaryByCategoryAndMonth(start, end, filterFlag, categoryId);
+            }
             else
             {
                 presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
