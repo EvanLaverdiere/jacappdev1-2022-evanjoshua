@@ -275,10 +275,21 @@ namespace WpfHomeBudget
             else if(typeof(T) == typeof(Dictionary<string, object>))
             {
                 List<Dictionary<string, object>> dictionaries = budgetItems as List<Dictionary<string, object>>;
-                foreach(string key in dictionaries[0].Keys)
+                foreach (string key in dictionaries[0].Keys)
                 {
-
+                    if (key.Contains("details:"))
+                        continue; // Skip over any key whose value is a list of BudgetItems.
+                    
+                    var column = new DataGridTextColumn();
+                    column.Header = key;
+                    column.Binding = new Binding($"[{key}]");
+                    mainDisplayGrid.Columns.Add(column);
                 }
+
+                //var monthsColumn = new DataGridTextColumn();
+                //monthsColumn.Header = "Months";
+                //monthsColumn.Binding = new Binding("Month");
+                //mainDisplayGrid.Columns.Add(monthsColumn);
             }
         }
 
