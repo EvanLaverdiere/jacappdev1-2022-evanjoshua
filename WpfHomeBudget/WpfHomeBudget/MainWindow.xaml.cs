@@ -299,12 +299,14 @@ namespace WpfHomeBudget
                     var column = new DataGridTextColumn();
                     column.Header = header;
                     column.Binding = new Binding($"[{header}]");
+                    column.Binding.StringFormat = "C";
                     mainDisplayGrid.Columns.Add(column);
                 }
 
                 var totalsColumn = new DataGridTextColumn();
                 totalsColumn.Header = "Total";
                 totalsColumn.Binding = new Binding("[Total]");
+                totalsColumn.Binding.StringFormat = "C";
                 mainDisplayGrid.Columns.Add(totalsColumn);
 
                 //var monthsColumn = new DataGridTextColumn();
