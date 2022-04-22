@@ -202,7 +202,7 @@ namespace TestProject
             string description = "test item";
 
             // Act
-            presenter.CreateBudget(budgetName, true);
+            presenter.CreateBudget(budgetName, false);
             presenter.CreateNewExpense(date, category, amount, description);
             presenter.EditExpense(1, date, category, amount, description);
 
@@ -224,9 +224,45 @@ namespace TestProject
             string description = "test item";
 
             // Act
-            presenter.CreateBudget(budgetName, true);
+            presenter.CreateBudget(budgetName, false);
             presenter.CreateNewExpense(date, category, amount, description);
-            presenter.EditExpense(4, date, category, amount, description); // Expense with ID=2 does not exist.
+            presenter.EditExpense(1, date, category, "notanumber", description); // Amount must be a number
+
+            // Assert
+            Assert.True(testView.calledShowError);
+        }
+
+        [Fact]
+        public void Test_DeleteExpenseSuccess()
+        {
+            // Arrange
+            TestView testView = new TestView();
+            Presenter presenter = new Presenter(testView);
+            string budgetName = "TestDB2";
+            DateTime date = DateTime.Now;
+            int category = 1;
+            string amount = "50";
+            string description = "test item";
+
+            // Act
+            presenter.CreateBudget(budgetName, false);
+            presenter.CreateNewExpense(date, category, amount, description);
+            presenter.DeleteExpense(1);
+
+            // Assert
+            Assert.True(testView.calledShowSuccess);
+            Assert.False(testView.calledShowError);
+        }
+
+        [Fact]
+        public void Test_DeleteExpenseFailure()
+        {
+            // Arrange
+            TestView testView = new TestView();
+            Presenter presenter = new Presenter(testView);
+
+            // Act
+            presenter.DeleteExpense(1); // Deleting when no budget was specified
 
             // Assert
             Assert.True(testView.calledShowError);

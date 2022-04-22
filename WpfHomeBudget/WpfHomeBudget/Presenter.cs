@@ -145,7 +145,7 @@ namespace WpfHomeBudget
             {
                 budget.expenses.Delete(Id);
 
-                viewable.ShowSuccess("Successfully delete expense from database.");
+                viewable.ShowSuccess("Successfully deleted expense from database.");
             }
             catch (Exception e)
             {
