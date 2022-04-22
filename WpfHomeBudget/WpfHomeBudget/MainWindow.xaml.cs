@@ -274,17 +274,38 @@ namespace WpfHomeBudget
 
             else if(typeof(T) == typeof(Dictionary<string, object>))
             {
+                List<Budget.Category> categories = presenter.GetCategories();
+                
                 List<Dictionary<string, object>> dictionaries = budgetItems as List<Dictionary<string, object>>;
-                foreach (string key in dictionaries[0].Keys)
-                {
-                    if (key.Contains("details:"))
-                        continue; // Skip over any key whose value is a list of BudgetItems.
+                //foreach (string key in dictionaries[0].Keys)
+                //{
+                //    if (key.Contains("details:"))
+                //        continue; // Skip over any key whose value is a list of BudgetItems.
                     
+                //    var column = new DataGridTextColumn();
+                //    column.Header = key;
+                //    column.Binding = new Binding($"[{key}]");
+                //    mainDisplayGrid.Columns.Add(column);
+                //}
+
+                var monthColumn = new DataGridTextColumn();
+                monthColumn.Header = "Month";
+                monthColumn.Binding = new Binding("[Month]");
+                mainDisplayGrid.Columns.Add(monthColumn);
+
+                foreach(Category category in categories)
+                {
+                    string header = category.Description;
                     var column = new DataGridTextColumn();
-                    column.Header = key;
-                    column.Binding = new Binding($"[{key}]");
+                    column.Header = header;
+                    column.Binding = new Binding($"[{header}]");
                     mainDisplayGrid.Columns.Add(column);
                 }
+
+                var totalsColumn = new DataGridTextColumn();
+                totalsColumn.Header = "Total";
+                totalsColumn.Binding = new Binding("[Total]");
+                mainDisplayGrid.Columns.Add(totalsColumn);
 
                 //var monthsColumn = new DataGridTextColumn();
                 //monthsColumn.Header = "Months";
