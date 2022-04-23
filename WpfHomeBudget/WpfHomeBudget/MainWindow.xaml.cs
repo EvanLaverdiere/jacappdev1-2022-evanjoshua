@@ -241,7 +241,7 @@ namespace WpfHomeBudget
                 balanceColumn.Binding.StringFormat = "C";
                 mainDisplayGrid.Columns.Add(balanceColumn);
             }
-
+            // If passed list is a list of BudgetItemsByCategory, display each category and the total for each.
             else if(typeof(T) == typeof(Budget.BudgetItemsByCategory))
             {
                 // do something
@@ -257,6 +257,7 @@ namespace WpfHomeBudget
                 mainDisplayGrid.Columns.Add(totalsColumn);
             }
 
+            // If The list is a list of BudgetItemsByMonth, display the totals earned for each month.
             else if(typeof(T) == typeof(Budget.BudgetItemsByMonth))
             {
                 // format the display 
@@ -272,6 +273,8 @@ namespace WpfHomeBudget
                 mainDisplayGrid.Columns.Add(totalsColumn);
             }
 
+            // If the list is a list of dictionaries, create a column for "Months", a column for each Category,
+            // and a column for "Totals".
             else if(typeof(T) == typeof(Dictionary<string, object>))
             {
                 List<Budget.Category> categories = presenter.GetCategories();
