@@ -233,8 +233,9 @@ namespace WpfHomeBudget
         {
             return modified;
         }
+
         /// <summary>
-        /// Retrieves a list of all budget items from the Home Budget, based on passed parameters.
+        /// Retrieves a list of <see cref="BudgetItem"/>s from the HomeBudget and tells the View to display said list.
         /// </summary>
         /// <remarks>
         /// The list can be filtered to display budget items from within a specific time frame,
@@ -244,13 +245,7 @@ namespace WpfHomeBudget
         /// <param name="end">The end of the desired time frame. Can be null.</param>
         /// <param name="filterFlag">True if the results are to be filtered by category, false otherwise.</param>
         /// <param name="categoryId">The ID of the desired category.</param>
-        /// <returns></returns>
-        public List<BudgetItem> GetBudgetItems(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
-        {
-            return budget.GetBudgetItems(start, end, filterFlag, categoryId);
-        }
-
-        public void GetBudgetItemsv2(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
+        public void GetBudgetItems(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
         {
             List<BudgetItem> budgetItems = budget.GetBudgetItems(start, end, filterFlag, categoryId);
             viewable.ShowBudgetItems<BudgetItem>(budgetItems);

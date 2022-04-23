@@ -169,7 +169,7 @@ namespace TestProject
         }
 
         [Fact]
-        public void Test_GetBudgetItemsv2CallsShowBudgetItems()
+        public void Test_GetBudgetItemsCallsShowBudgetItems()
         {
             // Arrange
             TestView testView = new TestView();
@@ -183,7 +183,7 @@ namespace TestProject
             presenter.CreateBudget(messyDB, false);
 
             // Assert
-            presenter.GetBudgetItemsv2(null, null, false, 0);
+            presenter.GetBudgetItems(null, null, false, 0);
 
             // Act
             Assert.True(testView.calledShowBudgetItems);

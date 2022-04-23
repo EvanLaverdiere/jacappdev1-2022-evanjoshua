@@ -349,7 +349,7 @@ namespace WpfHomeBudget
             }
             else
             {
-                presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
+                presenter.GetBudgetItems(start, end, filterFlag, categoryId);
             }
         }
 
