@@ -357,5 +357,27 @@ namespace WpfHomeBudget
         {
             UpdateGrid();
         }
+
+        private void editItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = mainDisplayGrid.SelectedItem as BudgetItem;
+
+            EditExpenseWindow editExpenseWindow = new EditExpenseWindow(presenter, selected);
+            editExpenseWindow.ShowDialog();
+
+            UpdateGrid();
+        }
+
+        private void deleteItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = mainDisplayGrid.SelectedItem as BudgetItem;
+
+            if (MessageBox.Show(this, "Are you sure you want to delete this expense?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                presenter.DeleteExpense(selected.ExpenseID);
+            }
+
+            UpdateGrid();
+        }
     }
 }
