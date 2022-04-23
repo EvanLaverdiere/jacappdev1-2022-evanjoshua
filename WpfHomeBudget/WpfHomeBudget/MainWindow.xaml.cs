@@ -330,6 +330,8 @@ namespace WpfHomeBudget
             bool orderByCategory = (bool)chk_OrderByCategory.IsChecked;
             bool orderByMonth = (bool)chk_OrderByMonth.IsChecked;
 
+            ToggleMenuItems();
+
             if (orderByCategory && !orderByMonth)
             {
                 presenter.GetBudgetItemsByCategory(start, end, filterFlag, categoryId);
@@ -378,6 +380,29 @@ namespace WpfHomeBudget
             }
 
             UpdateGrid();
+        }
+
+        /// <summary>
+        /// Enables or disables the main display grid's ContextMenu items, based on whether user has chosen to 
+        /// summarize results by category and/or month.
+        /// </summary>
+        private void ToggleMenuItems()
+        {
+            bool orderByCategory = (bool)chk_OrderByCategory.IsChecked;
+            bool orderByMonth = (bool)chk_OrderByMonth.IsChecked;
+
+            // If either or both controls are checked, disable the menu buttons.
+            if(orderByCategory || orderByMonth)
+            {
+                editItem.IsEnabled = false;
+                deleteItem.IsEnabled = false;
+            }
+            // If neither control is checked, re-enable the menu buttons.
+            else
+            {
+                editItem.IsEnabled = true;
+                deleteItem.IsEnabled = true;
+            }
         }
     }
 }
