@@ -211,6 +211,28 @@ namespace TestProject
         }
 
         [Fact]
+        public void Test_GetBudgetItemsByMonthCallsShowBudgetItems()
+        {
+            // Arrange
+            TestView testView = new TestView();
+            Presenter presenter = new Presenter(testView);
+
+            // Manually create a database so the Presenter can actually retrieve something.
+            string folder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\"));
+            String goodDB = $"{folder}\\{TEST_DB_INPUT_FILE}";
+            String messyDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, messyDB, true);
+            presenter.CreateBudget(messyDB, false);
+
+            // Assert
+            presenter.GetBudgetItemsByMonth(null, null, false, 0);
+
+            // Act
+            Assert.True(testView.calledShowBudgetItems);
+
+        }
+
+        [Fact]
         public void Test_EditExpenseSuccess()
         {
             // Arrange
