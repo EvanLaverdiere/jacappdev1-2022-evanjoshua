@@ -241,6 +241,82 @@ namespace WpfHomeBudget
                 balanceColumn.Binding.StringFormat = "C";
                 mainDisplayGrid.Columns.Add(balanceColumn);
             }
+            // If passed list is a list of BudgetItemsByCategory, display each category and the total for each.
+            else if(typeof(T) == typeof(Budget.BudgetItemsByCategory))
+            {
+                // do something
+                var categoryColumn = new DataGridTextColumn();
+                categoryColumn.Header = "Category";
+                categoryColumn.Binding = new Binding("Category");
+                mainDisplayGrid.Columns.Add(categoryColumn);
+
+                var totalsColumn = new DataGridTextColumn();
+                totalsColumn.Header = "Total";
+                totalsColumn.Binding = new Binding("Total");
+                totalsColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(totalsColumn);
+            }
+
+            // If The list is a list of BudgetItemsByMonth, display the totals earned for each month.
+            else if(typeof(T) == typeof(Budget.BudgetItemsByMonth))
+            {
+                // format the display 
+                var monthColumn = new DataGridTextColumn();
+                monthColumn.Header = "Month";
+                monthColumn.Binding = new Binding("Month");
+                mainDisplayGrid.Columns.Add(monthColumn);
+
+                var totalsColumn = new DataGridTextColumn();
+                totalsColumn.Header = "Total";
+                totalsColumn.Binding = new Binding("Total");
+                totalsColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(totalsColumn);
+            }
+
+            // If the list is a list of dictionaries, create a column for "Months", a column for each Category,
+            // and a column for "Totals".
+            else if(typeof(T) == typeof(Dictionary<string, object>))
+            {
+                List<Budget.Category> categories = presenter.GetCategories();
+                
+                List<Dictionary<string, object>> dictionaries = budgetItems as List<Dictionary<string, object>>;
+                //foreach (string key in dictionaries[0].Keys)
+                //{
+                //    if (key.Contains("details:"))
+                //        continue; // Skip over any key whose value is a list of BudgetItems.
+                    
+                //    var column = new DataGridTextColumn();
+                //    column.Header = key;
+                //    column.Binding = new Binding($"[{key}]");
+                //    mainDisplayGrid.Columns.Add(column);
+                //}
+
+                var monthColumn = new DataGridTextColumn();
+                monthColumn.Header = "Month";
+                monthColumn.Binding = new Binding("[Month]");
+                mainDisplayGrid.Columns.Add(monthColumn);
+
+                foreach(Category category in categories)
+                {
+                    string header = category.Description;
+                    var column = new DataGridTextColumn();
+                    column.Header = header;
+                    column.Binding = new Binding($"[{header}]");
+                    column.Binding.StringFormat = "C";
+                    mainDisplayGrid.Columns.Add(column);
+                }
+
+                var totalsColumn = new DataGridTextColumn();
+                totalsColumn.Header = "Total";
+                totalsColumn.Binding = new Binding("[Total]");
+                totalsColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(totalsColumn);
+
+                //var monthsColumn = new DataGridTextColumn();
+                //monthsColumn.Header = "Months";
+                //monthsColumn.Binding = new Binding("Month");
+                //mainDisplayGrid.Columns.Add(monthsColumn);
+            }
         }
 
         /// <summary>
@@ -254,7 +330,27 @@ namespace WpfHomeBudget
             bool filterFlag = (bool)chk_FilterCategories.IsChecked;    // Specified by a checkbox, or by picking a value from the list of categories?
             int categoryId = cmb_Categories.SelectedIndex + 1;     // Specified by a drop-down list of categories. Offset is necessary, as indices start from 0 while the Category IDs start from 1.
 
-            presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
+            bool orderByCategory = (bool)chk_OrderByCategory.IsChecked;
+            bool orderByMonth = (bool)chk_OrderByMonth.IsChecked;
+
+            ToggleMenuItems();
+
+            if (orderByCategory && !orderByMonth)
+            {
+                presenter.GetBudgetItemsByCategory(start, end, filterFlag, categoryId);
+            }
+            else if (orderByMonth && !orderByCategory)
+            {
+                presenter.GetBudgetItemsByMonth(start, end, filterFlag, categoryId);
+            }
+            else if(orderByCategory && orderByMonth)
+            {
+                presenter.GetBudgetDictionaryByCategoryAndMonth(start, end, filterFlag, categoryId);
+            }
+            else
+            {
+                presenter.GetBudgetItems(start, end, filterFlag, categoryId);
+            }
         }
 
         private void startDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -287,6 +383,29 @@ namespace WpfHomeBudget
             }
 
             UpdateGrid();
+        }
+
+        /// <summary>
+        /// Enables or disables the main display grid's ContextMenu items, based on whether user has chosen to 
+        /// summarize results by category and/or month.
+        /// </summary>
+        private void ToggleMenuItems()
+        {
+            bool orderByCategory = (bool)chk_OrderByCategory.IsChecked;
+            bool orderByMonth = (bool)chk_OrderByMonth.IsChecked;
+
+            // If either or both controls are checked, disable the menu buttons.
+            if(orderByCategory || orderByMonth)
+            {
+                editItem.IsEnabled = false;
+                deleteItem.IsEnabled = false;
+            }
+            // If neither control is checked, re-enable the menu buttons.
+            else
+            {
+                editItem.IsEnabled = true;
+                deleteItem.IsEnabled = true;
+            }
         }
     }
 }
