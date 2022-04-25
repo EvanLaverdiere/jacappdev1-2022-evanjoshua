@@ -65,9 +65,13 @@ namespace WpfHomeBudget
             string inputLocation = ((System.Windows.Controls.TextBox)this.FindName("inputLocation")).Text;
             string inputFileName = ((System.Windows.Controls.TextBox)this.FindName("inputName")).Text;
 
+            //take out the .db extension if it was added manually
+            int extensionStartIndex = inputLocation.IndexOf('.');
+            inputFileName = inputFileName.Substring(0, extensionStartIndex);
+
             if (inputFileName != string.Empty && inputLocation != string.Empty)
             {
-                path = inputLocation + "\\" + inputFileName;
+                path = $"{inputLocation}\\{inputFileName}.db";
                 this.Close();
             }
         }
