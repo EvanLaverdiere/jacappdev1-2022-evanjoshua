@@ -269,12 +269,34 @@ namespace WpfHomeBudget
             viewable.ShowBudgetItems<BudgetItemsByMonth>(budgetItems);
         }
 
+        /// <summary>
+        /// Retrieves a list of <see cref="Budget.BudgetItemsByCategory"/> and tells the view to display said list.
+        /// </summary>
+        /// <remarks>
+        /// The list can be filtered to display BudgetItemsByCategory from within a specific time frame,
+        /// BudgetItemsByCategory belonging to a specific category, or both.
+        /// </remarks>
+        /// <param name="start">The beginning of the desired time frame. Can be null.</param>
+        /// <param name="end">The end of the desired time frame. Can be null.</param>
+        /// <param name="filterFlag">True if the results are to be filtered by category, false otherwise.</param>
+        /// <param name="categoryId">The ID of the desired category.</param>
         public void GetBudgetItemsByCategory(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
         {
             List<BudgetItemsByCategory> budgetItems = budget.GetBudgetItemsByCategory(start, end, filterFlag, categoryId);
             viewable.ShowBudgetItems(budgetItems);
         }
 
+        /// <summary>
+        /// Retrieves a list of dictionaries representing a breakdown of the budget by category and month, and tells the view to display said list.
+        /// </summary>
+        /// <remarks>
+        /// The list can be filtered to display budget dictionaries belonging to a specific time frame,
+        /// budget dictionaries belonging to a specific category, or both.
+        /// </remarks>
+        /// <param name="start">The beginning of the desired time frame. Can be null.</param>
+        /// <param name="end">The end of the desired time frame. Can be null.</param>
+        /// <param name="filterFlag">True if the results are to be filtered by category, false otherwise.</param>
+        /// <param name="categoryId">The ID of the desired category.</param>
         public void GetBudgetDictionaryByCategoryAndMonth(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
         {
             List<Dictionary<string, object>> budgetItems = budget.GetBudgetDictionaryByCategoryAndMonth(start, end, filterFlag, categoryId);
