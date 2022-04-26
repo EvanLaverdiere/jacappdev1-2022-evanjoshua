@@ -335,22 +335,24 @@ namespace WpfHomeBudget
 
             ToggleMenuItems();
 
-            if (orderByCategory && !orderByMonth)
-            {
-                presenter.GetBudgetItemsByCategory(start, end, filterFlag, categoryId);
-            }
-            else if (orderByMonth && !orderByCategory)
-            {
-                presenter.GetBudgetItemsByMonth(start, end, filterFlag, categoryId);
-            }
-            else if(orderByCategory && orderByMonth)
-            {
-                presenter.GetBudgetDictionaryByCategoryAndMonth(start, end, filterFlag, categoryId);
-            }
-            else
-            {
-                presenter.GetBudgetItems(start, end, filterFlag, categoryId);
-            }
+            presenter.UpdateDisplay(start, end, filterFlag, categoryId, orderByCategory, orderByMonth);
+
+            //if (orderByCategory && !orderByMonth)
+            //{
+            //    presenter.GetBudgetItemsByCategory(start, end, filterFlag, categoryId);
+            //}
+            //else if (orderByMonth && !orderByCategory)
+            //{
+            //    presenter.GetBudgetItemsByMonth(start, end, filterFlag, categoryId);
+            //}
+            //else if(orderByCategory && orderByMonth)
+            //{
+            //    presenter.GetBudgetDictionaryByCategoryAndMonth(start, end, filterFlag, categoryId);
+            //}
+            //else
+            //{
+            //    presenter.GetBudgetItems(start, end, filterFlag, categoryId);
+            //}
         }
 
         private void startDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
