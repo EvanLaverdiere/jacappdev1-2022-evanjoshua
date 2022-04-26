@@ -280,5 +280,17 @@ namespace WpfHomeBudget
             List<Dictionary<string, object>> budgetItems = budget.GetBudgetDictionaryByCategoryAndMonth(start, end, filterFlag, categoryId);
             viewable.ShowBudgetItems(budgetItems);
         }
+
+        public void UpdateDisplay(DateTime? start, DateTime? end, bool filterFlag, int categoryId, bool orderByCategory, bool orderByMonth)
+        {
+            if (orderByCategory && orderByMonth)
+                GetBudgetDictionaryByCategoryAndMonth(start, end, filterFlag, categoryId);
+            else if (orderByCategory && !orderByMonth)
+                GetBudgetItemsByCategory(start, end, filterFlag, categoryId);
+            else if (!orderByCategory && orderByMonth)
+                GetBudgetItemsByMonth(start, end, filterFlag, categoryId);
+            else
+                GetBudgetItems(start, end, filterFlag, categoryId);
+        }
     }
 }
