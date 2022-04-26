@@ -281,14 +281,35 @@ namespace WpfHomeBudget
             viewable.ShowBudgetItems(budgetItems);
         }
 
+        /// <summary>
+        /// Updates the View's display with a list of budget items.
+        /// </summary>
+        /// <remarks>
+        /// Does so in one of four ways, based on the combination of the values of the boolean parameters "orderByCategory" and "orderByMonth".
+        /// 
+        /// Other parameters are used to filter the list of budget items by time frame, by category, or both.
+        /// </remarks>
+        /// <param name="start">The beginning of the desired time frame. Can be null.</param>
+        /// <param name="end">The end of the desired time frame. Can be null.</param>
+        /// <param name="filterFlag">True if the results are to be filtered by category, false otherwise.</param>
+        /// <param name="categoryId">The ID of the desired category.</param>
+        /// <param name="orderByCategory">True if the budget is to be summarized by Category, false otherwise.</param>
+        /// <param name="orderByMonth">True if the budget is to be summarized by Month, false otherwise.</param>
         public void UpdateDisplay(DateTime? start, DateTime? end, bool filterFlag, int categoryId, bool orderByCategory, bool orderByMonth)
         {
+            // If both variables are true, send back a list of Budget dictionaries by Category and Month.
             if (orderByCategory && orderByMonth)
                 GetBudgetDictionaryByCategoryAndMonth(start, end, filterFlag, categoryId);
+
+            // If only orderByCategory is true, send back a list of BudgetItemsByCategory.
             else if (orderByCategory && !orderByMonth)
                 GetBudgetItemsByCategory(start, end, filterFlag, categoryId);
+            
+            // If only orderByMonth is true, send back a list of BudgetItemsByMonth.
             else if (!orderByCategory && orderByMonth)
                 GetBudgetItemsByMonth(start, end, filterFlag, categoryId);
+
+            // If both variables are false, send back a list of regular BudgetItems.
             else
                 GetBudgetItems(start, end, filterFlag, categoryId);
         }

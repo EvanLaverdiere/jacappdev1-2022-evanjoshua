@@ -338,11 +338,21 @@ namespace WpfHomeBudget
             presenter.UpdateDisplay(start, end, filterFlag, categoryId, orderByCategory, orderByMonth);
         }
 
+        /// <summary>
+        /// Event handler which calls the UpdateGrid() method whenever the value of startDate or endDate changes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void startDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateGrid();
         }
 
+        /// <summary>
+        /// Event handler which calls the UpdateGrid() method whenever the chk_FilterCategories button is checked or unchecked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void chk_FilterCategories_Checked(object sender, RoutedEventArgs e)
         {
             UpdateGrid();
