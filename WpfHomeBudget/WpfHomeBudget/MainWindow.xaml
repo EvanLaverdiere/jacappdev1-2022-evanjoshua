@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         MinWidth="500" MinHeight="600"
         WindowState="Maximized"
-        Style="{StaticResource WindowStyle}" Icon="/LightModeIcon.png"
+        Style="{StaticResource WindowStyle}" Icon="/images/MoneyManager.ico"
         Title="BudgetApplication" 
         >
     <Grid>
