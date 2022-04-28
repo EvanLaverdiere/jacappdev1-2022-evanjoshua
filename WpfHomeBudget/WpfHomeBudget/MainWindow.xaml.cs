@@ -190,7 +190,24 @@ namespace WpfHomeBudget
 
         public void ShowBudget<T>(List<T> budgetItems)
         {
+            // Get the selected tab
             TabItem selectedTab = (TabItem)TabControl.SelectedItem;
+
+            // If the selected tab is the Table display the Data Grid
+            if (selectedTab.Header == "Table")
+            {
+                DisplayToGrid(budgetItems);
+            }
+            // If the selected tab is the 
+            else if (selectedTab.Header == "Pie Chart")
+            {
+                DisplayToChart(budgetItems);
+            }
+            // Default case
+            else
+            {
+                MessageBox.Show("No tab selected", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
         }
 
@@ -319,7 +336,7 @@ namespace WpfHomeBudget
                 //mainDisplayGrid.Columns.Add(monthsColumn);
             }
         }
-        
+
         /// <summary>
         /// Passes information about current filters to the Presenter, so the Presenter can update the view.
         /// </summary>
@@ -395,7 +412,7 @@ namespace WpfHomeBudget
             bool orderByMonth = (bool)chk_OrderByMonth.IsChecked;
 
             // If either or both controls are checked, disable the menu buttons.
-            if(orderByCategory || orderByMonth)
+            if (orderByCategory || orderByMonth)
             {
                 editItem.IsEnabled = false;
                 deleteItem.IsEnabled = false;
