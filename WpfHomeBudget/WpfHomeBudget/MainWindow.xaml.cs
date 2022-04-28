@@ -361,16 +361,19 @@ namespace WpfHomeBudget
         private void editItem_Click(object sender, RoutedEventArgs e)
         {
             var selected = mainDisplayGrid.SelectedItem as BudgetItem;
+            int index = mainDisplayGrid.SelectedIndex;
 
             EditExpenseWindow editExpenseWindow = new EditExpenseWindow(presenter, selected);
             editExpenseWindow.ShowDialog();
 
             UpdateGrid();
+            Select(index);
         }
 
         private void deleteItem_Click(object sender, RoutedEventArgs e)
         {
             var selected = mainDisplayGrid.SelectedItem as BudgetItem;
+            int index = mainDisplayGrid.SelectedIndex;
 
             if (MessageBox.Show(this, "Are you sure you want to delete this expense?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
@@ -378,6 +381,7 @@ namespace WpfHomeBudget
             }
 
             UpdateGrid();
+            Select(index);
         }
 
         /// <summary>
@@ -400,6 +404,18 @@ namespace WpfHomeBudget
             {
                 editItem.IsEnabled = true;
                 deleteItem.IsEnabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Sets focus to an item in the DataGrid.
+        /// </summary>
+        /// <param name="index">The index of item</param>
+        public void Select(int index)
+        {
+            if (!mainDisplayGrid.Items.IsEmpty && (mainDisplayGrid.Items[index] != null))
+            {
+                mainDisplayGrid.SelectedItem = mainDisplayGrid.Items[index];
             }
         }
     }
