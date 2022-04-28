@@ -738,6 +738,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E5D8A3D694654EEF92DFE5426196BD1B"
+            {
+            "Name" = "8:MoneyManager2022"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_12896E3F8EC0475DB53D8169348F5884"
+            "Folder" = "8:_B9D7CD8765424D529C6E0C5BCBEC35FD"
+            "WorkingFolder" = "8:_ACC1B89CE4B141E8B85F448CF119710F"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
