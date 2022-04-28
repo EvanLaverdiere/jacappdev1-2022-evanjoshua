@@ -162,6 +162,10 @@
                             <MenuItem x:Name="deleteItem" Header="Delete" Click="deleteItem_Click"></MenuItem>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
+                    <DataGrid.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"  Color="{x:Static SystemColors.HighlightColor}"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"  Color="{x:Static SystemColors.HighlightTextColor}"/>
+                    </DataGrid.Resources>
                 </DataGrid>
 
                 <!-- options: row 2-->
