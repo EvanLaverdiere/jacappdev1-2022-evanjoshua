@@ -438,12 +438,18 @@ namespace WpfHomeBudget
                     }
                 }
 
+                if(indexes.Count == 0)
+                {
+                    MessageBox.Show("No matching items were found");
+                    return;
+                }
+
                 if (!(mainDisplayGrid.SelectedItem == null))
                 {
                     count = mainDisplayGrid.SelectedIndex;
                 }
                 
-                if(mainDisplayGrid.SelectedIndex == indexes[indexes.Count - 1])
+                if (mainDisplayGrid.SelectedIndex == indexes[indexes.Count - 1])
                 {
                     count = 0;
                 }
