@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfHomeBudget"
+        xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
         mc:Ignorable="d"
         MinWidth="500" MinHeight="600"
         WindowState="Maximized"
@@ -146,27 +147,9 @@
                     <TextBlock Padding="2" Text="Expense" FontWeight="Bold"/>
                 </Viewbox>
 
-                <!-- Database view: row 1-->
-                <!-- TO DO: Clear out some of these columns, find way to make Amount & Balance display as currency -->
-                <DataGrid x:Name="mainDisplayGrid" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True">
-                    <!--<DataGrid.Columns>
-                        <DataGridTextColumn Header="Id" />
-                        <DataGridTextColumn Header="Date"/>
-                        <DataGridTextColumn Header="Description"/>
-                        <DataGridTextColumn Header="Amount"/>
-                        <DataGridTextColumn Header="Category"/>
-                    </DataGrid.Columns>-->
-                    <DataGrid.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem x:Name="editItem" Header="Edit" Click="editItem_Click"></MenuItem>
-                            <MenuItem x:Name="deleteItem" Header="Delete" Click="deleteItem_Click"></MenuItem>
-                        </ContextMenu>
-                    </DataGrid.ContextMenu>
-                    <DataGrid.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"  Color="{x:Static SystemColors.HighlightColor}"/>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"  Color="{x:Static SystemColors.HighlightTextColor}"/>
-                    </DataGrid.Resources>
-                </DataGrid>
+                <!-- Main view:  row 1-->
+                <local:DataGridView x:Name="mainDisplayGrid" Visibility="Visible" Grid.Row="1"  Grid.Column="1"></local:DataGridView>
+                <local:PieChartView x:Name="mainPieChartView" Visibility="Collapsed" Grid.Row="1" Grid.Column="1"></local:PieChartView>
 
                 <!-- options: row 2-->
                 <Grid Grid.Column ="1" Grid.Row="2">
