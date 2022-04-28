@@ -12,7 +12,7 @@
     <None Remove="images\documents.png" />
     <None Remove="images\folder.png" />
     <None Remove="images\LightTheme.png" />
-    <None Remove="LightModeIcon.png" />
+    <None Remove="images\MoneyManager.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,7 +39,9 @@
     <Resource Include="images\folder.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="LightModeIcon.png" />
+    <Resource Include="images\MoneyManager.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

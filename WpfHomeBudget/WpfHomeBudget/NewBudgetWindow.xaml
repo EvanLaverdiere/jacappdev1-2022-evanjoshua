@@ -8,7 +8,7 @@
         Title="NewBudgetWindow"
         Height="600" Width="700"
         MinHeight="550" MinWidth="650"
-         Style="{StaticResource WindowStyle}" Icon="/LightModeIcon.png"
+         Style="{StaticResource WindowStyle}" Icon="/images/MoneyManager.ico"
         WindowStartupLocation="CenterScreen"
         >
     <Grid>

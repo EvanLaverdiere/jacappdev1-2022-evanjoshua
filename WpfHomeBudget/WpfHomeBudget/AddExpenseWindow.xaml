@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfHomeBudget"
         mc:Ignorable="d"
-         Style="{StaticResource WindowStyle}" Icon="/LightModeIcon.png"
+         Style="{StaticResource WindowStyle}" Icon="/images/MoneyManager.ico"
         Title="AddExpenseWindow"
         Height="500" Width="500"
         MinHeight="450" MinWidth="300"
