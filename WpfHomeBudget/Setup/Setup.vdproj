@@ -22,13 +22,13 @@
         "Entry"
         {
         "MsmKey" = "8:_05E093ED7DDE2549B0B216B2FB0A2B84"
-        "OwnerKey" = "8:_24E218C2A03A4378A82F21EF68BFE6BD"
+        "OwnerKey" = "8:_024C8B94E9854C2B89FF6538275910AA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_05E093ED7DDE2549B0B216B2FB0A2B84"
-        "OwnerKey" = "8:_024C8B94E9854C2B89FF6538275910AA"
+        "OwnerKey" = "8:_24E218C2A03A4378A82F21EF68BFE6BD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -52,13 +52,13 @@
         "Entry"
         {
         "MsmKey" = "8:_436EF7FD8E3CBCAD85EB43037DE4D6A8"
-        "OwnerKey" = "8:_F46997F984B54A328546719DFF9B9163"
+        "OwnerKey" = "8:_24E218C2A03A4378A82F21EF68BFE6BD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_436EF7FD8E3CBCAD85EB43037DE4D6A8"
-        "OwnerKey" = "8:_24E218C2A03A4378A82F21EF68BFE6BD"
+        "OwnerKey" = "8:_F46997F984B54A328546719DFF9B9163"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -76,7 +76,7 @@
         "Entry"
         {
         "MsmKey" = "8:_5B04B07F2E7D55F0CCEFACDA390BD7CA"
-        "OwnerKey" = "8:_3BC2E1049AE74C97AAF150FC97283B9B"
+        "OwnerKey" = "8:_436EF7FD8E3CBCAD85EB43037DE4D6A8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -88,7 +88,7 @@
         "Entry"
         {
         "MsmKey" = "8:_5B04B07F2E7D55F0CCEFACDA390BD7CA"
-        "OwnerKey" = "8:_436EF7FD8E3CBCAD85EB43037DE4D6A8"
+        "OwnerKey" = "8:_3BC2E1049AE74C97AAF150FC97283B9B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -158,6 +158,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
         "Release"
@@ -182,6 +190,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
     }
@@ -599,6 +615,17 @@
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_15E190A0434C47588A0F5BC6B253ECF5"
+                    {
+                    "Name" = "8:MoneyManager2022"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_EEAA615C26B24B66A13C5766A0771CEC"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
         }
@@ -738,6 +765,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_82F09A6E821943DDB6052211998F5466"
+            {
+            "Name" = "8:Shortcut to MoneyMaster2022"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_12896E3F8EC0475DB53D8169348F5884"
+            "Folder" = "8:_15E190A0434C47588A0F5BC6B253ECF5"
+            "WorkingFolder" = "8:_ACC1B89CE4B141E8B85F448CF119710F"
+            "Icon" = "8:_8D135EECB40244729BE5F803545364D3"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E5D8A3D694654EEF92DFE5426196BD1B"
             {
             "Name" = "8:MoneyManager2022"
