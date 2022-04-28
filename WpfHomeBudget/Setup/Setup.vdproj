@@ -585,7 +585,7 @@
         {
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_ACC1B89CE4B141E8B85F448CF119710F"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFiles64Folder][Manufacturer]\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -643,7 +643,7 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Setup"
+        "ProductName" = "8:MoneyManager2022"
         "ProductCode" = "8:{21A5546F-E24B-4D20-8A32-58FBCC54EDA5}"
         "PackageCode" = "8:{177D0A78-6305-49E7-A66C-96B8279F390D}"
         "UpgradeCode" = "8:{243E6972-16A6-4851-B6B1-F3EA6248A00A}"
@@ -666,7 +666,7 @@
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
-        "TargetPlatform" = "3:0"
+        "TargetPlatform" = "3:1"
         "PreBuildEvent" = "8:"
         "PostBuildEvent" = "8:"
         "RunPostBuildEvent" = "3:0"
