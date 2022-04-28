@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Height="500" Width="700"
         MinHeight="400" MinWidth="500" 
-        Style="{StaticResource WindowStyle}" Icon="/LightModeIcon.png"
+        Style="{StaticResource WindowStyle}" Icon="/images/MoneyManager.ico"
         WindowStartupLocation="CenterScreen"
         Title="EntryWindow" >
     <Grid>

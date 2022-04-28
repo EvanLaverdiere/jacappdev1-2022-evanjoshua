@@ -67,7 +67,12 @@ namespace WpfHomeBudget
 
             //take out the .db extension if it was added manually
             int extensionStartIndex = inputLocation.IndexOf('.');
-            inputFileName = inputFileName.Substring(0, extensionStartIndex);
+
+            //check that there is an extention before trying to delete it
+            if (extensionStartIndex != -1)
+            {
+                inputFileName = inputFileName.Substring(0, extensionStartIndex);
+            }
 
             if (inputFileName != string.Empty && inputLocation != string.Empty)
             {
