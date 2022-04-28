@@ -67,7 +67,7 @@ namespace WpfHomeBudget
 
                 //mainDisplayGrid.ItemsSource = presenter.GetBudgetItems(start, end, filterFlag, categoryId);
                 //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
-                UpdateGrid();
+                UpdateView();
 
                 cmb_Categories.ItemsSource = presenter.GetCategories();
 
@@ -107,12 +107,7 @@ namespace WpfHomeBudget
             expenseWindow.ShowDialog();
             // The presenter should update the view after an expense is added.
             //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
-            UpdateGrid();
-        }
-
-        public void ShowBudgetItems()
-        {
-            throw new NotImplementedException();
+            UpdateView();
         }
 
         /// <summary>
@@ -123,11 +118,6 @@ namespace WpfHomeBudget
         {
             //throw new NotImplementedException();
             MessageBox.Show(error, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        public void Clear()
-        {
-            throw new NotImplementedException();
         }
 
         public void turnDark()
@@ -189,7 +179,7 @@ namespace WpfHomeBudget
             categoryWindow.ShowDialog();
             // Tell the presenter to update the view after a successful operation.
             //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
-            UpdateGrid();
+            UpdateView();
         }
 
         public void ShowSuccess(string message)
@@ -198,7 +188,18 @@ namespace WpfHomeBudget
             MessageBox.Show(message, "SUCCESS", MessageBoxButton.OK);
         }
 
-        public void ShowBudgetItems<T>(List<T> budgetItems)
+        public void ShowBudget<T>(List<T> budgetItems)
+        {
+            TabItem selectedTab = (TabItem)TabControl.SelectedItem;
+
+        }
+
+        private void DisplayToChart<T>(List<T> budgetItems)
+        {
+
+        }
+
+        private void DisplayToGrid<T>(List<T> budgetItems)
         {
             //throw new NotImplementedException();
             mainDisplayGrid.ItemsSource = budgetItems;
@@ -206,7 +207,7 @@ namespace WpfHomeBudget
             mainDisplayGrid.Columns.Clear();
 
             // If passed list is a list of BudgetItems, configure the grid's columns as follows.
-            if(typeof(T) == typeof(Budget.BudgetItem))
+            if (typeof(T) == typeof(Budget.BudgetItem))
             {
                 var idColumn = new DataGridTextColumn();
                 idColumn.Header = "Expense ID";
@@ -242,7 +243,7 @@ namespace WpfHomeBudget
                 mainDisplayGrid.Columns.Add(balanceColumn);
             }
             // If passed list is a list of BudgetItemsByCategory, display each category and the total for each.
-            else if(typeof(T) == typeof(Budget.BudgetItemsByCategory))
+            else if (typeof(T) == typeof(Budget.BudgetItemsByCategory))
             {
                 // do something
                 var categoryColumn = new DataGridTextColumn();
@@ -258,7 +259,7 @@ namespace WpfHomeBudget
             }
 
             // If The list is a list of BudgetItemsByMonth, display the totals earned for each month.
-            else if(typeof(T) == typeof(Budget.BudgetItemsByMonth))
+            else if (typeof(T) == typeof(Budget.BudgetItemsByMonth))
             {
                 // format the display 
                 var monthColumn = new DataGridTextColumn();
@@ -275,16 +276,16 @@ namespace WpfHomeBudget
 
             // If the list is a list of dictionaries, create a column for "Months", a column for each Category,
             // and a column for "Totals".
-            else if(typeof(T) == typeof(Dictionary<string, object>))
+            else if (typeof(T) == typeof(Dictionary<string, object>))
             {
                 List<Budget.Category> categories = presenter.GetCategories();
-                
+
                 List<Dictionary<string, object>> dictionaries = budgetItems as List<Dictionary<string, object>>;
                 //foreach (string key in dictionaries[0].Keys)
                 //{
                 //    if (key.Contains("details:"))
                 //        continue; // Skip over any key whose value is a list of BudgetItems.
-                    
+
                 //    var column = new DataGridTextColumn();
                 //    column.Header = key;
                 //    column.Binding = new Binding($"[{key}]");
@@ -296,7 +297,7 @@ namespace WpfHomeBudget
                 monthColumn.Binding = new Binding("[Month]");
                 mainDisplayGrid.Columns.Add(monthColumn);
 
-                foreach(Category category in categories)
+                foreach (Category category in categories)
                 {
                     string header = category.Description;
                     var column = new DataGridTextColumn();
@@ -318,11 +319,11 @@ namespace WpfHomeBudget
                 //mainDisplayGrid.Columns.Add(monthsColumn);
             }
         }
-
+        
         /// <summary>
-        /// Passes information about current filters to the Presenter, so the Presenter can update the grid.
+        /// Passes information about current filters to the Presenter, so the Presenter can update the view.
         /// </summary>
-        private void UpdateGrid()
+        private void UpdateView()
         {
             // These variables have fixed values at the moment because the UI elements needed to set them have not been implemented yet.
             DateTime? start = startDate.SelectedDate; // Specified by a DatePicker.
@@ -345,7 +346,7 @@ namespace WpfHomeBudget
         /// <param name="e"></param>
         private void startDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateGrid();
+            UpdateView();
         }
 
         /// <summary>
@@ -355,7 +356,7 @@ namespace WpfHomeBudget
         /// <param name="e"></param>
         private void chk_FilterCategories_Checked(object sender, RoutedEventArgs e)
         {
-            UpdateGrid();
+            UpdateView();
         }
 
         private void editItem_Click(object sender, RoutedEventArgs e)
@@ -366,7 +367,7 @@ namespace WpfHomeBudget
             EditExpenseWindow editExpenseWindow = new EditExpenseWindow(presenter, selected);
             editExpenseWindow.ShowDialog();
 
-            UpdateGrid();
+            UpdateView();
             Select(index);
         }
 
@@ -380,7 +381,7 @@ namespace WpfHomeBudget
                 presenter.DeleteExpense(selected.ExpenseID);
             }
 
-            UpdateGrid();
+            UpdateView();
             Select(index);
         }
 

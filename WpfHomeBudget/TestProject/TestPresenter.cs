@@ -39,11 +39,6 @@ namespace TestProject
             calledShowSuccess = true;
         }
 
-        public void Clear()
-        {
-            throw new NotImplementedException();
-        }
-
         public void turnDark()
         {
             throw new NotImplementedException();
@@ -54,10 +49,15 @@ namespace TestProject
             throw new NotImplementedException();
         }
 
-        public void ShowBudgetItems<T>(List<T> budgetItems)
+        public void ShowBudget<T>(List<T> budgetItems)
         {
             //throw new NotImplementedException();
             calledShowBudgetItems = true;
+        }
+
+        public void Select(int index)
+        {
+            throw new NotImplementedException();
         }
     }
     /// <summary>

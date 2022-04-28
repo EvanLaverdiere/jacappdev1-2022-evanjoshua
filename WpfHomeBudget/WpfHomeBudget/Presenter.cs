@@ -248,7 +248,7 @@ namespace WpfHomeBudget
         public void GetBudgetItems(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
         {
             List<BudgetItem> budgetItems = budget.GetBudgetItems(start, end, filterFlag, categoryId);
-            viewable.ShowBudgetItems<BudgetItem>(budgetItems);
+            viewable.ShowBudget<BudgetItem>(budgetItems);
 
         }
 
@@ -266,7 +266,7 @@ namespace WpfHomeBudget
         public void GetBudgetItemsByMonth(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
         {
             List<BudgetItemsByMonth> budgetItems = budget.GetBudgetItemsByMonth(start, end, filterFlag, categoryId);
-            viewable.ShowBudgetItems<BudgetItemsByMonth>(budgetItems);
+            viewable.ShowBudget<BudgetItemsByMonth>(budgetItems);
         }
 
         /// <summary>
@@ -283,7 +283,7 @@ namespace WpfHomeBudget
         public void GetBudgetItemsByCategory(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
         {
             List<BudgetItemsByCategory> budgetItems = budget.GetBudgetItemsByCategory(start, end, filterFlag, categoryId);
-            viewable.ShowBudgetItems(budgetItems);
+            viewable.ShowBudget(budgetItems);
         }
 
         /// <summary>
@@ -300,7 +300,7 @@ namespace WpfHomeBudget
         public void GetBudgetDictionaryByCategoryAndMonth(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
         {
             List<Dictionary<string, object>> budgetItems = budget.GetBudgetDictionaryByCategoryAndMonth(start, end, filterFlag, categoryId);
-            viewable.ShowBudgetItems(budgetItems);
+            viewable.ShowBudget(budgetItems);
         }
 
         /// <summary>
