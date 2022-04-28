@@ -59,6 +59,11 @@ namespace TestProject
             //throw new NotImplementedException();
             calledShowBudgetItems = true;
         }
+
+        public void Select(int index)
+        {
+            throw new NotImplementedException();
+        }
     }
     /// <summary>
     /// Class for testing the UI functionality of the Presenter object.
