@@ -38,5 +38,7 @@ namespace WpfHomeBudget
         // Change the color scheme to the colorfull one
 
         void turnLight();
+
+        void Select(int index);
     }
 }
