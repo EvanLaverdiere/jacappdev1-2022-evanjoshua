@@ -69,6 +69,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_3F81CE165D674E348F02CE3E6CEB42D3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4ECC447C7BE4419D8B422050254A7C82"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -82,12 +88,6 @@
         "Entry"
         {
         "MsmKey" = "8:_709E96C8525944A0BB6C8108C5DCF449"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8D135EECB40244729BE5F803545364D3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -393,6 +393,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3F81CE165D674E348F02CE3E6CEB42D3"
+            {
+            "SourcePath" = "8:..\\WpfHomeBudget\\images\\MoneyManager.ico"
+            "TargetName" = "8:MoneyManager.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_ACC1B89CE4B141E8B85F448CF119710F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4ECC447C7BE4419D8B422050254A7C82"
             {
             "AssemblyRegister" = "3:1"
@@ -459,26 +479,6 @@
             {
             "SourcePath" = "8:..\\WpfHomeBudget\\bin\\Debug\\netcoreapp3.1\\runtimes\\win-x64\\native\\SQLite.Interop.dll"
             "TargetName" = "8:SQLite.Interop.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_ACC1B89CE4B141E8B85F448CF119710F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8D135EECB40244729BE5F803545364D3"
-            {
-            "SourcePath" = "8:..\\WpfHomeBudget\\images\\MoneyManager.ico"
-            "TargetName" = "8:MoneyManager.ico"
             "Tag" = "8:"
             "Folder" = "8:_ACC1B89CE4B141E8B85F448CF119710F"
             "Condition" = "8:"
@@ -645,7 +645,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MoneyManager2022"
         "ProductCode" = "8:{21A5546F-E24B-4D20-8A32-58FBCC54EDA5}"
-        "PackageCode" = "8:{7B2CC59E-D852-4D38-B39B-3B5AAF1CE4A9}"
+        "PackageCode" = "8:{121F49CD-FAF5-4D97-8C9E-BF3C5AC80776}"
         "UpgradeCode" = "8:{243E6972-16A6-4851-B6B1-F3EA6248A00A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -776,7 +776,7 @@
             "Target" = "8:_12896E3F8EC0475DB53D8169348F5884"
             "Folder" = "8:_15E190A0434C47588A0F5BC6B253ECF5"
             "WorkingFolder" = "8:_ACC1B89CE4B141E8B85F448CF119710F"
-            "Icon" = "8:_8D135EECB40244729BE5F803545364D3"
+            "Icon" = "8:_3F81CE165D674E348F02CE3E6CEB42D3"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E5D8A3D694654EEF92DFE5426196BD1B"
@@ -790,7 +790,7 @@
             "Target" = "8:_12896E3F8EC0475DB53D8169348F5884"
             "Folder" = "8:_B9D7CD8765424D529C6E0C5BCBEC35FD"
             "WorkingFolder" = "8:_ACC1B89CE4B141E8B85F448CF119710F"
-            "Icon" = "8:_8D135EECB40244729BE5F803545364D3"
+            "Icon" = "8:_3F81CE165D674E348F02CE3E6CEB42D3"
             "Feature" = "8:"
             }
         }
