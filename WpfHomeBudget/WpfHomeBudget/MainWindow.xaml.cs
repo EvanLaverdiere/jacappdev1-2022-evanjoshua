@@ -416,57 +416,24 @@ namespace WpfHomeBudget
             if (!mainDisplayGrid.Items.IsEmpty && (mainDisplayGrid.Items[index] != null))
             {
                 mainDisplayGrid.SelectedItem = mainDisplayGrid.Items[index];
+                mainDisplayGrid.ScrollIntoView(mainDisplayGrid.SelectedItem);
             }
         }
 
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
             string text = searchBox.Text;
-            int startIndex = 0;
-            int count = 0;
             List<int> indexes = new List<int>();
+            List<BudgetItem> items = new List<BudgetItem>();
 
             if (!mainDisplayGrid.Items.IsEmpty)
             {
                 for (int i = 0; i < mainDisplayGrid.Items.Count; i++)
                 {
-                    var item = mainDisplayGrid.Items[i] as BudgetItem;
-
-                    if (item.ShortDescription.Contains(text))
-                    {
-                        indexes.Add(i);
-                    }
+                    items.Add(mainDisplayGrid.Items[i] as BudgetItem);
                 }
 
-                if(indexes.Count == 0)
-                {
-                    MessageBox.Show("No matching items were found");
-                    return;
-                }
-
-                if (!(mainDisplayGrid.SelectedItem == null))
-                {
-                    count = mainDisplayGrid.SelectedIndex;
-                }
-                
-                if (mainDisplayGrid.SelectedIndex == indexes[indexes.Count - 1])
-                {
-                    count = 0;
-                }
-                
-                mainDisplayGrid.SelectedIndex = indexes[count++];
-
-                //for (int i = startIndex; i < mainDisplayGrid.Items.Count; i++)
-                //{
-                //    var item = mainDisplayGrid.Items[i] as BudgetItem;
-
-                //    if (item.ShortDescription.Contains(text))
-                //    {
-                //        mainDisplayGrid.SelectedItem = mainDisplayGrid.Items[i];
-                //        startIndex++;
-                //        break;
-                //    }
-                //}
+                presenter.Search(text, indexes, items);
             }
         }
     }

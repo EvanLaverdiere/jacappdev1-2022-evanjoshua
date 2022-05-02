@@ -17,6 +17,7 @@ namespace WpfHomeBudget
         private IViewable viewable;
         HomeBudget budget;
         private bool modified = false;
+        private int selectCount = 0;
 
         // constructor
         public Presenter(IViewable view)
@@ -334,6 +335,35 @@ namespace WpfHomeBudget
             // If both variables are false, send back a list of regular BudgetItems.
             else
                 GetBudgetItems(start, end, filterFlag, categoryId);
+        }
+
+        public void Search(string text, List<int> indexes, List<BudgetItem> items)
+        {
+            for(int i=0; i < items.Count; i++)
+            {
+                if (items[i].ShortDescription.Contains(text))
+                {
+                    indexes.Add(i);
+                }
+            }
+
+            if (selectCount == indexes.Count)
+            {
+                selectCount = 0;
+            }
+
+            if (indexes.Count == 0)
+            {
+                viewable.ShowError("No matching items were found");
+            }
+            else if (indexes.Count == 1)
+            {
+                viewable.Select(indexes[0]);
+            }
+            else
+            {
+                viewable.Select(indexes[selectCount++]);
+            }
         }
     }
 }
