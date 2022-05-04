@@ -166,14 +166,48 @@
                     </TabItem>
                     <TabItem Header="Pie Chart">
                         <!-- Chart -->
-                        <toolkit:Chart x:Name="mainDisplayChart">
-                            <!-- Pie chart -->
-                            <toolkit:LabeledPieSeries
-                                 IndependentValueBinding="{Binding Path=Key}"
-                                 DependentValueBinding="{Binding Path=Value}"
-                                 Title="PieChart">
-                            </toolkit:LabeledPieSeries>
-                        </toolkit:Chart>
+                        <Grid >
+                            <!-- Divide space into two columns, one for title and other stuff, andone for the chart -->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="800"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="400"/>
+                            </Grid.RowDefinitions>
+                            <!-- insert stack panel in column one, include title, and drop-down box for choosing months -->
+                            <StackPanel Margin="10,0,10,10">
+                                <TextBlock FontSize="18" Name="txtTitle">Title</TextBlock>
+                                <ComboBox Name="cbMonths" Margin="0,10,0,0" SelectionChanged="cbMonths_SelectionChanged"></ComboBox>
+                            </StackPanel>
+
+                            <!-- Create a chart in column 1 -->
+                            <toolkit:Chart Grid.Column="1" Name="chPie" Margin="0,0,150,0" Height="390">
+
+                                <!-- this chart will be a pie chart -->
+                                <toolkit:LabeledPieSeries IndependentValueBinding="{Binding Path=Key}"
+                                    DependentValueBinding="{Binding Path=Value}"
+                                    HorizontalAlignment="Left"
+                                    Height="305"
+                                    VerticalAlignment="Top"
+                                    Width="537"
+                                    Title="Test" Margin="10,10,0,0">
+                                </toolkit:LabeledPieSeries>
+                            </toolkit:Chart>
+                            <toolkit:Chart Grid.Column="1" Name="chBar" Margin="0,0,150,0" Height="390" Visibility="Hidden">
+                                <toolkit:BarSeries IndependentValueBinding="{Binding Path=Key}"
+                                                   DependentValueBinding="{Binding Path=Value}"
+                                                   HorizontalAlignment="Left"
+                                                   Height="305"
+                                                   VerticalAlignment="Top"
+                                                   Width="537"
+                                                   Title="Test" Margin="10,10,0,0">
+                                </toolkit:BarSeries>
+                            </toolkit:Chart>
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Name="txtInvalid" FontSize="36" TextAlignment="Center">
+                                Not Implemented
+                            </TextBlock>
+                        </Grid>
                     </TabItem>
                 </TabControl>
 
