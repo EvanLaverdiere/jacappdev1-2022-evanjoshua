@@ -101,6 +101,12 @@ jobs:
       env:
         Configuration: ${{ matrix.configuration }}
 
+    # [EVAN] Build the solution.
+    - name: Build the solution
+      run: msbuild $env:Solution_Name /p:Configuration=$env:Configuration
+      env:
+        Configuration: ${{ matrix.configuration }}
+
     # [EVAN]: Setup vstest and add it to the PATH.
     - name: Setup vstest
       uses: darenm/Setup-VSTest@v1
