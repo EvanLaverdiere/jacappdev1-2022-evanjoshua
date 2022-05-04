@@ -262,6 +262,8 @@ namespace WpfHomeBudget
                 totalsColumn.Binding = new Binding("Total");
                 totalsColumn.Binding.StringFormat = "C";
                 mainDisplayGrid.Columns.Add(totalsColumn);
+
+                totalsColumn.CellStyle = rightAligned;
             }
 
             // If The list is a list of BudgetItemsByMonth, display the totals earned for each month.
