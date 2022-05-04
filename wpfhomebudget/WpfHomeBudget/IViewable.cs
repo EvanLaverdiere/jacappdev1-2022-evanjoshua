@@ -14,7 +14,7 @@ namespace WpfHomeBudget
         /// </summary>
         /// <typeparam name="T">The generic Type of the budget items. Could be BudgetItem, BudgetItemByCategory, BudgetItemByMonth, or something else.</typeparam>
         /// <param name="budgetItems">The list of budget items to be displayed.</param>
-        void ShowBudget<T>(List<T> budgetItems);
+        void ShowBudgetItems<T>(List<T> budgetItems);
 
         // Display an error message if something goes wrong
         /// <summary>
@@ -29,20 +29,16 @@ namespace WpfHomeBudget
         /// <param name="message">The message to be displayed.</param>
         void ShowSuccess(string message);
 
-        /// <summary>
-        /// Display the window with a darker color scheme
-        /// </summary>
+        // One clearing method for potential future use
+        void Clear();
+
+        // Change the color scheme to dark mode
         void turnDark();
 
-        /// <summary>
-        /// Display the window with a lighter color scheme
-        /// </summary>
+        // Change the color scheme to the colorfull one
+
         void turnLight();
 
-        /// <summary>
-        /// Select an item at the given index
-        /// </summary>
-        /// <param name="index"></param>
         void Select(int index);
     }
 }
