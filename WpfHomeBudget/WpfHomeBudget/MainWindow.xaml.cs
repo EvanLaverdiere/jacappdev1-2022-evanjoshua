@@ -205,6 +205,10 @@ namespace WpfHomeBudget
             // Clear out the existing columns.
             mainDisplayGrid.Columns.Clear();
 
+            // Create a right-aligned style to be applied to any columns containing a monetary amount.
+            Style rightAligned = new Style();
+            rightAligned.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Right));
+
             // If passed list is a list of BudgetItems, configure the grid's columns as follows.
             if(typeof(T) == typeof(Budget.BudgetItem))
             {
@@ -240,6 +244,9 @@ namespace WpfHomeBudget
                 balanceColumn.Binding = new Binding("Balance");
                 balanceColumn.Binding.StringFormat = "C";
                 mainDisplayGrid.Columns.Add(balanceColumn);
+
+                amountColumn.CellStyle = rightAligned;
+                balanceColumn.CellStyle = rightAligned;
             }
             // If passed list is a list of BudgetItemsByCategory, display each category and the total for each.
             else if(typeof(T) == typeof(Budget.BudgetItemsByCategory))
