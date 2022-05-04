@@ -280,6 +280,8 @@ namespace WpfHomeBudget
                 totalsColumn.Binding = new Binding("Total");
                 totalsColumn.Binding.StringFormat = "C";
                 mainDisplayGrid.Columns.Add(totalsColumn);
+
+                totalsColumn.CellStyle = rightAligned;
             }
 
             // If the list is a list of dictionaries, create a column for "Months", a column for each Category,
