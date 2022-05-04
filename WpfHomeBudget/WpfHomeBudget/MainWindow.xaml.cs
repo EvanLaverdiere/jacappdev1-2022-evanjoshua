@@ -315,6 +315,8 @@ namespace WpfHomeBudget
                     column.Binding = new Binding($"[{header}]");
                     column.Binding.StringFormat = "C";
                     mainDisplayGrid.Columns.Add(column);
+
+                    column.CellStyle = rightAligned;
                 }
 
                 var totalsColumn = new DataGridTextColumn();
@@ -322,6 +324,8 @@ namespace WpfHomeBudget
                 totalsColumn.Binding = new Binding("[Total]");
                 totalsColumn.Binding.StringFormat = "C";
                 mainDisplayGrid.Columns.Add(totalsColumn);
+
+                totalsColumn.CellStyle = rightAligned;
 
                 //var monthsColumn = new DataGridTextColumn();
                 //monthsColumn.Header = "Months";
