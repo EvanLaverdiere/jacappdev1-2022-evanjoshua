@@ -82,7 +82,7 @@ jobs:
       
     - name: Run Nuget.exe to restore NuGet packages
       env:
-        RestoreUseSkipNonexistentTargets: false
+        NUGET_RESTORE_MSBUILD_ARGS: /p:RestoreUseSkipNonexistentTargets=false
       run: nuget restore $env:Solution_Name
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
