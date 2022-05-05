@@ -30,14 +30,14 @@ namespace WpfHomeBudget
         private bool isDarkMode;
 
         private List<object> _dataSource;
-        private enum ChartType
+        public enum ChartType
         {
             Standard,
             ByCategory,
             ByMonth,
             ByMonthAndCategory
         }
-        private ChartType chartType = ChartType.Standard;
+        public ChartType chartType = ChartType.Standard;
         private List<string> Categories;
 
         public MainWindow()
@@ -223,29 +223,8 @@ namespace WpfHomeBudget
             this.Categories = CategoryList; // save the categories list
         }
 
-        // prepare for 'byCategory',
-        // NOTE: just show invalid text... this chart is not implemented
-        public void InitializeByCategoryDisplay()
-        {
-            chPie.Visibility = Visibility.Hidden;
-            txtInvalid.Visibility = Visibility.Visible;
-        }
-
         // prepare for 'byMonth',
         // NOTE: just show invalid text... this chart is not implemented
-        public void InitializeByMonthDisplay()
-        {
-            chPie.Visibility = Visibility.Hidden;
-            txtInvalid.Visibility = Visibility.Visible;
-        }
-
-        // prepare for standard display,
-        // NOTE: just show invalid text... this chart is not implemented
-        public void InitializeStandardDisplay()
-        {
-            chPie.Visibility = Visibility.Hidden;
-            txtInvalid.Visibility = Visibility.Visible;
-        }
 
         private void drawByMonthLineChart()
         {
