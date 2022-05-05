@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WpfHomeBudget;
 using Xunit;
+using Budget;
 
 namespace TestProject
 {
@@ -21,6 +22,7 @@ namespace TestProject
         public bool calledShowBudgetItems;
         public bool calledShowError;
         public bool calledShowSuccess;
+        public bool calledSelect;
 
         public void ShowBudgetItems()
         {
@@ -62,7 +64,7 @@ namespace TestProject
 
         public void Select(int index)
         {
-            throw new NotImplementedException();
+            calledSelect = true;
         }
     }
     /// <summary>
@@ -357,6 +359,28 @@ namespace TestProject
 
             // Assert
             Assert.True(testView.calledShowError);
+        }
+
+        [Fact]
+        public void Test_SelectItemSuccess()
+        {
+            // Arrange
+            TestView testView = new TestView();
+            Presenter presenter = new Presenter(testView);
+            string budgetName = "TestDB3";
+            DateTime date = DateTime.Now;
+            int category = 1;
+            string amount = "10";
+            string description = "McDonald's";
+            List<int> indexes = new List<int>();
+            List<BudgetItem> items = new List<BudgetItem>();
+
+            // Act
+            presenter.CreateBudget(budgetName, false);
+            presenter.CreateNewExpense(date, category, amount, description);
+            presenter.Search("McDonald's", indexes, items);
+
+            // Assert
         }
     }
 }
