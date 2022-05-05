@@ -206,7 +206,7 @@ namespace WpfHomeBudget
             mainDisplayGrid.Columns.Clear();
 
             // If passed list is a list of BudgetItems, configure the grid's columns as follows.
-            if(typeof(T) == typeof(Budget.BudgetItem))
+            if (typeof(T) == typeof(Budget.BudgetItem))
             {
                 var idColumn = new DataGridTextColumn();
                 idColumn.Header = "Expense ID";
@@ -242,7 +242,7 @@ namespace WpfHomeBudget
                 mainDisplayGrid.Columns.Add(balanceColumn);
             }
             // If passed list is a list of BudgetItemsByCategory, display each category and the total for each.
-            else if(typeof(T) == typeof(Budget.BudgetItemsByCategory))
+            else if (typeof(T) == typeof(Budget.BudgetItemsByCategory))
             {
                 // do something
                 var categoryColumn = new DataGridTextColumn();
@@ -258,7 +258,7 @@ namespace WpfHomeBudget
             }
 
             // If The list is a list of BudgetItemsByMonth, display the totals earned for each month.
-            else if(typeof(T) == typeof(Budget.BudgetItemsByMonth))
+            else if (typeof(T) == typeof(Budget.BudgetItemsByMonth))
             {
                 // format the display 
                 var monthColumn = new DataGridTextColumn();
@@ -275,16 +275,16 @@ namespace WpfHomeBudget
 
             // If the list is a list of dictionaries, create a column for "Months", a column for each Category,
             // and a column for "Totals".
-            else if(typeof(T) == typeof(Dictionary<string, object>))
+            else if (typeof(T) == typeof(Dictionary<string, object>))
             {
                 List<Budget.Category> categories = presenter.GetCategories();
-                
+
                 List<Dictionary<string, object>> dictionaries = budgetItems as List<Dictionary<string, object>>;
                 //foreach (string key in dictionaries[0].Keys)
                 //{
                 //    if (key.Contains("details:"))
                 //        continue; // Skip over any key whose value is a list of BudgetItems.
-                    
+
                 //    var column = new DataGridTextColumn();
                 //    column.Header = key;
                 //    column.Binding = new Binding($"[{key}]");
@@ -296,7 +296,7 @@ namespace WpfHomeBudget
                 monthColumn.Binding = new Binding("[Month]");
                 mainDisplayGrid.Columns.Add(monthColumn);
 
-                foreach(Category category in categories)
+                foreach (Category category in categories)
                 {
                     string header = category.Description;
                     var column = new DataGridTextColumn();
@@ -394,7 +394,7 @@ namespace WpfHomeBudget
             bool orderByMonth = (bool)chk_OrderByMonth.IsChecked;
 
             // If either or both controls are checked, disable the menu buttons.
-            if(orderByCategory || orderByMonth)
+            if (orderByCategory || orderByMonth)
             {
                 editItem.IsEnabled = false;
                 deleteItem.IsEnabled = false;
@@ -416,6 +416,27 @@ namespace WpfHomeBudget
             if (!mainDisplayGrid.Items.IsEmpty && (mainDisplayGrid.Items[index] != null))
             {
                 mainDisplayGrid.SelectedItem = mainDisplayGrid.Items[index];
+                mainDisplayGrid.ScrollIntoView(mainDisplayGrid.SelectedItem);
+            }
+        }
+
+        private void searchButton_Click(object sender, RoutedEventArgs e)
+        {
+            string text = searchBox.Text;
+            List<int> indexes = new List<int>();
+            List<string> items = new List<string>();
+            List<string> amounts = new List<string>();
+
+            if (!mainDisplayGrid.Items.IsEmpty)
+            {
+                for (int i = 0; i < mainDisplayGrid.Items.Count; i++)
+                {
+                    BudgetItem item = mainDisplayGrid.Items[i] as BudgetItem;
+                    items.Add(item.ShortDescription);
+                    amounts.Add(item.Amount.ToString());
+                }
+
+                presenter.Search(text, indexes, items, amounts);
             }
         }
     }
