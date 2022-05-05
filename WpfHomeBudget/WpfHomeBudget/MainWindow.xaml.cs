@@ -464,117 +464,115 @@ namespace WpfHomeBudget
             Style rightAligned = new Style();
             rightAligned.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Right));
 
+
             // If passed list is a list of BudgetItems, configure the grid's columns as follows.
             if (typeof(T) == typeof(Budget.BudgetItem))
+            {
+                var idColumn = new DataGridTextColumn();
+                idColumn.Header = "Expense ID";
+                //idColumn.Binding = new Binding("ExpenseId");
+                idColumn.Binding = new Binding("ExpenseID");
+                mainDisplayGrid.Columns.Add(idColumn);
 
-                // If passed list is a list of BudgetItems, configure the grid's columns as follows.
-                if (typeof(T) == typeof(Budget.BudgetItem))
+                var dateColumn = new DataGridTextColumn();
+                dateColumn.Header = "Date";
+                dateColumn.Binding = new Binding("Date");
+                mainDisplayGrid.Columns.Add(dateColumn);
+
+                var categoryColumn = new DataGridTextColumn();
+                categoryColumn.Header = "Category";
+                categoryColumn.Binding = new Binding("Category");
+                mainDisplayGrid.Columns.Add(categoryColumn);
+
+                var descriptionColumn = new DataGridTextColumn();
+                descriptionColumn.Header = "Description";
+                descriptionColumn.Binding = new Binding("ShortDescription");
+                mainDisplayGrid.Columns.Add(descriptionColumn);
+
+                var amountColumn = new DataGridTextColumn();
+                amountColumn.Header = "Amount";
+                amountColumn.Binding = new Binding("Amount");
+                amountColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(amountColumn);
+
+                var balanceColumn = new DataGridTextColumn();
+                balanceColumn.Header = "Budget Balance";
+                balanceColumn.Binding = new Binding("Balance");
+                balanceColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(balanceColumn);
+
+                amountColumn.CellStyle = rightAligned;
+                balanceColumn.CellStyle = rightAligned;
+            }
+            // If passed list is a list of BudgetItemsByCategory, display each category and the total for each.
+            else if (typeof(T) == typeof(Budget.BudgetItemsByCategory))
+            {
+                // do something
+                var categoryColumn = new DataGridTextColumn();
+                categoryColumn.Header = "Category";
+                categoryColumn.Binding = new Binding("Category");
+                mainDisplayGrid.Columns.Add(categoryColumn);
+
+                var totalsColumn = new DataGridTextColumn();
+                totalsColumn.Header = "Total";
+                totalsColumn.Binding = new Binding("Total");
+                totalsColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(totalsColumn);
+
+                totalsColumn.CellStyle = rightAligned;
+            }
+
+            // If The list is a list of BudgetItemsByMonth, display the totals earned for each month.
+            else if (typeof(T) == typeof(Budget.BudgetItemsByMonth))
+            {
+                // format the display 
+                var monthColumn = new DataGridTextColumn();
+                monthColumn.Header = "Month";
+                monthColumn.Binding = new Binding("Month");
+                mainDisplayGrid.Columns.Add(monthColumn);
+
+                var totalsColumn = new DataGridTextColumn();
+                totalsColumn.Header = "Total";
+                totalsColumn.Binding = new Binding("Total");
+                totalsColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(totalsColumn);
+
+                totalsColumn.CellStyle = rightAligned;
+            }
+
+            // If the list is a list of dictionaries, create a column for "Months", a column for each Category,
+            // and a column for "Totals".
+            else if (typeof(T) == typeof(Dictionary<string, object>))
+            {
+                List<Budget.Category> categories = presenter.GetCategories();
+
+                List<Dictionary<string, object>> dictionaries = budgetItems as List<Dictionary<string, object>>;
+
+                var monthColumn = new DataGridTextColumn();
+                monthColumn.Header = "Month";
+                monthColumn.Binding = new Binding("[Month]");
+                mainDisplayGrid.Columns.Add(monthColumn);
+
+                foreach (Category category in categories)
                 {
-                    var idColumn = new DataGridTextColumn();
-                    idColumn.Header = "Expense ID";
-                    //idColumn.Binding = new Binding("ExpenseId");
-                    idColumn.Binding = new Binding("ExpenseID");
-                    mainDisplayGrid.Columns.Add(idColumn);
+                    string header = category.Description;
+                    var column = new DataGridTextColumn();
+                    column.Header = header;
+                    column.Binding = new Binding($"[{header}]");
+                    column.Binding.StringFormat = "C";
+                    mainDisplayGrid.Columns.Add(column);
 
-                    var dateColumn = new DataGridTextColumn();
-                    dateColumn.Header = "Date";
-                    dateColumn.Binding = new Binding("Date");
-                    mainDisplayGrid.Columns.Add(dateColumn);
-
-                    var categoryColumn = new DataGridTextColumn();
-                    categoryColumn.Header = "Category";
-                    categoryColumn.Binding = new Binding("Category");
-                    mainDisplayGrid.Columns.Add(categoryColumn);
-
-                    var descriptionColumn = new DataGridTextColumn();
-                    descriptionColumn.Header = "Description";
-                    descriptionColumn.Binding = new Binding("ShortDescription");
-                    mainDisplayGrid.Columns.Add(descriptionColumn);
-
-                    var amountColumn = new DataGridTextColumn();
-                    amountColumn.Header = "Amount";
-                    amountColumn.Binding = new Binding("Amount");
-                    amountColumn.Binding.StringFormat = "C";
-                    mainDisplayGrid.Columns.Add(amountColumn);
-
-                    var balanceColumn = new DataGridTextColumn();
-                    balanceColumn.Header = "Budget Balance";
-                    balanceColumn.Binding = new Binding("Balance");
-                    balanceColumn.Binding.StringFormat = "C";
-                    mainDisplayGrid.Columns.Add(balanceColumn);
-
-                    amountColumn.CellStyle = rightAligned;
-                    balanceColumn.CellStyle = rightAligned;
-                }
-                // If passed list is a list of BudgetItemsByCategory, display each category and the total for each.
-                else if (typeof(T) == typeof(Budget.BudgetItemsByCategory))
-                {
-                    // do something
-                    var categoryColumn = new DataGridTextColumn();
-                    categoryColumn.Header = "Category";
-                    categoryColumn.Binding = new Binding("Category");
-                    mainDisplayGrid.Columns.Add(categoryColumn);
-
-                    var totalsColumn = new DataGridTextColumn();
-                    totalsColumn.Header = "Total";
-                    totalsColumn.Binding = new Binding("Total");
-                    totalsColumn.Binding.StringFormat = "C";
-                    mainDisplayGrid.Columns.Add(totalsColumn);
-
-                    totalsColumn.CellStyle = rightAligned;
+                    column.CellStyle = rightAligned;
                 }
 
-                // If The list is a list of BudgetItemsByMonth, display the totals earned for each month.
-                else if (typeof(T) == typeof(Budget.BudgetItemsByMonth))
-                {
-                    // format the display 
-                    var monthColumn = new DataGridTextColumn();
-                    monthColumn.Header = "Month";
-                    monthColumn.Binding = new Binding("Month");
-                    mainDisplayGrid.Columns.Add(monthColumn);
+                var totalsColumn = new DataGridTextColumn();
+                totalsColumn.Header = "Total";
+                totalsColumn.Binding = new Binding("[Total]");
+                totalsColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(totalsColumn);
 
-                    var totalsColumn = new DataGridTextColumn();
-                    totalsColumn.Header = "Total";
-                    totalsColumn.Binding = new Binding("Total");
-                    totalsColumn.Binding.StringFormat = "C";
-                    mainDisplayGrid.Columns.Add(totalsColumn);
-
-                    totalsColumn.CellStyle = rightAligned;
-                }
-
-                // If the list is a list of dictionaries, create a column for "Months", a column for each Category,
-                // and a column for "Totals".
-                else if (typeof(T) == typeof(Dictionary<string, object>))
-                {
-                    List<Budget.Category> categories = presenter.GetCategories();
-
-                    List<Dictionary<string, object>> dictionaries = budgetItems as List<Dictionary<string, object>>;
-
-                    var monthColumn = new DataGridTextColumn();
-                    monthColumn.Header = "Month";
-                    monthColumn.Binding = new Binding("[Month]");
-                    mainDisplayGrid.Columns.Add(monthColumn);
-
-                    foreach (Category category in categories)
-                    {
-                        string header = category.Description;
-                        var column = new DataGridTextColumn();
-                        column.Header = header;
-                        column.Binding = new Binding($"[{header}]");
-                        column.Binding.StringFormat = "C";
-                        mainDisplayGrid.Columns.Add(column);
-
-                        column.CellStyle = rightAligned;
-                    }
-
-                    var totalsColumn = new DataGridTextColumn();
-                    totalsColumn.Header = "Total";
-                    totalsColumn.Binding = new Binding("[Total]");
-                    totalsColumn.Binding.StringFormat = "C";
-                    mainDisplayGrid.Columns.Add(totalsColumn);
-
-                    totalsColumn.CellStyle = rightAligned;
-                }
+                totalsColumn.CellStyle = rightAligned;
+            }
         }
 
         public void DisplayToChart(List<object> budgetItems)
