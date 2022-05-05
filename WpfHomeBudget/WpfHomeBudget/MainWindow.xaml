@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfHomeBudget"
+        xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
         mc:Ignorable="d"
         MinWidth="500" MinHeight="600"
         WindowState="Maximized"
@@ -143,32 +144,75 @@
 
                 </Grid>
 
-                <!-- Title: row 0-->
+                <!-- tabs: row 0-->
                 <Viewbox Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left">
                     <TextBlock Padding="2" Text="Expense" FontWeight="Bold"/>
                 </Viewbox>
 
-                <!-- Database view: row 1-->
-                <!-- TO DO: Clear out some of these columns, find way to make Amount & Balance display as currency -->
-                <DataGrid x:Name="mainDisplayGrid" Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True">
-                    <!--<DataGrid.Columns>
-                        <DataGridTextColumn Header="Id" />
-                        <DataGridTextColumn Header="Date"/>
-                        <DataGridTextColumn Header="Description"/>
-                        <DataGridTextColumn Header="Amount"/>
-                        <DataGridTextColumn Header="Category"/>
-                    </DataGrid.Columns>-->
-                    <DataGrid.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem x:Name="editItem" Header="Edit" Click="editItem_Click"></MenuItem>
-                            <MenuItem x:Name="deleteItem" Header="Delete" Click="deleteItem_Click"></MenuItem>
-                        </ContextMenu>
-                    </DataGrid.ContextMenu>
-                    <DataGrid.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"  Color="{x:Static SystemColors.HighlightColor}"/>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"  Color="{x:Static SystemColors.HighlightTextColor}"/>
-                    </DataGrid.Resources>
-                </DataGrid>
+                <!-- Main view:  row 1-->
+                <TabControl x:Name="TabControl" Grid.Row="1"  Grid.Column="1" SelectedIndex="0">
+                    <TabItem Header="Table">
+                        <!-- Database view-->
+                        <DataGrid x:Name="mainDisplayGrid" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem x:Name="editItem" Header="Edit" Click="editItem_Click"></MenuItem>
+                                    <MenuItem x:Name="deleteItem" Header="Delete" Click="deleteItem_Click"></MenuItem>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                            <DataGrid.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"  Color="{x:Static SystemColors.HighlightColor}"/>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"  Color="{x:Static SystemColors.HighlightTextColor}"/>
+                            </DataGrid.Resources>
+                        </DataGrid>
+                    </TabItem>
+                    <TabItem Header="Pie Chart">
+                        <!-- Chart -->
+                        <Grid >
+                            <!-- Divide space into two columns, one for title and other stuff, andone for the chart -->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="800"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="400"/>
+                            </Grid.RowDefinitions>
+                            <!-- insert stack panel in column one, include title, and drop-down box for choosing months -->
+                            <StackPanel Margin="10,0,10,10">
+                                <TextBlock FontSize="18" Name="txtTitle">Title</TextBlock>
+                                <ComboBox Name="cbMonths" Margin="0,10,0,0" SelectionChanged="cbMonths_SelectionChanged"></ComboBox>
+                            </StackPanel>
+
+                            <!-- Create a chart in column 1 -->
+                            <toolkit:Chart Grid.Column="1" Name="chPie" Margin="0,0,150,0" Height="390">
+
+                                <!-- this chart will be a pie chart -->
+                                <toolkit:LabeledPieSeries 
+                                    IndependentValueBinding="{Binding Path=Key}"
+                                    DependentValueBinding="{Binding Path=Value}"
+                                    HorizontalAlignment="Left"
+                                    Height="305"
+                                    VerticalAlignment="Top"
+                                    Width="537"
+                                    Title="Test" Margin="10,10,0,0">
+                                </toolkit:LabeledPieSeries>
+                            </toolkit:Chart>
+                            <toolkit:Chart Grid.Column="1" Name="chBar" Margin="0,0,150,0" Height="390" Visibility="Hidden">
+                                <toolkit:BarSeries IndependentValueBinding="{Binding Path=Key}"
+                                                   DependentValueBinding="{Binding Path=Value}"
+                                                   HorizontalAlignment="Left"
+                                                   Height="305"
+                                                   VerticalAlignment="Top"
+                                                   Width="537"
+                                                   Title="Test" Margin="10,10,0,0">
+                                </toolkit:BarSeries>
+                            </toolkit:Chart>
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Name="txtInvalid" FontSize="36" TextAlignment="Center">
+                                Not Implemented
+                            </TextBlock>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
 
                 <!-- options: row 2-->
                 <Grid Grid.Column ="1" Grid.Row="2">

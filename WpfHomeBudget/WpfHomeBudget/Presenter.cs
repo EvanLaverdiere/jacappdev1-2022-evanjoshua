@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Budget;
+using WpfHomeBudget.Interfaces;
 
 namespace WpfHomeBudget
 {
@@ -14,15 +15,17 @@ namespace WpfHomeBudget
     public class Presenter
     {
         // backing fields
+        private IDisplayable displayable;
         private IViewable viewable;
         HomeBudget budget;
         private bool modified = false;
         private int selectCount = 0;
 
         // constructor
-        public Presenter(IViewable view)
+        public Presenter(IViewable view, IDisplayable display)
         {
             viewable = view;
+            displayable = display;
             //budget = new HomeBudget();
         }
         // methods
@@ -249,8 +252,15 @@ namespace WpfHomeBudget
         public void GetBudgetItems(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
         {
             List<BudgetItem> budgetItems = budget.GetBudgetItems(start, end, filterFlag, categoryId);
-            viewable.ShowBudgetItems<BudgetItem>(budgetItems);
-
+            string displayType = displayable.GetDisplayType();
+            if (displayType == "Pie Chart")
+            {
+                displayable.DisplayToChart(budgetItems.Cast<object>().ToList());
+            }
+            else
+            {
+                displayable.DisplayToGrid(budgetItems);
+            }
         }
 
         /// <summary>
@@ -267,7 +277,15 @@ namespace WpfHomeBudget
         public void GetBudgetItemsByMonth(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
         {
             List<BudgetItemsByMonth> budgetItems = budget.GetBudgetItemsByMonth(start, end, filterFlag, categoryId);
-            viewable.ShowBudgetItems<BudgetItemsByMonth>(budgetItems);
+            string displayType = displayable.GetDisplayType();
+            if (displayType == "Pie Chart")
+            {
+                displayable.DisplayToChart(budgetItems.Cast<object>().ToList());
+            }
+            else
+            {
+                displayable.DisplayToGrid(budgetItems);
+            }
         }
 
         /// <summary>
@@ -284,7 +302,15 @@ namespace WpfHomeBudget
         public void GetBudgetItemsByCategory(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
         {
             List<BudgetItemsByCategory> budgetItems = budget.GetBudgetItemsByCategory(start, end, filterFlag, categoryId);
-            viewable.ShowBudgetItems(budgetItems);
+            string displayType = displayable.GetDisplayType();
+            if (displayType == "Pie Chart")
+            {
+                displayable.DisplayToChart(budgetItems.Cast<object>().ToList());
+            }
+            else
+            {
+                displayable.DisplayToGrid(budgetItems);
+            }
         }
 
         /// <summary>
@@ -301,7 +327,24 @@ namespace WpfHomeBudget
         public void GetBudgetDictionaryByCategoryAndMonth(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
         {
             List<Dictionary<string, object>> budgetItems = budget.GetBudgetDictionaryByCategoryAndMonth(start, end, filterFlag, categoryId);
-            viewable.ShowBudgetItems(budgetItems);
+            string displayType = displayable.GetDisplayType();
+            if (displayType == "Pie Chart")
+            {
+                List<Category> categories = GetCategories();
+                List<string> categoryNames = new List<string>();
+                foreach (Category category in categories)
+                {
+                    categoryNames.Add(category.Description);
+                }
+                displayable.InitializeByCategoryAndMonthDisplay(categoryNames);
+                displayable.DisplayToChart(budgetItems.Cast<object>().ToList());
+            }
+            else if (displayable.isOrderedByMonthAndCategory())
+            {
+                displayable.DisplayToGrid(budgetItems);
+            }
+
+
         }
 
         /// <summary>
@@ -327,7 +370,7 @@ namespace WpfHomeBudget
             // If only orderByCategory is true, send back a list of BudgetItemsByCategory.
             else if (orderByCategory && !orderByMonth)
                 GetBudgetItemsByCategory(start, end, filterFlag, categoryId);
-            
+
             // If only orderByMonth is true, send back a list of BudgetItemsByMonth.
             else if (!orderByCategory && orderByMonth)
                 GetBudgetItemsByMonth(start, end, filterFlag, categoryId);

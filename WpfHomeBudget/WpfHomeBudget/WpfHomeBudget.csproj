@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="DotNetProjects.WpfToolkit.DataVisualization" Version="6.0.90" />
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.19041.1" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
   </ItemGroup>

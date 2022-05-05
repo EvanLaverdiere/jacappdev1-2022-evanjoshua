@@ -14,22 +14,30 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Budget;
+using System.Windows.Controls.DataVisualization.Charting;
+using WpfHomeBudget.Interfaces;
 
 namespace WpfHomeBudget
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : System.Windows.Window, IViewable
+    public partial class MainWindow : System.Windows.Window, IViewable, IDisplayable
     {
-        private Presenter presenter;
+        private Presenter presenter;    // The presenter object of the application
 
         private bool isDarkMode;
 
-        //private DateTime? start;
-        //private DateTime? end;
-        //private bool filterFlag;
-        //private int categoryId;
+        private List<object> _dataSource;
+        public enum ChartType
+        {
+            Standard,
+            ByCategory,
+            ByMonth,
+            ByMonthAndCategory
+        }
+        public ChartType chartType = ChartType.Standard;
+        private List<string> Categories;
 
         public MainWindow()
         {
@@ -56,18 +64,11 @@ namespace WpfHomeBudget
                     turnDark();
                 }
 
-                presenter = new Presenter(this);
+                presenter = new Presenter(this, this);
 
                 presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
 
-                //// By default, these fields will have the following values:
-                //start = end = null;
-                //filterFlag = false;
-                //categoryId = 0;
-
-                //mainDisplayGrid.ItemsSource = presenter.GetBudgetItems(start, end, filterFlag, categoryId);
-                //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
-                UpdateGrid();
+                UpdateView();
 
                 cmb_Categories.ItemsSource = presenter.GetCategories();
 
@@ -107,12 +108,7 @@ namespace WpfHomeBudget
             expenseWindow.ShowDialog();
             // The presenter should update the view after an expense is added.
             //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
-            UpdateGrid();
-        }
-
-        public void ShowBudgetItems()
-        {
-            throw new NotImplementedException();
+            UpdateView();
         }
 
         /// <summary>
@@ -123,11 +119,6 @@ namespace WpfHomeBudget
         {
             //throw new NotImplementedException();
             MessageBox.Show(error, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        public void Clear()
-        {
-            throw new NotImplementedException();
         }
 
         public void turnDark()
@@ -189,7 +180,7 @@ namespace WpfHomeBudget
             categoryWindow.ShowDialog();
             // Tell the presenter to update the view after a successful operation.
             //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
-            UpdateGrid();
+            UpdateView();
         }
 
         public void ShowSuccess(string message)
@@ -198,7 +189,271 @@ namespace WpfHomeBudget
             MessageBox.Show(message, "SUCCESS", MessageBoxButton.OK);
         }
 
-        public void ShowBudgetItems<T>(List<T> budgetItems)
+        #region PieChart
+        public List<object> DataSource
+        {
+            get { return _dataSource; }
+            set
+
+            {
+                // if changing data source, then redraw chart
+                _dataSource = value;
+                if (chartType == ChartType.ByMonthAndCategory) drawByMonthPieChart();
+
+                if (chartType == ChartType.ByMonth) drawByMonthLineChart();
+            }
+        }
+
+        // clear the current data
+        public void DataClear()
+        {
+            ((PieSeries)chPie.Series[0]).ItemsSource = null;
+        }
+
+        // Get prepared for displaying Month and Category
+        // Inputs: usedCategoryList... a list of categories
+        public void InitializeByCategoryAndMonthDisplay(List<string> CategoryList)
+        {
+            txtTitle.Text = "By Month";
+            chartType = ChartType.ByMonthAndCategory; // set chart type appropriately
+            chPie.Visibility = Visibility.Visible; // show the pie chart
+            txtInvalid.Visibility = Visibility.Hidden; // hide the "invalid parameters" text
+
+            this.Categories = CategoryList; // save the categories list
+        }
+
+        // prepare for 'byMonth',
+        // NOTE: just show invalid text... this chart is not implemented
+
+        private void drawByMonthLineChart()
+        {
+        }
+
+        // Draw the 'ByMonth' chart
+        private void drawByMonthPieChart()
+        {
+            // create a list of months from the source data
+            List<String> months = new List<String>();
+            foreach (object obj in _dataSource)
+            {
+                var item = obj as Dictionary<String, object>;
+                if (item != null)
+                {
+                    months.Add(item["Month"].ToString());
+                }
+
+            }
+            // add the months to the combobox dropdown
+            cbMonths.ItemsSource = months;
+            // reset selected index to last 'month' in list
+            cbMonths.SelectedIndex = -1;
+            // set the data for the pie-chart
+            set_MonthCategory_Data();
+        }
+
+
+        // define the data for the given month from the datasoure,
+        // ... which in this case is a list of Dictionary<String,object>
+        // defining totals for each category for a given month
+        private void set_MonthCategory_Data()
+        {
+            DataClear();
+            // bail out if there are no 'month' items in the drop down
+            if (cbMonths.Items.Count == 0) return;
+            // set the default selection to the last in the list
+            if (cbMonths.SelectedIndex < 0 || cbMonths.SelectedIndex >
+
+            cbMonths.Items.Count - 1)
+
+            {
+                cbMonths.SelectedIndex = cbMonths.Items.Count - 1;
+            }
+            // what is the selected month?
+            String selectedMonth = cbMonths.SelectedItem.ToString();
+            // ---------------------------------------------------------------
+            // define which data is to be displayed
+            // ---------------------------------------------------------------
+            var DisplayData = new List<KeyValuePair<String, double>>();
+            foreach (object obj in _dataSource)
+            {
+                var item = obj as Dictionary<String, object>;
+                // is the item listed in the _dataSource part of the selected month ?
+
+                if (item != null && (string)item["Month"] == selectedMonth)
+                {
+                    // go through each key/value pair in this item (item is a dictionary)
+
+                    foreach (var pair in item)
+                    {
+                        String category = pair.Key;
+                        String value = pair.Value.ToString();
+                        // if the key is not a category, skip processing
+                        if (!Categories.Contains(category)) continue;
+                        // what is the amount of money for this category (item[category])
+
+                        var amount = 0.0;
+                        double.TryParse(value, out amount);
+                        // only display expenses (i.e., amount < 0)
+                        if (amount < 0)
+                        {
+                            DisplayData.Add(new KeyValuePair<String, double>
+
+                            (category, -amount));
+                        }
+                    }
+                    // we found the month we wanted, no need to loop through other months, so
+
+                    // stop looking
+                    break;
+                }
+
+            }
+            // set the data for the pie-chart
+            ((PieSeries)chPie.Series[0]).ItemsSource = DisplayData;
+        }
+
+        private void cbMonths_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            set_MonthCategory_Data();
+        }
+        #endregion
+
+        /// <summary>
+        /// Passes information about current filters to the Presenter, so the Presenter can update the view.
+        /// </summary>
+        private void UpdateView()
+        {
+            // These variables have fixed values at the moment because the UI elements needed to set them have not been implemented yet.
+            DateTime? start = startDate.SelectedDate; // Specified by a DatePicker.
+            DateTime? end = endDate.SelectedDate;   // Specified by a second DatePicker.
+            bool filterFlag = (bool)chk_FilterCategories.IsChecked;    // Specified by a checkbox, or by picking a value from the list of categories?
+            int categoryId = cmb_Categories.SelectedIndex + 1;     // Specified by a drop-down list of categories. Offset is necessary, as indices start from 0 while the Category IDs start from 1.
+
+            bool orderByCategory = (bool)chk_OrderByCategory.IsChecked;
+            bool orderByMonth = (bool)chk_OrderByMonth.IsChecked;
+
+            ToggleMenuItems();
+
+            presenter.UpdateDisplay(start, end, filterFlag, categoryId, orderByCategory, orderByMonth);
+        }
+
+        /// <summary>
+        /// Event handler which calls the UpdateGrid() method whenever the value of startDate or endDate changes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void startDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateView();
+        }
+
+        /// <summary>
+        /// Event handler which calls the UpdateGrid() method whenever the chk_FilterCategories button is checked or unchecked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void chk_FilterCategories_Checked(object sender, RoutedEventArgs e)
+        {
+            UpdateView();
+        }
+
+        private void editItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = mainDisplayGrid.SelectedItem as BudgetItem;
+            int index = mainDisplayGrid.SelectedIndex;
+
+            EditExpenseWindow editExpenseWindow = new EditExpenseWindow(presenter, selected);
+            editExpenseWindow.ShowDialog();
+
+            UpdateView();
+            Select(index);
+        }
+
+        private void deleteItem_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = mainDisplayGrid.SelectedItem as BudgetItem;
+            int index = mainDisplayGrid.SelectedIndex;
+
+            if (MessageBox.Show(this, "Are you sure you want to delete this expense?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                presenter.DeleteExpense(selected.ExpenseID);
+            }
+
+            UpdateView();
+            Select(index);
+        }
+
+        /// <summary>
+        /// Enables or disables the main display grid's ContextMenu items, based on whether user has chosen to 
+        /// summarize results by category and/or month.
+        /// </summary>
+        private void ToggleMenuItems()
+        {
+            bool orderByCategory = (bool)chk_OrderByCategory.IsChecked;
+            bool orderByMonth = (bool)chk_OrderByMonth.IsChecked;
+
+            // If either or both controls are checked, disable the menu buttons.
+            if (orderByCategory || orderByMonth)
+            {
+                editItem.IsEnabled = false;
+                deleteItem.IsEnabled = false;
+            }
+            // If neither control is checked, re-enable the menu buttons.
+            else
+            {
+                editItem.IsEnabled = true;
+                deleteItem.IsEnabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Sets focus to an item in the DataGrid.
+        /// </summary>
+        /// <param name="index">The index of item</param>
+        public void Select(int index)
+        {
+            if (!mainDisplayGrid.Items.IsEmpty && (mainDisplayGrid.Items[index] != null))
+            {
+                mainDisplayGrid.SelectedItem = mainDisplayGrid.Items[index];
+                mainDisplayGrid.ScrollIntoView(mainDisplayGrid.SelectedItem);
+            }
+        }
+
+        private void searchButton_Click(object sender, RoutedEventArgs e)
+        {
+            string text = searchBox.Text;
+            List<int> indexes = new List<int>();
+            List<string> items = new List<string>();
+            List<string> amounts = new List<string>();
+
+            if (!mainDisplayGrid.Items.IsEmpty)
+            {
+                for (int i = 0; i < mainDisplayGrid.Items.Count; i++)
+                {
+                    BudgetItem item = mainDisplayGrid.Items[i] as BudgetItem;
+                    items.Add(item.ShortDescription);
+                    amounts.Add(item.Amount.ToString());
+                }
+
+                presenter.Search(text, indexes, items, amounts);
+            }
+        }
+
+        public string GetDisplayType()
+        {
+            // Get the selected tab
+            TabItem selectedTab = (TabItem)TabControl.SelectedItem;
+
+            // If the selected tab is the Table display the Data Grid
+            return selectedTab.Header as string;
+        }
+
+        public bool isOrderedByMonthAndCategory()
+        {
+            return (bool)chk_OrderByCategory.IsChecked && (bool)chk_OrderByMonth.IsChecked;
+        }
+
+        void IDisplayable.DisplayToGrid<T>(List<T> budgetItems)
         {
             //throw new NotImplementedException();
             mainDisplayGrid.ItemsSource = budgetItems;
@@ -208,6 +463,7 @@ namespace WpfHomeBudget
             // Create a right-aligned style to be applied to any columns containing a monetary amount.
             Style rightAligned = new Style();
             rightAligned.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Right));
+
 
             // If passed list is a list of BudgetItems, configure the grid's columns as follows.
             if (typeof(T) == typeof(Budget.BudgetItem))
@@ -291,16 +547,6 @@ namespace WpfHomeBudget
                 List<Budget.Category> categories = presenter.GetCategories();
 
                 List<Dictionary<string, object>> dictionaries = budgetItems as List<Dictionary<string, object>>;
-                //foreach (string key in dictionaries[0].Keys)
-                //{
-                //    if (key.Contains("details:"))
-                //        continue; // Skip over any key whose value is a list of BudgetItems.
-
-                //    var column = new DataGridTextColumn();
-                //    column.Header = key;
-                //    column.Binding = new Binding($"[{key}]");
-                //    mainDisplayGrid.Columns.Add(column);
-                //}
 
                 var monthColumn = new DataGridTextColumn();
                 monthColumn.Header = "Month";
@@ -326,133 +572,12 @@ namespace WpfHomeBudget
                 mainDisplayGrid.Columns.Add(totalsColumn);
 
                 totalsColumn.CellStyle = rightAligned;
-
-                //var monthsColumn = new DataGridTextColumn();
-                //monthsColumn.Header = "Months";
-                //monthsColumn.Binding = new Binding("Month");
-                //mainDisplayGrid.Columns.Add(monthsColumn);
             }
         }
 
-        /// <summary>
-        /// Passes information about current filters to the Presenter, so the Presenter can update the grid.
-        /// </summary>
-        private void UpdateGrid()
+        public void DisplayToChart(List<object> budgetItems)
         {
-            // These variables have fixed values at the moment because the UI elements needed to set them have not been implemented yet.
-            DateTime? start = startDate.SelectedDate; // Specified by a DatePicker.
-            DateTime? end = endDate.SelectedDate;   // Specified by a second DatePicker.
-            bool filterFlag = (bool)chk_FilterCategories.IsChecked;    // Specified by a checkbox, or by picking a value from the list of categories?
-            int categoryId = cmb_Categories.SelectedIndex + 1;     // Specified by a drop-down list of categories. Offset is necessary, as indices start from 0 while the Category IDs start from 1.
-
-            bool orderByCategory = (bool)chk_OrderByCategory.IsChecked;
-            bool orderByMonth = (bool)chk_OrderByMonth.IsChecked;
-
-            ToggleMenuItems();
-
-            presenter.UpdateDisplay(start, end, filterFlag, categoryId, orderByCategory, orderByMonth);
-        }
-
-        /// <summary>
-        /// Event handler which calls the UpdateGrid() method whenever the value of startDate or endDate changes.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void startDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateGrid();
-        }
-
-        /// <summary>
-        /// Event handler which calls the UpdateGrid() method whenever the chk_FilterCategories button is checked or unchecked.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void chk_FilterCategories_Checked(object sender, RoutedEventArgs e)
-        {
-            UpdateGrid();
-        }
-
-        private void editItem_Click(object sender, RoutedEventArgs e)
-        {
-            var selected = mainDisplayGrid.SelectedItem as BudgetItem;
-            int index = mainDisplayGrid.SelectedIndex;
-
-            EditExpenseWindow editExpenseWindow = new EditExpenseWindow(presenter, selected);
-            editExpenseWindow.ShowDialog();
-
-            UpdateGrid();
-            Select(index);
-        }
-
-        private void deleteItem_Click(object sender, RoutedEventArgs e)
-        {
-            var selected = mainDisplayGrid.SelectedItem as BudgetItem;
-            int index = mainDisplayGrid.SelectedIndex;
-
-            if (MessageBox.Show(this, "Are you sure you want to delete this expense?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                presenter.DeleteExpense(selected.ExpenseID);
-            }
-
-            UpdateGrid();
-            Select(index);
-        }
-
-        /// <summary>
-        /// Enables or disables the main display grid's ContextMenu items, based on whether user has chosen to 
-        /// summarize results by category and/or month.
-        /// </summary>
-        private void ToggleMenuItems()
-        {
-            bool orderByCategory = (bool)chk_OrderByCategory.IsChecked;
-            bool orderByMonth = (bool)chk_OrderByMonth.IsChecked;
-
-            // If either or both controls are checked, disable the menu buttons.
-            if (orderByCategory || orderByMonth)
-            {
-                editItem.IsEnabled = false;
-                deleteItem.IsEnabled = false;
-            }
-            // If neither control is checked, re-enable the menu buttons.
-            else
-            {
-                editItem.IsEnabled = true;
-                deleteItem.IsEnabled = true;
-            }
-        }
-
-        /// <summary>
-        /// Sets focus to an item in the DataGrid.
-        /// </summary>
-        /// <param name="index">The index of item</param>
-        public void Select(int index)
-        {
-            if (!mainDisplayGrid.Items.IsEmpty && (mainDisplayGrid.Items[index] != null))
-            {
-                mainDisplayGrid.SelectedItem = mainDisplayGrid.Items[index];
-                mainDisplayGrid.ScrollIntoView(mainDisplayGrid.SelectedItem);
-            }
-        }
-
-        private void searchButton_Click(object sender, RoutedEventArgs e)
-        {
-            string text = searchBox.Text;
-            List<int> indexes = new List<int>();
-            List<string> items = new List<string>();
-            List<string> amounts = new List<string>();
-
-            if (!mainDisplayGrid.Items.IsEmpty)
-            {
-                for (int i = 0; i < mainDisplayGrid.Items.Count; i++)
-                {
-                    BudgetItem item = mainDisplayGrid.Items[i] as BudgetItem;
-                    items.Add(item.ShortDescription);
-                    amounts.Add(item.Amount.ToString());
-                }
-
-                presenter.Search(text, indexes, items, amounts);
-            }
+            DataSource = budgetItems;
         }
     }
 }

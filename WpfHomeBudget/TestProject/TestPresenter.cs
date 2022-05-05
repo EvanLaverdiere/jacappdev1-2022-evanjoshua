@@ -6,27 +6,27 @@ using System.Text;
 using System.Threading.Tasks;
 using WpfHomeBudget;
 using Xunit;
+using WpfHomeBudget.Interfaces;
 
 namespace TestProject
 {
     /// <summary>
     /// Mock class representing a View object which implements the IViewable interface.
     /// </summary>
-    public class TestView : IViewable
+    public class TestView : IViewable, IDisplayable
     {
-        public bool calledClearError;
-        public bool calledClearForm;
-        public bool calledClearSelection;
-        public bool calledRefresh;
-        public bool calledShowBudgetItems;
-        public bool calledShowError;
-        public bool calledShowSuccess;
-        public bool calledSelect;
-
-        public void ShowBudgetItems()
-        {
-            throw new NotImplementedException();
-        }
+        public bool calledClearError = false;
+        public bool calledClearForm = false;
+        public bool calledClearSelection = false;
+        public bool calledRefresh = false;
+        public bool calledShowError = false;
+        public bool calledShowSuccess = false;
+        public bool calledSelect = false;
+        public bool calledGetDisplayType = false;
+        public bool calledIsOrderedByMonthAndCategory = false;
+        public bool calledDisplayToGrid = false;
+        public bool calledDisplayToChart = false;
+        public bool calledInitializeByCategoryAndMonthDisplay = false;
 
         public void ShowError(string error)
         {
@@ -40,11 +40,6 @@ namespace TestProject
             calledShowSuccess = true;
         }
 
-        public void Clear()
-        {
-            throw new NotImplementedException();
-        }
-
         public void turnDark()
         {
             throw new NotImplementedException();
@@ -55,15 +50,36 @@ namespace TestProject
             throw new NotImplementedException();
         }
 
-        public void ShowBudgetItems<T>(List<T> budgetItems)
-        {
-            //throw new NotImplementedException();
-            calledShowBudgetItems = true;
-        }
-
         public void Select(int index)
         {
             calledSelect = true;
+        }
+
+        public string GetDisplayType()
+        {
+            calledGetDisplayType = true;
+            return " ";
+        }
+
+        public bool isOrderedByMonthAndCategory()
+        {
+            calledIsOrderedByMonthAndCategory = true;
+            return true;
+        }
+
+        public void DisplayToGrid<T>(List<T> budgetItems)
+        {
+            calledDisplayToGrid = true;
+        }
+
+        public void DisplayToChart(List<object> budgetItems)
+        {
+            calledDisplayToChart = true;
+        }
+
+        public void InitializeByCategoryAndMonthDisplay(List<string> categoryNames)
+        {
+            calledInitializeByCategoryAndMonthDisplay = true;
         }
     }
     /// <summary>
@@ -83,7 +99,7 @@ namespace TestProject
         public void TestConstructor()
         {
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
             Assert.IsType<Presenter>(presenter);
         }
 
@@ -92,7 +108,7 @@ namespace TestProject
         {
             // Arrange
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
             DateTime? badDate = null;
             int badCategory = -1;
             string noAmount = "";
@@ -110,7 +126,7 @@ namespace TestProject
         {
             // Arrange
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
             string badDescription = "";
             int badCategoryType = -1;
 
@@ -127,7 +143,7 @@ namespace TestProject
             // Arrange
             // Initialize the view & presenter.
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
 
             // manually create a database. Copied from one of Sandy's HomeBudget_GetBudgetItemsByMonth tests.
             string folder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\"));
@@ -155,7 +171,7 @@ namespace TestProject
             // Arrange
             // Initialize the view & presenter.
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
 
             // manually create a database. Copied from one of Sandy's HomeBudget_GetBudgetItemsByMonth tests.
             string folder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\"));
@@ -179,7 +195,7 @@ namespace TestProject
         {
             // Arrange
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
 
             // Manually create a database so the Presenter can actually retrieve something.
             string folder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\"));
@@ -188,19 +204,19 @@ namespace TestProject
             System.IO.File.Copy(goodDB, messyDB, true);
             presenter.CreateBudget(messyDB, false);
 
-            // Assert
+            // Act
             presenter.GetBudgetItems(null, null, false, 0);
 
-            // Act
-            Assert.True(testView.calledShowBudgetItems);
+            // Assert
+            Assert.True(testView.calledGetDisplayType);
         }
 
         [Fact]
-        public void Test_GetBudgetItemsByCategoryCallsShowBudgetItems()
+        public void Test_GetBudgetItemsByCategoryCallGetDisplayType()
         {
             // Arrange
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
 
             // Manually create a database so the Presenter can actually retrieve something.
             string folder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\"));
@@ -213,15 +229,15 @@ namespace TestProject
             presenter.GetBudgetItemsByCategory(null, null, false, 0);
 
             // Act
-            Assert.True(testView.calledShowBudgetItems);
+            Assert.True(testView.calledGetDisplayType);
         }
 
         [Fact]
-        public void Test_GetBudgetItemsByMonthCallsShowBudgetItems()
+        public void Test_GetBudgetItemsByMonthCallscGetDisplayType()
         {
             // Arrange
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
 
             // Manually create a database so the Presenter can actually retrieve something.
             string folder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\"));
@@ -234,16 +250,16 @@ namespace TestProject
             presenter.GetBudgetItemsByMonth(null, null, false, 0);
 
             // Act
-            Assert.True(testView.calledShowBudgetItems);
+            Assert.True(testView.calledGetDisplayType);
 
         }
 
         [Fact]
-        public void Test_GetBudgetDictionaryByCategoryAndMonthCallsShowBudgetItems()
+        public void Test_GetBudgetDictionaryByCategoryAndMonthCallsGetDisplayType()
         {
             // Arrange
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
 
             // Manually create a database so the Presenter can actually retrieve something.
             string folder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\"));
@@ -256,16 +272,16 @@ namespace TestProject
             presenter.GetBudgetDictionaryByCategoryAndMonth(null, null, false, 0);
 
             // Act
-            Assert.True(testView.calledShowBudgetItems);
+            Assert.True(testView.calledGetDisplayType);
 
         }
 
         [Fact]
-        public void Test_UpdateDisplayCallsShowBudgetItems()
+        public void Test_UpdateDisplayCallsGetDisplayType()
         {
             // Arrange
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
 
             // Manually create a database so the Presenter can actually retrieve something.
             string folder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\"));
@@ -278,7 +294,7 @@ namespace TestProject
             presenter.UpdateDisplay(null, null, false, 0, false, false);
 
             // Act
-            Assert.True(testView.calledShowBudgetItems);
+            Assert.True(testView.calledGetDisplayType);
         }
 
         [Fact]
@@ -286,7 +302,7 @@ namespace TestProject
         {
             // Arrange
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
             string budgetName = "TestDB";
             DateTime date = DateTime.Now;
             int category = 1;
@@ -308,7 +324,7 @@ namespace TestProject
         {
             // Arrange
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
             string budgetName = "TestDB";
             DateTime date = DateTime.Now;
             int category = 1;
@@ -329,7 +345,7 @@ namespace TestProject
         {
             // Arrange
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
             string budgetName = "TestDB2";
             DateTime date = DateTime.Now;
             int category = 1;
@@ -351,7 +367,7 @@ namespace TestProject
         {
             // Arrange
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
 
             // Act
             presenter.DeleteExpense(1); // Deleting when no budget was specified
@@ -365,7 +381,7 @@ namespace TestProject
         {
             // Arrange
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
             string budgetName = "TestDB3";
             DateTime date = DateTime.Now;
             int category = 1;
@@ -391,7 +407,7 @@ namespace TestProject
         {
             // Arrange
             TestView testView = new TestView();
-            Presenter presenter = new Presenter(testView);
+            Presenter presenter = new Presenter(testView, testView);
             string budgetName = "TestDB4";
             DateTime date = DateTime.Now;
             int category = 1;
