@@ -15,7 +15,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Budget;
 using System.Windows.Controls.DataVisualization.Charting;
-using System.Linq;
 using WpfHomeBudget.Interfaces;
 
 namespace WpfHomeBudget
