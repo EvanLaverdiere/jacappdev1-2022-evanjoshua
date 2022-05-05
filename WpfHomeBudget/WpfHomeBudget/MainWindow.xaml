@@ -148,7 +148,7 @@
                 </Viewbox>
 
                 <!-- Main view:  row 1-->
-                <TabControl x:Name="TabControl" Grid.Row="1"  Grid.Column="1">
+                <TabControl x:Name="TabControl" Grid.Row="1"  Grid.Column="1" SelectedIndex="0">
                     <TabItem Header="Table">
                         <!-- Database view-->
                         <DataGrid x:Name="mainDisplayGrid" AutoGenerateColumns="False" IsReadOnly="True">
@@ -194,7 +194,7 @@
                                     Title="Test" Margin="10,10,0,0">
                                 </toolkit:LabeledPieSeries>
                             </toolkit:Chart>
-                            <toolkit:Chart Grid.Column="1" Name="chBar" Margin="0,0,150,0" Height="390" Visibility="Hidden">
+                            <toolkit:Chart Grid.Column="1" Name="chBar" Margin="0,0,150,0" Height="390">
                                 <toolkit:BarSeries IndependentValueBinding="{Binding Path=Key}"
                                                    DependentValueBinding="{Binding Path=Value}"
                                                    HorizontalAlignment="Left"

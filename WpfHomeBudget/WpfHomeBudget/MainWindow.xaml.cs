@@ -15,22 +15,30 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Budget;
 using System.Windows.Controls.DataVisualization.Charting;
+using System.Linq;
+using WpfHomeBudget.Interfaces;
 
 namespace WpfHomeBudget
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : System.Windows.Window, IViewable
+    public partial class MainWindow : System.Windows.Window, IViewable, IDisplayable
     {
-        private Presenter presenter;
+        private Presenter presenter;    // The presenter object of the application
 
         private bool isDarkMode;
 
-        //private DateTime? start;
-        //private DateTime? end;
-        //private bool filterFlag;
-        //private int categoryId;
+        private List<object> _dataSource;
+        private enum ChartType
+        {
+            Standard,
+            ByCategory,
+            ByMonth,
+            ByMonthAndCategory
+        }
+        private ChartType chartType = ChartType.Standard;
+        private List<string> Categories;
 
         public MainWindow()
         {
@@ -57,17 +65,10 @@ namespace WpfHomeBudget
                     turnDark();
                 }
 
-                presenter = new Presenter(this);
+                presenter = new Presenter(this, this);
 
                 presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
 
-                //// By default, these fields will have the following values:
-                //start = end = null;
-                //filterFlag = false;
-                //categoryId = 0;
-
-                //mainDisplayGrid.ItemsSource = presenter.GetBudgetItems(start, end, filterFlag, categoryId);
-                //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
                 UpdateView();
 
                 cmb_Categories.ItemsSource = presenter.GetCategories();
@@ -189,154 +190,152 @@ namespace WpfHomeBudget
             MessageBox.Show(message, "SUCCESS", MessageBoxButton.OK);
         }
 
-        public void ShowBudget<T>(List<T> budgetItems)
+        #region PieChart
+
+        public List<object> DataSource
         {
-            // Get the selected tab
-            TabItem selectedTab = (TabItem)TabControl.SelectedItem;
+            get { return _dataSource; }
+            set
+            {
+                // if changing data source, then redraw chart
+                _dataSource = value;
+                if (chartType == ChartType.ByMonthAndCategory) drawByMonthPieChart();
 
-            // If the selected tab is the Table display the Data Grid
-            if (selectedTab.Header == "Table")
-            {
-                DisplayToGrid(budgetItems);
+                if (chartType == ChartType.ByMonth) drawByMonthLineChart();
             }
-            // If the selected tab is the 
-            else if (selectedTab.Header == "Pie Chart")
-            {
-                DisplayToChart(budgetItems);
-            }
-            // Default case
-            else
-            {
-                MessageBox.Show("No tab selected", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
         }
 
-        private void DisplayToChart<T>(List<T> budgetItems)
+        // clear the current data
+        public void DataClear()
         {
-
+            ((PieSeries)chPie.Series[0]).ItemsSource = null;
         }
 
-        private void DisplayToGrid<T>(List<T> budgetItems)
+        // Get prepared for displaying Month and Category
+        // Inputs: usedCategoryList... a list of categories
+        public void InitializeByCategoryAndMonthDisplay(List<string> CategoryList)
         {
-            //throw new NotImplementedException();
-            mainDisplayGrid.ItemsSource = budgetItems;
-            // Clear out the existing columns.
-            mainDisplayGrid.Columns.Clear();
+            txtTitle.Text = "By Month";
+            chartType = ChartType.ByMonthAndCategory; // set chart type appropriately
+            chPie.Visibility = Visibility.Visible; // show the pie chart
+            txtInvalid.Visibility = Visibility.Hidden; // hide the "invalid parameters" text
 
-            // If passed list is a list of BudgetItems, configure the grid's columns as follows.
-            if (typeof(T) == typeof(Budget.BudgetItem))
+            this.Categories = CategoryList; // save the categories list
+        }
+
+        // prepare for 'byCategory',
+        // NOTE: just show invalid text... this chart is not implemented
+        public void InitializeByCategoryDisplay()
+        {
+            chPie.Visibility = Visibility.Hidden;
+            txtInvalid.Visibility = Visibility.Visible;
+        }
+
+        // prepare for 'byMonth',
+        // NOTE: just show invalid text... this chart is not implemented
+        public void InitializeByMonthDisplay()
+        {
+            chPie.Visibility = Visibility.Hidden;
+            txtInvalid.Visibility = Visibility.Visible;
+        }
+
+        // prepare for standard display,
+        // NOTE: just show invalid text... this chart is not implemented
+        public void InitializeStandardDisplay()
+        {
+            chPie.Visibility = Visibility.Hidden;
+            txtInvalid.Visibility = Visibility.Visible;
+        }
+
+        private void drawByMonthLineChart()
+        {
+        }
+
+        // Draw the 'ByMonth' chart
+        private void drawByMonthPieChart()
+        {
+            // create a list of months from the source data
+            List<String> months = new List<String>();
+            foreach (object obj in _dataSource)
             {
-                var idColumn = new DataGridTextColumn();
-                idColumn.Header = "Expense ID";
-                //idColumn.Binding = new Binding("ExpenseId");
-                idColumn.Binding = new Binding("ExpenseID");
-                mainDisplayGrid.Columns.Add(idColumn);
-
-                var dateColumn = new DataGridTextColumn();
-                dateColumn.Header = "Date";
-                dateColumn.Binding = new Binding("Date");
-                mainDisplayGrid.Columns.Add(dateColumn);
-
-                var categoryColumn = new DataGridTextColumn();
-                categoryColumn.Header = "Category";
-                categoryColumn.Binding = new Binding("Category");
-                mainDisplayGrid.Columns.Add(categoryColumn);
-
-                var descriptionColumn = new DataGridTextColumn();
-                descriptionColumn.Header = "Description";
-                descriptionColumn.Binding = new Binding("ShortDescription");
-                mainDisplayGrid.Columns.Add(descriptionColumn);
-
-                var amountColumn = new DataGridTextColumn();
-                amountColumn.Header = "Amount";
-                amountColumn.Binding = new Binding("Amount");
-                amountColumn.Binding.StringFormat = "C";
-                mainDisplayGrid.Columns.Add(amountColumn);
-
-                var balanceColumn = new DataGridTextColumn();
-                balanceColumn.Header = "Budget Balance";
-                balanceColumn.Binding = new Binding("Balance");
-                balanceColumn.Binding.StringFormat = "C";
-                mainDisplayGrid.Columns.Add(balanceColumn);
-            }
-            // If passed list is a list of BudgetItemsByCategory, display each category and the total for each.
-            else if (typeof(T) == typeof(Budget.BudgetItemsByCategory))
-            {
-                // do something
-                var categoryColumn = new DataGridTextColumn();
-                categoryColumn.Header = "Category";
-                categoryColumn.Binding = new Binding("Category");
-                mainDisplayGrid.Columns.Add(categoryColumn);
-
-                var totalsColumn = new DataGridTextColumn();
-                totalsColumn.Header = "Total";
-                totalsColumn.Binding = new Binding("Total");
-                totalsColumn.Binding.StringFormat = "C";
-                mainDisplayGrid.Columns.Add(totalsColumn);
-            }
-
-            // If The list is a list of BudgetItemsByMonth, display the totals earned for each month.
-            else if (typeof(T) == typeof(Budget.BudgetItemsByMonth))
-            {
-                // format the display 
-                var monthColumn = new DataGridTextColumn();
-                monthColumn.Header = "Month";
-                monthColumn.Binding = new Binding("Month");
-                mainDisplayGrid.Columns.Add(monthColumn);
-
-                var totalsColumn = new DataGridTextColumn();
-                totalsColumn.Header = "Total";
-                totalsColumn.Binding = new Binding("Total");
-                totalsColumn.Binding.StringFormat = "C";
-                mainDisplayGrid.Columns.Add(totalsColumn);
-            }
-
-            // If the list is a list of dictionaries, create a column for "Months", a column for each Category,
-            // and a column for "Totals".
-            else if (typeof(T) == typeof(Dictionary<string, object>))
-            {
-                List<Budget.Category> categories = presenter.GetCategories();
-
-                List<Dictionary<string, object>> dictionaries = budgetItems as List<Dictionary<string, object>>;
-                //foreach (string key in dictionaries[0].Keys)
-                //{
-                //    if (key.Contains("details:"))
-                //        continue; // Skip over any key whose value is a list of BudgetItems.
-
-                //    var column = new DataGridTextColumn();
-                //    column.Header = key;
-                //    column.Binding = new Binding($"[{key}]");
-                //    mainDisplayGrid.Columns.Add(column);
-                //}
-
-                var monthColumn = new DataGridTextColumn();
-                monthColumn.Header = "Month";
-                monthColumn.Binding = new Binding("[Month]");
-                mainDisplayGrid.Columns.Add(monthColumn);
-
-                foreach (Category category in categories)
+                var item = obj as Dictionary<String, object>;
+                if (item != null)
                 {
-                    string header = category.Description;
-                    var column = new DataGridTextColumn();
-                    column.Header = header;
-                    column.Binding = new Binding($"[{header}]");
-                    column.Binding.StringFormat = "C";
-                    mainDisplayGrid.Columns.Add(column);
+                    months.Add(item["Month"].ToString());
                 }
-
-                var totalsColumn = new DataGridTextColumn();
-                totalsColumn.Header = "Total";
-                totalsColumn.Binding = new Binding("[Total]");
-                totalsColumn.Binding.StringFormat = "C";
-                mainDisplayGrid.Columns.Add(totalsColumn);
-
-                //var monthsColumn = new DataGridTextColumn();
-                //monthsColumn.Header = "Months";
-                //monthsColumn.Binding = new Binding("Month");
-                //mainDisplayGrid.Columns.Add(monthsColumn);
             }
+            // add the months to the combobox dropdown
+            cbMonths.ItemsSource = months;
+            // reset selected index to last 'month' in list
+            cbMonths.SelectedIndex = -1;
+            // set the data for the pie-chart
+            set_MonthCategory_Data();
         }
+
+        // define the data for the given month from the datasoure,
+        // ... which in this case is a list of Dictionary<String,object>
+        // defining totals for each category for a given month
+        private void set_MonthCategory_Data()
+        {
+            DataClear();
+            // bail out if there are no 'month' items in the drop down
+            if (cbMonths.Items.Count == 0) return;
+            // set the default selection to the last in the list
+            if (cbMonths.SelectedIndex < 0 || cbMonths.SelectedIndex >
+
+            cbMonths.Items.Count - 1)
+
+            {
+                cbMonths.SelectedIndex = cbMonths.Items.Count - 1;
+            }
+            // what is the selected month?
+            String selectedMonth = cbMonths.SelectedItem.ToString();
+            // ---------------------------------------------------------------
+            // define which data is to be displayed
+            // ---------------------------------------------------------------
+            var DisplayData = new List<KeyValuePair<String, double>>();
+            foreach (object obj in _dataSource)
+            {
+                var item = obj as Dictionary<String, object>;
+                // is the item listed in the _dataSource part of the selected month ?
+
+                if (item != null && (string)item["Month"] == selectedMonth)
+                {
+                    // go through each key/value pair in this item (item is a dictionary)
+
+                    foreach (var pair in item)
+                    {
+                        String category = pair.Key;
+                        String value = pair.Value.ToString();
+                        // if the key is not a category, skip processing
+                        if (!Categories.Contains(category)) continue;
+                        // what is the amount of money for this category (item[category])
+
+                        var amount = 0.0;
+                        double.TryParse(value, out amount);
+                        // only display expenses (i.e., amount < 0)
+                        if (amount < 0)
+                        {
+                            DisplayData.Add(new KeyValuePair<String, double>
+
+                            (category, -amount));
+                        }
+                    }
+                    // we found the month we wanted, no need to loop through other months, so
+
+                    // stop looking
+                    break;
+                }
+            }
+            // set the data for the pie-chart
+            ((PieSeries)chPie.Series[0]).ItemsSource = DisplayData;
+        }
+
+        private void cbMonths_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            set_MonthCategory_Data();
+        }
+        #endregion
 
         /// <summary>
         /// Passes information about current filters to the Presenter, so the Presenter can update the view.
@@ -436,6 +435,131 @@ namespace WpfHomeBudget
             {
                 mainDisplayGrid.SelectedItem = mainDisplayGrid.Items[index];
             }
+        }
+
+        public string GetDisplayType()
+        {
+            // Get the selected tab
+            TabItem selectedTab = (TabItem)TabControl.SelectedItem;
+
+            // If the selected tab is the Table display the Data Grid
+            return selectedTab.Header as string;
+        }
+
+        public bool isOrderedByMonthAndCategory()
+        {
+            return (bool)chk_OrderByCategory.IsChecked && (bool)chk_OrderByMonth.IsChecked;
+        }
+
+        void IDisplayable.DisplayToGrid<T>(List<T> budgetItems)
+        {
+            //throw new NotImplementedException();
+            mainDisplayGrid.ItemsSource = budgetItems;
+            // Clear out the existing columns.
+            mainDisplayGrid.Columns.Clear();
+
+            // If passed list is a list of BudgetItems, configure the grid's columns as follows.
+            if (typeof(T) == typeof(Budget.BudgetItem))
+            {
+                var idColumn = new DataGridTextColumn();
+                idColumn.Header = "Expense ID";
+                //idColumn.Binding = new Binding("ExpenseId");
+                idColumn.Binding = new Binding("ExpenseID");
+                mainDisplayGrid.Columns.Add(idColumn);
+
+                var dateColumn = new DataGridTextColumn();
+                dateColumn.Header = "Date";
+                dateColumn.Binding = new Binding("Date");
+                mainDisplayGrid.Columns.Add(dateColumn);
+
+                var categoryColumn = new DataGridTextColumn();
+                categoryColumn.Header = "Category";
+                categoryColumn.Binding = new Binding("Category");
+                mainDisplayGrid.Columns.Add(categoryColumn);
+
+                var descriptionColumn = new DataGridTextColumn();
+                descriptionColumn.Header = "Description";
+                descriptionColumn.Binding = new Binding("ShortDescription");
+                mainDisplayGrid.Columns.Add(descriptionColumn);
+
+                var amountColumn = new DataGridTextColumn();
+                amountColumn.Header = "Amount";
+                amountColumn.Binding = new Binding("Amount");
+                amountColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(amountColumn);
+
+                var balanceColumn = new DataGridTextColumn();
+                balanceColumn.Header = "Budget Balance";
+                balanceColumn.Binding = new Binding("Balance");
+                balanceColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(balanceColumn);
+            }
+            // If passed list is a list of BudgetItemsByCategory, display each category and the total for each.
+            else if (typeof(T) == typeof(Budget.BudgetItemsByCategory))
+            {
+                // do something
+                var categoryColumn = new DataGridTextColumn();
+                categoryColumn.Header = "Category";
+                categoryColumn.Binding = new Binding("Category");
+                mainDisplayGrid.Columns.Add(categoryColumn);
+
+                var totalsColumn = new DataGridTextColumn();
+                totalsColumn.Header = "Total";
+                totalsColumn.Binding = new Binding("Total");
+                totalsColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(totalsColumn);
+            }
+
+            // If The list is a list of BudgetItemsByMonth, display the totals earned for each month.
+            else if (typeof(T) == typeof(Budget.BudgetItemsByMonth))
+            {
+                // format the display 
+                var monthColumn = new DataGridTextColumn();
+                monthColumn.Header = "Month";
+                monthColumn.Binding = new Binding("Month");
+                mainDisplayGrid.Columns.Add(monthColumn);
+
+                var totalsColumn = new DataGridTextColumn();
+                totalsColumn.Header = "Total";
+                totalsColumn.Binding = new Binding("Total");
+                totalsColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(totalsColumn);
+            }
+
+            // If the list is a list of dictionaries, create a column for "Months", a column for each Category,
+            // and a column for "Totals".
+            else if (typeof(T) == typeof(Dictionary<string, object>))
+            {
+                List<Budget.Category> categories = presenter.GetCategories();
+
+                List<Dictionary<string, object>> dictionaries = budgetItems as List<Dictionary<string, object>>;
+
+                var monthColumn = new DataGridTextColumn();
+                monthColumn.Header = "Month";
+                monthColumn.Binding = new Binding("[Month]");
+                mainDisplayGrid.Columns.Add(monthColumn);
+
+                foreach (Category category in categories)
+                {
+                    string header = category.Description;
+                    var column = new DataGridTextColumn();
+                    column.Header = header;
+                    column.Binding = new Binding($"[{header}]");
+                    column.Binding.StringFormat = "C";
+                    mainDisplayGrid.Columns.Add(column);
+                }
+
+                var totalsColumn = new DataGridTextColumn();
+                totalsColumn.Header = "Total";
+                totalsColumn.Binding = new Binding("[Total]");
+                totalsColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(totalsColumn);
+            }
+        }
+
+        public void DisplayToChart(List<object> budgetItems)
+        {
+            DataSource = budgetItems;
         }
     }
 }
