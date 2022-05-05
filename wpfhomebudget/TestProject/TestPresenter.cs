@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using WpfHomeBudget;
 using Xunit;
-using Budget;
 
 namespace TestProject
 {
@@ -373,14 +372,40 @@ namespace TestProject
             string amount = "10";
             string description = "McDonald's";
             List<int> indexes = new List<int>();
-            List<BudgetItem> items = new List<BudgetItem>();
+            List<string> items = new List<string>();
 
             // Act
             presenter.CreateBudget(budgetName, false);
             presenter.CreateNewExpense(date, category, amount, description);
+            items.Add("McDonald's");
             presenter.Search("McDonald's", indexes, items);
 
             // Assert
+            Assert.True(testView.calledSelect);
+        }
+
+        [Fact]
+        public void Test_SelectItemFailure()
+        {
+            // Arrange
+            TestView testView = new TestView();
+            Presenter presenter = new Presenter(testView);
+            string budgetName = "TestDB4";
+            DateTime date = DateTime.Now;
+            int category = 1;
+            string amount = "10";
+            string description = "McDonald's";
+            List<int> indexes = new List<int>();
+            List<string> items = new List<string>();
+
+            // Act
+            presenter.CreateBudget(budgetName, false);
+            presenter.CreateNewExpense(date, category, amount, description);
+            items.Add("Wendy's"); // has not been added to the budget
+            presenter.Search("McDonald's", indexes, items);
+
+            // Assert
+            Assert.False(testView.calledSelect);
         }
     }
 }
