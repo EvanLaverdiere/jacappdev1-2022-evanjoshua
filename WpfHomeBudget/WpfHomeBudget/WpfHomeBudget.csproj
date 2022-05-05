@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>True</UseWindowsForms>
+    <ApplicationIcon>images\MoneyManager.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
