@@ -21,6 +21,7 @@ namespace TestProject
         public bool calledShowBudgetItems;
         public bool calledShowError;
         public bool calledShowSuccess;
+        public bool calledSelect;
 
         public void ShowBudgetItems()
         {
@@ -57,7 +58,7 @@ namespace TestProject
 
         public void Select(int index)
         {
-            throw new NotImplementedException();
+            calledSelect = true;
         }
     }
     /// <summary>
@@ -352,6 +353,58 @@ namespace TestProject
 
             // Assert
             Assert.True(testView.calledShowError);
+        }
+
+        [Fact]
+        public void Test_SelectItemSuccess()
+        {
+            // Arrange
+            TestView testView = new TestView();
+            Presenter presenter = new Presenter(testView);
+            string budgetName = "TestDB3";
+            DateTime date = DateTime.Now;
+            int category = 1;
+            string amount = "10";
+            string description = "McDonald's";
+            List<int> indexes = new List<int>();
+            List<string> items = new List<string>();
+            List<string> amounts = new List<string>();
+
+            // Act
+            presenter.CreateBudget(budgetName, false);
+            presenter.CreateNewExpense(date, category, amount, description);
+            items.Add("McDonald's");
+            amounts.Add("10");
+            presenter.Search("McDonald's", indexes, items, amounts);
+
+            // Assert
+            Assert.True(testView.calledSelect);
+        }
+
+        [Fact]
+        public void Test_SelectItemFailure()
+        {
+            // Arrange
+            TestView testView = new TestView();
+            Presenter presenter = new Presenter(testView);
+            string budgetName = "TestDB4";
+            DateTime date = DateTime.Now;
+            int category = 1;
+            string amount = "10";
+            string description = "McDonald's";
+            List<int> indexes = new List<int>();
+            List<string> items = new List<string>();
+            List<string> amounts = new List<string>();
+
+            // Act
+            presenter.CreateBudget(budgetName, false);
+            presenter.CreateNewExpense(date, category, amount, description);
+            items.Add("Wendy's"); // has not been added to the budget
+            amounts.Add("10");
+            presenter.Search("McDonald's", indexes, items, amounts);
+
+            // Assert
+            Assert.False(testView.calledSelect);
         }
     }
 }

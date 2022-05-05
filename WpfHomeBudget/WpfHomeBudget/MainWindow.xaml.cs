@@ -191,11 +191,11 @@ namespace WpfHomeBudget
         }
 
         #region PieChart
-
         public List<object> DataSource
         {
             get { return _dataSource; }
             set
+
             {
                 // if changing data source, then redraw chart
                 _dataSource = value;
@@ -242,6 +242,7 @@ namespace WpfHomeBudget
                 {
                     months.Add(item["Month"].ToString());
                 }
+
             }
             // add the months to the combobox dropdown
             cbMonths.ItemsSource = months;
@@ -250,6 +251,7 @@ namespace WpfHomeBudget
             // set the data for the pie-chart
             set_MonthCategory_Data();
         }
+
 
         // define the data for the given month from the datasoure,
         // ... which in this case is a list of Dictionary<String,object>
@@ -305,6 +307,7 @@ namespace WpfHomeBudget
                     // stop looking
                     break;
                 }
+
             }
             // set the data for the pie-chart
             ((PieSeries)chPie.Series[0]).ItemsSource = DisplayData;
@@ -413,6 +416,27 @@ namespace WpfHomeBudget
             if (!mainDisplayGrid.Items.IsEmpty && (mainDisplayGrid.Items[index] != null))
             {
                 mainDisplayGrid.SelectedItem = mainDisplayGrid.Items[index];
+                mainDisplayGrid.ScrollIntoView(mainDisplayGrid.SelectedItem);
+            }
+        }
+
+        private void searchButton_Click(object sender, RoutedEventArgs e)
+        {
+            string text = searchBox.Text;
+            List<int> indexes = new List<int>();
+            List<string> items = new List<string>();
+            List<string> amounts = new List<string>();
+
+            if (!mainDisplayGrid.Items.IsEmpty)
+            {
+                for (int i = 0; i < mainDisplayGrid.Items.Count; i++)
+                {
+                    BudgetItem item = mainDisplayGrid.Items[i] as BudgetItem;
+                    items.Add(item.ShortDescription);
+                    amounts.Add(item.Amount.ToString());
+                }
+
+                presenter.Search(text, indexes, items, amounts);
             }
         }
 
@@ -436,6 +460,13 @@ namespace WpfHomeBudget
             mainDisplayGrid.ItemsSource = budgetItems;
             // Clear out the existing columns.
             mainDisplayGrid.Columns.Clear();
+
+            // Create a right-aligned style to be applied to any columns containing a monetary amount.
+            Style rightAligned = new Style();
+            rightAligned.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Right));
+
+            // If passed list is a list of BudgetItems, configure the grid's columns as follows.
+            if (typeof(T) == typeof(Budget.BudgetItem))
 
             // If passed list is a list of BudgetItems, configure the grid's columns as follows.
             if (typeof(T) == typeof(Budget.BudgetItem))
@@ -472,6 +503,9 @@ namespace WpfHomeBudget
                 balanceColumn.Binding = new Binding("Balance");
                 balanceColumn.Binding.StringFormat = "C";
                 mainDisplayGrid.Columns.Add(balanceColumn);
+                
+                amountColumn.CellStyle = rightAligned;
+                balanceColumn.CellStyle = rightAligned;
             }
             // If passed list is a list of BudgetItemsByCategory, display each category and the total for each.
             else if (typeof(T) == typeof(Budget.BudgetItemsByCategory))
@@ -487,6 +521,8 @@ namespace WpfHomeBudget
                 totalsColumn.Binding = new Binding("Total");
                 totalsColumn.Binding.StringFormat = "C";
                 mainDisplayGrid.Columns.Add(totalsColumn);
+                
+                totalsColumn.CellStyle = rightAligned;
             }
 
             // If The list is a list of BudgetItemsByMonth, display the totals earned for each month.
@@ -503,6 +539,8 @@ namespace WpfHomeBudget
                 totalsColumn.Binding = new Binding("Total");
                 totalsColumn.Binding.StringFormat = "C";
                 mainDisplayGrid.Columns.Add(totalsColumn);
+                
+                totalsColumn.CellStyle = rightAligned;
             }
 
             // If the list is a list of dictionaries, create a column for "Months", a column for each Category,
@@ -526,6 +564,8 @@ namespace WpfHomeBudget
                     column.Binding = new Binding($"[{header}]");
                     column.Binding.StringFormat = "C";
                     mainDisplayGrid.Columns.Add(column);
+                    
+                    totalsColumn.CellStyle = rightAligned;
                 }
 
                 var totalsColumn = new DataGridTextColumn();
@@ -533,6 +573,8 @@ namespace WpfHomeBudget
                 totalsColumn.Binding = new Binding("[Total]");
                 totalsColumn.Binding.StringFormat = "C";
                 mainDisplayGrid.Columns.Add(totalsColumn);
+                
+                totalsColumn.CellStyle = rightAligned;
             }
         }
 
