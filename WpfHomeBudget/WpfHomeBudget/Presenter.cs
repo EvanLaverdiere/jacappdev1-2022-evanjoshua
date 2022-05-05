@@ -337,11 +337,11 @@ namespace WpfHomeBudget
                 GetBudgetItems(start, end, filterFlag, categoryId);
         }
 
-        public void Search(string text, List<int> indexes, List<BudgetItem> items)
+        public void Search(string text, List<int> indexes, List<string> items)
         {
             for(int i=0; i < items.Count; i++)
             {
-                if (items[i].ShortDescription.Contains(text))
+                if (items[i].Contains(text))
                 {
                     indexes.Add(i);
                 }

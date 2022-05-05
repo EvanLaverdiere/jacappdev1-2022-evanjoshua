@@ -424,13 +424,14 @@ namespace WpfHomeBudget
         {
             string text = searchBox.Text;
             List<int> indexes = new List<int>();
-            List<BudgetItem> items = new List<BudgetItem>();
+            List<string> items = new List<string>();
 
             if (!mainDisplayGrid.Items.IsEmpty)
             {
                 for (int i = 0; i < mainDisplayGrid.Items.Count; i++)
                 {
-                    items.Add(mainDisplayGrid.Items[i] as BudgetItem);
+                    BudgetItem item = mainDisplayGrid.Items[i] as BudgetItem;
+                    items.Add(item.ShortDescription);
                 }
 
                 presenter.Search(text, indexes, items);
