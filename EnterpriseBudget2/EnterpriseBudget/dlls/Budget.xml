@@ -1,0 +1,597 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Budget</name>
+    </assembly>
+    <members>
+        <member name="T:Budget.BudgetFiles">
+            <summary>
+            BudgetFiles class is used to manage the files used in the Budget project
+            </summary>
+        </member>
+        <member name="T:Budget.BudgetItem">
+            <summary>
+            Essentially just a struct for combining expenses and category data
+            into one object
+            </summary>
+        </member>
+        <member name="P:Budget.BudgetItem.CategoryID">
+            <value>The category Id of the current expense</value>
+        </member>
+        <member name="P:Budget.BudgetItem.ExpenseID">
+            <value>Unique number identifying the specific expense</value>
+        </member>
+        <member name="P:Budget.BudgetItem.Date">
+            <value>The date that the expense was incurred</value>
+        </member>
+        <member name="P:Budget.BudgetItem.Category">
+            <value>The description of the category for the current expense</value>
+        </member>
+        <member name="P:Budget.BudgetItem.ShortDescription">
+            <value>A description of this expense</value>
+        </member>
+        <member name="P:Budget.BudgetItem.Amount">
+            <value>The dollar amount of this expense</value>
+        </member>
+        <member name="P:Budget.BudgetItem.Balance">
+            <value>This value varies depending of the context of the expense
+            within a list.  It is the running total of all previous expenses
+            plus the current one</value>
+        </member>
+        <member name="T:Budget.BudgetItemsByMonth">
+            <summary>
+            Essentially just a struct for containing information about the
+            cumulative totals of expenses for a given month
+            </summary>
+        </member>
+        <member name="P:Budget.BudgetItemsByMonth.Month">
+            <value>The month that the expenses were incurred</value>
+        </member>
+        <member name="P:Budget.BudgetItemsByMonth.Details">
+            <value>A list of BudgetItems for this given month</value>
+        </member>
+        <member name="P:Budget.BudgetItemsByMonth.Total">
+            <value>The total amount of expenses incurred for this given month</value>
+        </member>
+        <member name="T:Budget.BudgetItemsByCategory">
+            <summary>
+            Essentially just a struct for containing information about the
+            cumulative totals of expenses for a given category
+            </summary>
+        </member>
+        <member name="P:Budget.BudgetItemsByCategory.Category">
+            <value>The description of the category in which the expenses were incurred</value>
+        </member>
+        <member name="P:Budget.BudgetItemsByCategory.Details">
+            <value>A list of BudgetItems for this given category</value>
+        </member>
+        <member name="P:Budget.BudgetItemsByCategory.Total">
+            <value>The total expenses incurred for this given category</value>
+        </member>
+        <member name="P:Budget.BudgetItemsByCategory.CategoryID">
+            <value>The category ID of the expenses in this group</value>
+        </member>
+        <member name="T:Budget.Categories">
+            <summary>
+            A collection of <c>Category</c> objects.
+            </summary>
+        </member>
+        <member name="M:Budget.Categories.#ctor(System.Data.SQLite.SQLiteConnection,System.Boolean)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="conn">ADO.Net compliant connection to a database</param>
+            <param name="IsNew">Adds default <c>Category</c> objects to the 
+            collection if set </param>
+        </member>
+        <member name="M:Budget.Categories.GetCategoryFromId(System.Int32)">
+            <summary>
+            Get a specific <c>Category</c> object from the collection, where the
+            object has the correct <c>Id</c> property.
+            </summary>
+            <param name="Id">Unique identifier of a <c>Category</c> object.</param>
+            <returns></returns>
+            <exception cref="T:System.Exception">If there is no <c>Category</c> object 
+            in the collection with that specific Id</exception>
+            <exception cref="T:System.Data.SQLite.SQLiteException">If the database file is corrupted in any way</exception>
+        </member>
+        <member name="M:Budget.Categories.List">
+            <summary>
+            Gets a list of all <c>Category</c> objects
+            </summary>
+            <returns>A all <c>Category</c> objects</returns>
+            <exception cref="T:System.Data.SQLite.SQLiteException">If the database file is corrupted in any way</exception>
+        </member>
+        <member name="M:Budget.Categories.Add(System.String,Budget.Category.CategoryType)">
+            <summary>
+            Adds a new <c>Category</c> object to the collection
+            </summary>
+            <param name="description">Category Description</param>
+            <param name="type">A type of category.  See
+            <see cref="T:Budget.Category.CategoryType"/></param>
+            <exception cref="T:System.Data.SQLite.SQLiteException">If the database file is corrupted in any way</exception>
+        </member>
+        <member name="M:Budget.Categories.UpdateProperties(System.Int32,System.String,Budget.Category.CategoryType)">
+            <summary>
+            Modify an existing category
+            </summary>
+            <param name="id">Category Id</param>
+            <param name="description">Category Description</param>
+            <param name="type">A type of category. </param>
+            <exception cref="T:System.Data.SQLite.SQLiteException">If the database file is corrupted in any way</exception>
+        </member>
+        <member name="M:Budget.Categories.Delete(System.Int32)">
+            <summary>
+            Delete the category with ID <c>Id</c> from the collection.
+            If the category does not exist, no exception will be thrown.
+            </summary>
+            <param name="Id">Unique identifier of an Category</param>
+            <exception cref="T:System.Data.SQLite.SQLiteException">If the database file is corrupted in any way</exception>
+        </member>
+        <member name="M:Budget.Categories.SetCategoriesToDefaults">
+             <summary>
+             Resets the <c>Category</c> collection to the defaults
+             <para>The categories cannot be reset if there are any existing
+             expenses that link to a specific category.</para>
+             </summary>
+            <exception cref="T:Budget.CategoriesException">If the categories cannot be reset</exception>
+        </member>
+        <member name="T:Budget.Category">
+            <summary>
+            A type of expense.  Categories are used to group expenses into managable
+            units.
+            </summary>
+            <remarks>Categories are further divied into Category Types.
+            See <see cref="T:Budget.Category.CategoryType">Category Type</see> for valid types.
+            </remarks>
+        </member>
+        <member name="P:Budget.Category.Id">
+            <value>Unique identifier of this category</value>
+        </member>
+        <member name="P:Budget.Category.Description">
+            <value>Description of this category</value>
+        </member>
+        <member name="P:Budget.Category.Type">
+            <value>The type of category. See <see cref="T:Budget.Category.CategoryType"/></value>
+        </member>
+        <member name="T:Budget.Category.CategoryType">
+            <summary>
+            A List of Category Types
+            </summary>
+        </member>
+        <member name="F:Budget.Category.CategoryType.Income">
+            <value>1</value>
+        </member>
+        <member name="F:Budget.Category.CategoryType.Expense">
+            <value>2</value>
+        </member>
+        <member name="F:Budget.Category.CategoryType.Credit">
+            <value>3</value>
+        </member>
+        <member name="F:Budget.Category.CategoryType.Savings">
+            <value>4</value>
+        </member>
+        <member name="M:Budget.Category.#ctor(System.String,Budget.Category.CategoryType)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="description">Description of the category</param>
+            <param name="type">Type of category.  See <see cref="T:Budget.Category.CategoryType"/> for valid types.
+            <para>Default: <see cref="F:Budget.Category.CategoryType.Expense"/></para></param>
+        </member>
+        <member name="M:Budget.Category.ToString">
+            <summary>
+            Forces the default 'stringification' of this object
+            </summary>
+            <returns>The description property of this object</returns>
+        </member>
+        <member name="T:Budget.Expense">
+            <summary>
+            An indivual expense
+            </summary>
+        </member>
+        <member name="P:Budget.Expense.Id">
+            <value>Unique identifer for this specific expense</value>
+        </member>
+        <member name="P:Budget.Expense.Date">
+            <value>Date that the expense was incurred</value>
+        </member>
+        <member name="P:Budget.Expense.Amount">
+            <value>Dollar amount of the expense incurred</value>
+        </member>
+        <member name="P:Budget.Expense.Description">
+            <value>Description of the expens expense</value>
+        </member>
+        <member name="P:Budget.Expense.Category">
+            <value>The category ID of the expense</value>
+        </member>
+        <member name="M:Budget.Expense.#ctor(System.DateTime,System.Int32,System.Double,System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="date">The date that the expense was incurred</param>
+            <param name="category">The category ID of the expense</param>
+            <param name="amount">The dollar amount of the expense</param>
+            <param name="description">The description of the expense</param>
+        </member>
+        <member name="T:Budget.Expenses">
+            <summary>
+            A collection of <c>Expense</c> objects
+            </summary>
+        </member>
+        <member name="M:Budget.Expenses.#ctor(System.Data.SQLite.SQLiteConnection)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="conn">ADO.Net compliant connection to a database</param>
+        </member>
+        <member name="M:Budget.Expenses.Add(System.DateTime,System.Int32,System.Double,System.String)">
+            <summary>
+            Add a new Expense to the database/collection
+            </summary>
+            <param name="date">Date the expense was incurred</param>
+            <param name="categoryId">ID of the category where this expense belongs</param>
+            <param name="amount">The amount of the expense</param>
+            <param name="description">The description of the expense </param>
+            <exception cref="T:System.Data.SQLite.SQLiteException">If the category ID is not valid,
+            then there will be a foreign key constraint error</exception>
+        </member>
+        <member name="M:Budget.Expenses.UpdateProperties(System.Int32,System.DateTime,System.Int32,System.Double,System.String)">
+            <summary>
+            Modify an existing expense
+            </summary>
+            <param name="expenseId">Date the expense was incurred</param>
+            <param name="date">Date the expense was incurred</param>
+            <param name="categoryId">ID of the category where this expense belongs</param>
+            <param name="amount">The amount of the expense</param>
+            <param name="description">The description of the expense </param>
+            <exception cref="T:System.Data.SQLite.SQLiteException">If the database file is corrupted in any way</exception>
+        </member>
+        <member name="M:Budget.Expenses.Delete(System.Int32)">
+            <summary>
+            Delete the expense with ID <c>Id</c> from the collection/database.
+            If the expense does not exist, no exception will be thrown.
+            </summary>
+            <param name="Id">Unique identifier of an Expense</param>
+            <exception cref="T:System.Data.SQLite.SQLiteException">If the database file is corrupted in any way</exception>
+        </member>
+        <member name="M:Budget.Expenses.List">
+            <summary>
+            Gets a list of expenses
+            </summary>
+            <exception cref="T:System.Data.SQLite.SQLiteException">If the database file is corrupted in any way</exception>
+            <returns>A list of <c>Expense</c> objects</returns>
+        </member>
+        <member name="T:Budget.HomeBudget">
+            <summary>
+            Top level library to provide capabilites for a simple home budget
+            using sqlite3 as the backend database
+            </summary>
+        </member>
+        <member name="P:Budget.HomeBudget.categories">
+            <value>A collection of category objects</value>
+        </member>
+        <member name="P:Budget.HomeBudget.expenses">
+            <value>A collection of expense objects</value>
+        </member>
+        <member name="M:Budget.HomeBudget.#ctor(System.String,System.Boolean)">
+            <summary>
+            Constructor for HomeBudget
+            </summary>
+            <remarks><para>If the specified <c>budgetFileName</c> does not exist,
+            a new database will be created, independent of the parameter <c>
+            isNewDatabase</c></para>
+            <para><c>budgetFileName</c> should typically be the full path name,
+            although it <i>should</i> work with relative paths</para></remarks>
+            <param name="budgetFileName">The name of the sqlite3 database file</param>
+            <param name="isNewDatabase">default:false
+            <para>If true, deletes <c>budgetFileName</c> and creates a new
+            database file with that name,</para><para>if false, connects to
+            <c>budgetFileName</c> via SQLite3</para></param>
+            <exception cref="T:System.Data.SQLite.SQLiteException">If the SQLite file
+            is corrupted in any way</exception>
+            <exception cref="T:System.Exception">If there are any file permission errors</exception>
+        </member>
+        <member name="M:Budget.HomeBudget.CloseDB">
+            <summary>
+            Closes the database connection
+            </summary>
+            <exception cref="T:System.Data.SQLite.SQLiteException">If the SQLite file
+            cannot be closed for any reason</exception>
+        </member>
+        <member name="M:Budget.HomeBudget.SaveToFile(System.String)">
+            <summary>
+            Saves the current database file to another file, and then connects to the new file
+            </summary>
+            <param name="toFile"></param>
+            <remarks>Copies the existing database to the new file.
+            Disconnects the database from the current file, 
+            and connects to the new file.</remarks>
+            <exception cref="T:System.Data.SQLite.SQLiteException">If the SQLite file
+            is corrupted in any way</exception>
+            <exception cref="T:System.Exception">If there are any file permission errors</exception>
+        </member>
+        <member name="M:Budget.HomeBudget.GetBudgetItems(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Boolean,System.Int32)">
+            <summary>
+            Get a list of BudgetItems, filtered by date, and possibly by category.
+            </summary>
+            <remarks><para>Results are ordered by date</para>
+            <para>If Start and End date are null, then they will be set to their defaults</para>
+            see <see cref="T:Budget.BudgetItem"/></remarks>
+            <seealso cref="M:Budget.HomeBudget.GetBudgetItemsByCategory(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Boolean,System.Int32)"/>
+            <seealso cref="!:GetBudgetItemsByMonth>"/>
+            <seealso cref="!:GetBudgetDictionaryByCategoryAndMonth>"/>
+            <exception cref="T:System.Data.SQLite.SQLiteException">If the SQLite file
+            is corrupted in any way</exception>
+            <param name="Start">Only expenses that were incurred after or on this date will be processed
+            <para>default: <c>Jan 1, 1900</c></para></param>
+            <param name="End">Only expenses that were incurred before or on this date will be processed
+            <para>default: <c>Jan 1, 2500</c></para></param>
+            <param name="FilterFlag">If set, only expenses with <c>CategoryId</c> will be processed</param>
+            <param name="CategoryID">If <c>FilterFlag</c> is set, only expenses with this category ID will be processed</param>
+            <returns>A collection of BudgetItem objects</returns>
+        </member>
+        <member name="M:Budget.HomeBudget.GetBudgetItemsByMonth(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Boolean,System.Int32)">
+             <summary>
+             Get a list of BudgetItemsByMonth, filtered by date, and possibly by category.
+             <para>Each <c>BudgetItemsByMonth</c> include total expenditures for that month, and a 
+             list of individual expenses for that month.</para>
+             </summary>
+             <remarks>
+             <para>Results are ordered by Month</para>
+             <para>If Start and End date are null, then they will be set to their defaults</para>
+             see <see cref="T:Budget.BudgetItemsByMonth"/></remarks>
+             <seealso cref="M:Budget.HomeBudget.GetBudgetItemsByCategory(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Boolean,System.Int32)"/>
+             <seealso cref="!:GetBudgetItems>"/>
+             <seealso cref="!:GetBudgetDictionaryByCategoryAndMonth>"/>
+             <exception cref="T:System.Data.SQLite.SQLiteException">If the SQLite file
+             is corrupted in any way</exception>
+             <param name="Start">Only expenses that were incurred after or on this date will be processed
+             <para>default: <c>Jan 1, 1900</c></para></param>
+             <param name="End">Only expenses that were incurred before or on this date will be processed
+             <para>default: <c>Jan 1, 2500</c></para></param>
+             <param name="FilterFlag">If set, only expenses with <c>CategoryId</c> will be processed</param>
+             <param name="CategoryID">If <c>FilterFlag</c> is set, only expenses with this category ID will be processed</param>
+             <returns>A collection of BudgetItemsByMonth objects</returns>
+             <example>
+             <code>
+                    var myBudget = new HomeBudget("existingDB.db");
+                    var report = myBudget.GetBudgetItemsByMonth(
+                        null,                // start date, is null so use default (Jan 1, 1900) 
+                        null,                // end date, is null so use default (Jan 1, 2025)
+                        false,               // I do NOT want to filter results on category Id?
+                        9                    // unused category id
+                        );
+                              
+                        foreach (var monthlyItem in report)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine(
+                                $"Month: {monthlyItem.Month}, Total: {monthlyItem.Total}");
+            
+                            foreach (var individualItem in monthlyItem.Details)
+                            {
+                                Console.WriteLine(
+                                    $"{individualItem.Date}     " +
+                                    $"{individualItem.Amount},\t" +
+                                    $"{individualItem.ShortDescription}");
+                            }
+                        }
+             
+             </code>
+             </example>
+        </member>
+        <member name="M:Budget.HomeBudget.GetBudgetItemsByCategory(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Boolean,System.Int32)">
+             <summary>
+             Get a list of BudgetItemsByCategory, filtered by date, and possibly by category.
+             <para>Each <c>BudgetItemsByCategory</c> include total expenditures for that category, and a 
+             list of individual expenses for that category.</para>
+             </summary>
+             <remarks>
+             <para>Results are ordered by Category Description</para>
+             <para>If Start and End date are null, then they will be set to their defaults</para>
+             see <see cref="T:Budget.BudgetItemsByCategory"/></remarks>
+             <seealso cref="M:Budget.HomeBudget.GetBudgetItemsByMonth(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Boolean,System.Int32)"/>
+             <seealso cref="!:GetBudgetItems>"/>
+             <seealso cref="!:GetBudgetDictionaryByCategoryAndMonth>"/>
+             <exception cref="T:System.Data.SQLite.SQLiteException">If the SQLite file
+             is corrupted in any way</exception>
+             <param name="Start">Only expenses that were incurred after or on this date will be processed
+             <para>default: <c>Jan 1, 1900</c></para></param>
+             <param name="End">Only expenses that were incurred before or on this date will be processed
+             <para>default: <c>Jan 1, 2500</c></para></param>
+             <param name="FilterFlag">If set, only expenses with <c>CategoryId</c> will be processed</param>
+             <param name="CategoryID">If <c>FilterFlag</c> is set, only expenses with this category ID will be processed</param>
+             <returns>A collection of BudgetItemsByCategory objects</returns>
+             <example>
+             <code>
+                    var myBudget = new HomeBudget("existingDB.db");
+                    var report = myBudget.GetBudgetItemsByCategory(
+                        null,                // start date, is null so use default (Jan 1, 1900) 
+                        null,                // end date, is null so use default (Jan 1, 2025)
+                        false,               // I do NOT want to filter results on category Id?
+                        9                    // unused category id
+                        );
+                              
+                        foreach (var categoryItem in report)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine(
+                                $"{categoryItem.Category}, Total: {categoryItem.Total}");
+            
+                            foreach (var individualItem in categoryItem.Details)
+                            {
+                                Console.WriteLine(
+                                    $"{individualItem.Date}     " +
+                                    $"{individualItem.Amount},\t" +
+                                    $"{individualItem.ShortDescription}");
+                            }
+                        }
+             
+             </code>
+             </example>
+        </member>
+        <member name="M:Budget.HomeBudget.GetBudgetDictionaryByCategoryAndMonth(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Boolean,System.Int32)">
+             <summary>
+             Get a list of Dictionaries with information about the total expenses
+             for a given month and category, in addition to the totals for a given month, and
+             the totals for a given category.
+             
+             <para>Each item in the returned list is a Dictionary
+             (list of string/object pairs), where the string/objects are:</para>
+             <list type="table">
+             <item><term><b>KEY</b></term><description><b>VALUE</b></description></item>
+             <item>
+             <term>Month</term>
+             <description>A string representing the month</description>
+             </item>
+             <item>
+             <term><i>Category Name 1</i></term>
+             <description>A double representing the total expenditures for this month and category</description>
+             </item>
+             <item>
+             <term>details:<i>Category Name 1</i></term>
+             <description>A list of <c>BudgetItems</c> for this month and category</description>
+             </item>
+             <item>
+             <term><i>Category Name 2</i></term>
+             <description>A double representing the total expenditures for this month and category</description>
+             </item>
+             <item>
+             <term>details:<i>Category Name 2</i></term>
+             <description>A list of <c>BudgetItems</c> for this month and category</description>
+             </item>
+             <item>
+             <term><i>...</i></term>
+             <description> </description>
+             </item>
+             <item>
+             <term><i>Category Name n</i></term>
+             <description>A double representing the total expenditures for this month and category</description>
+             </item>
+             <item>
+             <term>details:<i>Category Name n</i></term>
+             <description>A list of <c>BudgetItems</c> for this month and category</description>
+             </item>
+             <item>
+             <term>Total</term>
+             <description>A double representing the total expenditures for this month</description>
+             </item>
+             </list>
+             
+             <para>The <b>last</b> item in the returned list is a Dictionary
+             (list of string/object pairs), where the string/objects are:</para>
+             <list type="table">
+             <item><term><b>KEY</b></term><description><b>VALUE</b></description></item>
+             <item>
+             <term>Month</term>
+             <description>the string 'TOTALS'</description>
+             </item>
+             <item>
+             <term><i>Category Name 1</i></term>
+             <description>A double representing the total expenditures for this category</description>
+             </item>
+             <item>
+             <term><i>Category Name 2</i></term>
+             <description>A double representing the total expenditures for this category</description>
+             </item>
+             <item>
+             <term><i>...</i></term>
+             <description>...</description>
+             </item>
+             <item>
+             <term><i>Category Name n</i></term>
+             <description>A double representing the total expenditures for this category</description>
+             </item>
+             </list>
+             
+             </summary>
+             
+             <remarks>
+             <para>If Start and End date are null, then they will be set to their defaults</para>
+             </remarks>
+             
+             <seealso cref="M:Budget.HomeBudget.GetBudgetItemsByMonth(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Boolean,System.Int32)"/>
+             <seealso cref="!:GetBudgetItems>"/>
+             <seealso cref="!:GetBudgetItemsByCategory>"/>
+             
+             <exception cref="T:System.Data.SQLite.SQLiteException">If the SQLite file
+             is corrupted in any way</exception>
+             
+             <param name="Start">Only expenses that were incurred after or on this date will be processed
+             <para>default: <c>Jan 1, 1900</c></para></param>
+             <param name="End">Only expenses that were incurred before or on this date will be processed
+             <para>default: <c>Jan 1, 2500</c></para></param>
+             <param name="FilterFlag">If set, only expenses with <c>CategoryId</c> will be processed</param>
+             <param name="CategoryID">If <c>FilterFlag</c> is set, only expenses with this category ID will be processed</param>
+             
+             
+             <example>
+             <code>
+             <![CDATA[
+                // open an existing budget
+                var myBudget = new HomeBudget("existingDB.db");
+            
+                // Get a report of my expenses by month
+                int categoryID = 0;
+                var report = myBudget.GetBudgetDictionaryByCategoryAndMonth(
+                    null, null, false,0);
+            
+                if (report.Count < 1) return;
+            
+                // Print the report
+                var totals = report[report.Count - 1];
+                String horizontal_line = new string('-', totals.Count * 15 + 20);
+                Console.WriteLine(horizontal_line);
+            
+                Console.Write(String.Format("{0,-10} |","Month"));
+                foreach (var category in myBudget.categories.List())
+                {
+                    var descr = category.Description;
+                    if (totals.ContainsKey(descr))
+                    {
+                        Console.Write(String.Format("{0,15} |", 
+                            descr.Substring(0, Math.Min(12, descr.Length))));
+                    }
+                }
+                Console.WriteLine(String.Format("{0,10}", "TOTAL"));
+                Console.WriteLine(horizontal_line);
+            
+                int counter = 0;
+                foreach (var monthDictionary in report)
+                {
+                    counter++;
+                    if (counter == report.Count ) Console.WriteLine(horizontal_line);
+            
+                    Console.Write(String.Format("{0,-10} |", monthDictionary["Month"] ));
+                    foreach (var category in myBudget.categories.List())
+                    {
+                        var descr = category.Description;
+                        if (totals.ContainsKey(descr))
+                        {
+                            string amount = new string(' ', 15);
+                            if (monthDictionary.ContainsKey(descr))
+                                amount = String.Format("{0,15:C}", monthDictionary[descr]);
+                            Console.Write($"{amount} |");
+                        }
+                    }
+                    if (monthDictionary.ContainsKey("Total"))
+                    {
+                        Console.WriteLine(String.Format("{0,15:C}", monthDictionary["Total"]));
+                    }
+                    else
+                    {
+                        Console.WriteLine();
+                    }
+                }
+                Console.WriteLine(horizontal_line);
+                Console.WriteLine();
+            
+             ]]>
+             </code>
+             </example>
+             
+             <returns>A collection of Dictionaries</returns>
+        </member>
+    </members>
+</doc>
