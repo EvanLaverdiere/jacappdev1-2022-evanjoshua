@@ -117,7 +117,7 @@ namespace EnterpriseBudget.Model
                     jobId = rdr.GetInt32(3);
                     string jobTitle = rdr.GetString(4);
 
-                    person = new Employee();
+                    person = new Employee(name, deptId, deptName, (JobTypes)jobId, jobTitle);
                 }
 
 
@@ -138,14 +138,14 @@ namespace EnterpriseBudget.Model
 
         }
 
-        private Employee(string userName, string password, int departmentId, JobTypes jobId)
+        private Employee(string userName, int departmentId, string departmentName, JobTypes jobId, string jobName)
         {
             _userName = userName;
             _deptId = departmentId;
             _jobType = jobId;
             // To be filled
-            _jobName = "";
-            _departmentName = "";
+            _jobName = jobName;
+            _departmentName = departmentName;
         }
 
     }
