@@ -98,23 +98,15 @@ namespace EnterpriseBudget.Model
 
                 rdr = verifyUser.ExecuteReader();
 
-                int id, deptId, jobId;
-                string name, pass;
 
                 if (rdr.HasRows)
                 {
                     rdr.Read();
 
-                    //id = rdr.GetInt32(0);
-                    //name = rdr.GetString(1);
-                    //pass = rdr.GetString(2);
-                    //deptId = rdr.GetInt32(3);
-                    //jobId = rdr.GetInt32(4);
-
-                    name = rdr.GetString(0);
-                    deptId = rdr.GetInt32(1);
+                    string name = rdr.GetString(0);
+                    int deptId = rdr.GetInt32(1);
                     string deptName = rdr.GetString(2);
-                    jobId = rdr.GetInt32(3);
+                    int jobId = rdr.GetInt32(3);
                     string jobTitle = rdr.GetString(4);
 
                     person = new Employee(name, deptId, deptName, (JobTypes)jobId, jobTitle);
