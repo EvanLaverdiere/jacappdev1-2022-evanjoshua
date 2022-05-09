@@ -83,8 +83,15 @@ namespace EnterpriseBudget.Model
             {
                 SqlCommand verifyUser = Connection.cnn.CreateCommand();
 
+                string sql = "SELECT e.name, e.departmentId, d.name, e.jobId, j.name FROM Employees e " +
+                    "INNER JOIN departments d ON e.departmentId = d.id " +
+                    "INNER JOIN jobTitles j ON e.jobId = j.id " +
+                    "WHERE e.name=@name " +
+                    "AND e.password=@password";
+
                 // TODO: FIX THIS 
-                verifyUser.CommandText = "SELECT id, name, password, departmentId, jobId FROM Employees WHERE name = @name AND password = @password";
+                verifyUser.CommandText = sql;
+
                 verifyUser.Parameters.AddWithValue("@name", username);
                 verifyUser.Parameters.AddWithValue("@password", password);
 
@@ -129,6 +136,9 @@ namespace EnterpriseBudget.Model
             _userName = userName;
             _deptId = departmentId;
             _jobType = jobId;
+            // To be filled
+            _jobName = "";
+            _departmentName = "";
         }
 
     }
