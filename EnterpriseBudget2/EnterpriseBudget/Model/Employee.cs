@@ -83,8 +83,15 @@ namespace EnterpriseBudget.Model
             {
                 SqlCommand verifyUser = Connection.cnn.CreateCommand();
 
+                //string sql = 
+
                 // TODO: FIX THIS 
-                verifyUser.CommandText = "SELECT id, name, password, departmentId, jobId FROM Employees WHERE name = @name AND password = @password";
+                verifyUser.CommandText = "SELECT e.name, e.departmentId, d.name, e.jobId, j.name FROM employees e " +
+                    "INNER JOIN departments d ON e.departmentId = d.id " +
+                    "INNER JOIN jobTitles j ON e.jobId = j.id " +
+                    "WHERE e.name=@name " +
+                    "AND e.password=@password";
+
                 verifyUser.Parameters.AddWithValue("@name", username);
                 verifyUser.Parameters.AddWithValue("@password", password);
 
@@ -97,11 +104,17 @@ namespace EnterpriseBudget.Model
                 {
                     rdr.Read();
 
-                    id = rdr.GetInt32(0);
-                    name = rdr.GetString(1);
-                    pass = rdr.GetString(2);
-                    deptId = rdr.GetInt32(3);
-                    jobId = rdr.GetInt32(4);
+                    //id = rdr.GetInt32(0);
+                    //name = rdr.GetString(1);
+                    //pass = rdr.GetString(2);
+                    //deptId = rdr.GetInt32(3);
+                    //jobId = rdr.GetInt32(4);
+
+                    name = rdr.GetString(0);
+                    deptId = rdr.GetInt32(1);
+                    string deptName = rdr.GetString(2);
+                    jobId = rdr.GetInt32(3);
+                    string jobTitle = rdr.GetString(4);
 
                     person = new Employee();
                 }
@@ -129,6 +142,9 @@ namespace EnterpriseBudget.Model
             _userName = userName;
             _deptId = departmentId;
             _jobType = jobId;
+            // To be filled
+            _jobName = "";
+            _departmentName = "";
         }
 
     }
