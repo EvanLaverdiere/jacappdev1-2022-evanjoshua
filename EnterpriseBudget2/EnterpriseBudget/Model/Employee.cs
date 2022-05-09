@@ -84,16 +84,29 @@ namespace EnterpriseBudget.Model
                 SqlCommand verifyUser = Connection.cnn.CreateCommand();
 
                 // TODO: FIX THIS 
-                verifyUser.CommandText = "SELECT * FROM Employees WHERE name = @name AND password = @password";
+                verifyUser.CommandText = "SELECT id, name, password, departmentId, jobId FROM Employees WHERE name = @name AND password = @password";
                 verifyUser.Parameters.AddWithValue("@name", username);
                 verifyUser.Parameters.AddWithValue("@password", password);
 
                 rdr = verifyUser.ExecuteReader();
 
-                while (rdr.HasRows)
+                int id, deptId, jobId;
+                string name, pass;
+
+                if (rdr.HasRows)
                 {
-                    
+                    rdr.Read();
+
+                    id = rdr.GetInt32(0);
+                    name = rdr.GetString(1);
+                    pass = rdr.GetString(2);
+                    deptId = rdr.GetInt32(3);
+                    jobId = rdr.GetInt32(4);
+
+                    person = new Employee();
                 }
+
+
 
             }
             catch (Exception e) {
@@ -109,6 +122,13 @@ namespace EnterpriseBudget.Model
         private Employee()
         {
 
+        }
+
+        private Employee(string userName, string password, int departmentId, JobTypes jobId)
+        {
+            _userName = userName;
+            _deptId = departmentId;
+            _jobType = jobId;
         }
 
     }
