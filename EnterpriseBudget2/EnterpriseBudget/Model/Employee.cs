@@ -86,10 +86,11 @@ namespace EnterpriseBudget.Model
                 //string sql = 
 
                 // TODO: FIX THIS 
-                verifyUser.CommandText = "SELECT e.name, e.departmentId, d.name, e.jobId, j.name FROM employees e " +
-                    "INNER JOIN departments d ON e.departmentId = d.id " +
-                    "INNER JOIN jobTitles j ON e.jobId = j.id " +
-                    "WHERE e.name=@name " +
+                verifyUser.CommandText = "SELECT e.name, e.departmentId, d.name, e.jobId, j.name " +
+                    "FROM employees e, departments d, jobTitles j " +
+                    "WHERE e.departmentId = d.id " +
+                    "AND e.jobId = j.id " +
+                    "AND e.name=@name " +
                     "AND e.password=@password";
 
                 verifyUser.Parameters.AddWithValue("@name", username);
