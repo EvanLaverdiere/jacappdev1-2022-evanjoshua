@@ -84,6 +84,16 @@ namespace EnterpriseBudget.Model
                 SqlCommand verifyUser = Connection.cnn.CreateCommand();
 
                 // TODO: FIX THIS 
+                verifyUser.CommandText = "SELECT * FROM Employees WHERE name = @name AND password = @password";
+                verifyUser.Parameters.AddWithValue("@name", username);
+                verifyUser.Parameters.AddWithValue("@password", password);
+
+                rdr = verifyUser.ExecuteReader();
+
+                while (rdr.HasRows)
+                {
+                    
+                }
 
             }
             catch (Exception e) {
