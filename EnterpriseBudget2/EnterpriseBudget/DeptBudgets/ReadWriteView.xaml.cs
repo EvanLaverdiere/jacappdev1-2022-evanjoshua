@@ -68,7 +68,13 @@ namespace EnterpriseBudget.DeptBudgets
             {
                 if (presenter.LoadData())
                 {
-                    txtWait.Text = "Successfully created home budget... now YOU have to do the rest :)";
+                    // Hide the loading message
+                    txtWait.Visibility = Visibility.Collapsed;
+
+                    // Check the type of user this is and display the appropriate view
+
+                    // Display the budget page
+
                 }
                 else
                 {

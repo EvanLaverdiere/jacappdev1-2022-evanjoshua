@@ -43,6 +43,9 @@
     <Reference Include="Budget">
       <HintPath>dlls\Budget.dll</HintPath>
     </Reference>
+    <Reference Include="DotNetProjects.DataVisualization.Toolkit, Version=6.1.94.0, Culture=neutral, PublicKeyToken=79778c5f2eed289b, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetProjects.WpfToolkit.DataVisualization.6.1.94\lib\net40\DotNetProjects.DataVisualization.Toolkit.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -79,6 +82,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ChairpersonControl\View.xaml.cs">
+      <DependentUpon>View.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ManageAllBudgets\InterfaceView.cs" />
     <Compile Include="ManageAllBudgets\Presenter.cs" />
     <Compile Include="ManageAllBudgets\View.xaml.cs">
@@ -102,6 +108,10 @@
     <Compile Include="Connection\View.xaml.cs">
       <DependentUpon>View.xaml</DependentUpon>
     </Compile>
+    <Page Include="ChairpersonControl\View.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ManageAllBudgets\View.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
