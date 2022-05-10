@@ -82,6 +82,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ChairpersonControl\IDisplayable.cs" />
+    <Compile Include="ChairpersonControl\Presenter.cs" />
     <Compile Include="ChairpersonControl\View.xaml.cs">
       <DependentUpon>View.xaml</DependentUpon>
     </Compile>
