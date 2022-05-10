@@ -135,7 +135,6 @@ namespace EnterpriseBudget.Model
             _userName = userName;
             _deptId = departmentId;
             _jobType = jobId;
-            // To be filled
             _jobName = jobName;
             _departmentName = departmentName;
         }
