@@ -15,18 +15,19 @@ namespace EnterpriseBudget.DeptBudgets
         Model.DepartmentBudgets budget;
         InterfaceView view;
         int deptId;
-        
+        public Model.DepartmentBudgets Budget { get { return budget; } }
+
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="_view">View associated with this presenter</param>
         /// <param name="deptId">This presenter is for a specific department</param>
-        public Presenter(InterfaceView _view,int deptId)
+        public Presenter(InterfaceView _view, int deptId)
         {
             view = _view;
             this.deptId = deptId;
         }
-        
+
         /// <summary>
         /// Get the data from the database, etc
         /// </summary>

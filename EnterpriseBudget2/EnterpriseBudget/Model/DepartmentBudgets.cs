@@ -26,7 +26,7 @@ namespace EnterpriseBudget.Model
         private String appName = "EnterpriseBudget";
         private String sPath;
         private HomeBudget homeBudget;
-
+        public String Path { get { return $"{sPath}\\{appName}\\{sqliteFileName}"; } }
         /// <summary>
         /// Constructor
         /// </summary>
@@ -52,11 +52,12 @@ namespace EnterpriseBudget.Model
         /// </summary>
         /// <param name="departmentID">The ID of the department whose budget we want to open</param>
         /// <returns>true if successful, false otherwise</returns>
-        public bool DownLoadAndOpenDepartmentBudgetFile( int departmentID) 
+        public bool DownLoadAndOpenDepartmentBudgetFile(int departmentID)
         {
-            try {
+            try
+            {
                 var path = $"{sPath}\\{appName}\\{sqliteFileName}";
-                ReadAndSaveBlobFromSQLServer(Connection.cnn, "deptBudgets", "sqlitefile", $"deptId={departmentID}",path);
+                ReadAndSaveBlobFromSQLServer(Connection.cnn, "deptBudgets", "sqlitefile", $"deptId={departmentID}", path);
                 homeBudget = new HomeBudget(path, false);
                 return true;
             }

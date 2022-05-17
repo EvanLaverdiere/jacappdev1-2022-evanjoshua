@@ -19,6 +19,8 @@ namespace EnterpriseBudget.DeptBudgets
     /// </summary>
     public partial class ReadWriteView : Window, InterfaceView
     {
+        public static Model.Employee Employee { get; set; }
+
         /// <summary>
         /// presenter for the DeptBudgets.ReadWriteView
         /// </summary>
@@ -32,8 +34,9 @@ namespace EnterpriseBudget.DeptBudgets
         /// <summary>
         /// Standard Windows constructor
         /// </summary>
-        public ReadWriteView()
+        public ReadWriteView(Model.Employee employee)
         {
+            Employee = employee;
             InitializeComponent();
         }
 
@@ -73,7 +76,6 @@ namespace EnterpriseBudget.DeptBudgets
 
                     // Display the budget page for the chairperson
                     theChairpersonView.Visibility = Visibility.Visible;
-
                 }
                 else
                 {

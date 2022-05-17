@@ -14,34 +14,43 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Budget;
 using System.Windows.Controls.DataVisualization.Charting;
+using EnterpriseBudget.DeptBudgets;
+using EnterpriseBudget.Model;
 
 namespace EnterpriseBudget.ChairpersonControl
 {
     /// <summary>
     /// Interaction logic for View.xaml
     /// </summary>
-    public partial class View : UserControl, IDisplayable
+    public partial class View : UserControl, IDisplayable, InterfaceView
     {
-        private Presenter presenter;    // The presenter object of the application
-
-        private List<object> _dataSource;
+        private Presenter presenter;            // The presenter object of the application
+        private DeptBudgets.Presenter enterprisePresenter;  // The enterprise database presenter
+        private List<object> _dataSource;       // List of budget items
         public enum ChartType
         {
             Standard,
             ByCategory,
             ByMonth,
             ByMonthAndCategory
-        }
-        public ChartType chartType = ChartType.Standard;
-        private List<string> Categories;
+        }                //  Enumeration of the possible chart types
+        public ChartType chartType = ChartType.Standard; // The current type of chart selected
+        private List<string> Categories;        // List of categories
 
         public View()
         {
             InitializeComponent();
-
             presenter = new Presenter(this, this);
 
-            //presenter.CreateBudget(entryWindow.dbLocation, entryWindow.IsNewDatabase);
+            // Get the current user of the app
+            var user = DeptBudgets.ReadWriteView.Employee;
+
+            // Create an enterprise presenter
+            enterprisePresenter = new DeptBudgets.Presenter(this, user.deptartmentID);
+            // Get the file location for the db file
+            String dbPath = enterprisePresenter.Budget.Path;
+            // Create a budget presenter
+            presenter.CreateBudget(dbPath, false);
 
             //UpdateView();
 
@@ -127,6 +136,9 @@ namespace EnterpriseBudget.ChairpersonControl
                 if (chartType == ChartType.ByMonth) drawByMonthLineChart();
             }
         }
+
+        DeptBudgets.Presenter InterfaceView.presenter { get => enterprisePresenter; set => enterprisePresenter = value; }
+        public MainControl.InterfaceView mainControl { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         // clear the current data
         public void DataClear()
@@ -504,5 +516,9 @@ namespace EnterpriseBudget.ChairpersonControl
             DataSource = budgetItems;
         }
 
+        public void TidyUpAndClose()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
