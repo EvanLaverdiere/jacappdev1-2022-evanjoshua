@@ -15,7 +15,6 @@ using System.Windows.Shapes;
 using Budget;
 using System.Windows.Controls.DataVisualization.Charting;
 using EnterpriseBudget.DeptBudgets;
-using EnterpriseBudget.Model;
 
 namespace EnterpriseBudget.ChairpersonControl
 {
@@ -52,31 +51,12 @@ namespace EnterpriseBudget.ChairpersonControl
             // Create a budget presenter
             presenter.CreateBudget(dbPath, false);
 
-            //UpdateView();
+            UpdateView();
 
-            //cmb_Categories.ItemsSource = presenter.GetCategories();
+            cmb_Categories.ItemsSource = presenter.GetCategories();
 
-            //Closing += confirmClose;
-
-            //txtStatusBar.Text = entryWindow.dbLocation;
+            txtStatusBar.Text = dbPath;
         }
-
-
-        /// <summary>
-        /// Requests confirmation from the user to close the application.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="cancelEventArgs"></param>
-        //private void confirmClose(object sender, CancelEventArgs cancelEventArgs)
-        //{
-        //    if (presenter.Modified())
-        //    {
-        //        if (MessageBox.Show(this, "Are you sure you want to close the application?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
-        //        {
-        //            cancelEventArgs.Cancel = true;
-        //        }
-        //    }
-        //}
 
         /// <summary>
         /// Creates and opens a new window for adding expenses to the budget.
@@ -85,11 +65,11 @@ namespace EnterpriseBudget.ChairpersonControl
         /// <param name="e"></param>
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            //AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
-            //expenseWindow.ShowDialog();
-            //// The presenter should update the view after an expense is added.
-            ////presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
-            //UpdateView();
+            AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
+            expenseWindow.ShowDialog();
+            // The presenter should update the view after an expense is added.
+            //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
+            UpdateView();
         }
 
         /// <summary>
