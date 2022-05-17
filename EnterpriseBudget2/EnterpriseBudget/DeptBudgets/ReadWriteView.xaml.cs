@@ -71,10 +71,7 @@ namespace EnterpriseBudget.DeptBudgets
                     // Hide the loading message
                     txtWait.Visibility = Visibility.Collapsed;
 
-                    // Check the type of user this is and display the administrator view or the chairperson view
-
                     // Display the budget page for the chairperson
-                    txtWait.Visibility = Visibility.Collapsed;
                     theChairpersonView.Visibility = Visibility.Visible;
 
                 }
