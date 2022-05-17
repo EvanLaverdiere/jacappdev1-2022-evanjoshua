@@ -11,7 +11,8 @@ namespace EnterpriseBudget.ChairpersonControl
     {
         private IDisplayable viewable, displayable;
         private HomeBudget budget;
-
+        private bool modified = false;
+        private int selectCount = 0;
 
         public Presenter(IDisplayable view, IDisplayable display)
         {
@@ -114,6 +115,202 @@ namespace EnterpriseBudget.ChairpersonControl
             // If no messages were appended, everything is good. Return true.
             return true;
         }
-    }
 
+        /// <summary>
+        /// Retrieves a list of category types for classifying expenses.
+        /// </summary>
+        /// <returns>The list of category types.</returns>
+        public List<string> GetCategoryTypes()
+        {
+            List<string> categoryTypes = new List<string>();
+
+            foreach (string type in Enum.GetNames(typeof(Category.CategoryType)))
+            {
+                categoryTypes.Add(type);
+            }
+
+            return categoryTypes;
+        }
+
+
+        public bool Modified()
+        {
+            return modified;
+        }
+
+        /// <summary>
+        /// Retrieves a list of <see cref="BudgetItem"/>s from the HomeBudget and tells the View to display said list.
+        /// </summary>
+        /// <remarks>
+        /// The list can be filtered to display budget items from within a specific time frame,
+        /// budget items belonging to a specific category, or both.
+        /// </remarks>
+        /// <param name="start">The beginning of the desired time frame. Can be null.</param>
+        /// <param name="end">The end of the desired time frame. Can be null.</param>
+        /// <param name="filterFlag">True if the results are to be filtered by category, false otherwise.</param>
+        /// <param name="categoryId">The ID of the desired category.</param>
+        public void GetBudgetItems(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
+        {
+            List<BudgetItem> budgetItems = budget.GetBudgetItems(start, end, filterFlag, categoryId);
+            string displayType = displayable.GetDisplayType();
+            if (displayType == "Pie Chart")
+            {
+                displayable.DisplayToChart(budgetItems.Cast<object>().ToList());
+            }
+            else
+            {
+                displayable.DisplayToGrid(budgetItems);
+            }
+        }
+
+        /// <summary>
+        /// Retrieves a list of <see cref="Budget.BudgetItemsByMonth"/> and tells the view to display said list.
+        /// </summary>
+        /// <remarks>
+        /// The list can be filtered to display BudgetItemsByMonth from within a specific time frame,
+        /// BudgetItemsByMonth belonging to a specific category, or both.
+        /// </remarks>
+        /// <param name="start">The beginning of the desired time frame. Can be null.</param>
+        /// <param name="end">The end of the desired time frame. Can be null.</param>
+        /// <param name="filterFlag">True if the results are to be filtered by category, false otherwise.</param>
+        /// <param name="categoryId">The ID of the desired category.</param>
+        public void GetBudgetItemsByMonth(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
+        {
+            List<BudgetItemsByMonth> budgetItems = budget.GetBudgetItemsByMonth(start, end, filterFlag, categoryId);
+            string displayType = displayable.GetDisplayType();
+            if (displayType == "Pie Chart")
+            {
+                displayable.DisplayToChart(budgetItems.Cast<object>().ToList());
+            }
+            else
+            {
+                displayable.DisplayToGrid(budgetItems);
+            }
+        }
+
+        /// <summary>
+        /// Retrieves a list of <see cref="Budget.BudgetItemsByCategory"/> and tells the view to display said list.
+        /// </summary>
+        /// <remarks>
+        /// The list can be filtered to display BudgetItemsByCategory from within a specific time frame,
+        /// BudgetItemsByCategory belonging to a specific category, or both.
+        /// </remarks>
+        /// <param name="start">The beginning of the desired time frame. Can be null.</param>
+        /// <param name="end">The end of the desired time frame. Can be null.</param>
+        /// <param name="filterFlag">True if the results are to be filtered by category, false otherwise.</param>
+        /// <param name="categoryId">The ID of the desired category.</param>
+        public void GetBudgetItemsByCategory(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
+        {
+            List<BudgetItemsByCategory> budgetItems = budget.GetBudgetItemsByCategory(start, end, filterFlag, categoryId);
+            string displayType = displayable.GetDisplayType();
+            if (displayType == "Pie Chart")
+            {
+                displayable.DisplayToChart(budgetItems.Cast<object>().ToList());
+            }
+            else
+            {
+                displayable.DisplayToGrid(budgetItems);
+            }
+        }
+
+        /// <summary>
+        /// Retrieves a list of dictionaries representing a breakdown of the budget by category and month, and tells the view to display said list.
+        /// </summary>
+        /// <remarks>
+        /// The list can be filtered to display budget dictionaries belonging to a specific time frame,
+        /// budget dictionaries belonging to a specific category, or both.
+        /// </remarks>
+        /// <param name="start">The beginning of the desired time frame. Can be null.</param>
+        /// <param name="end">The end of the desired time frame. Can be null.</param>
+        /// <param name="filterFlag">True if the results are to be filtered by category, false otherwise.</param>
+        /// <param name="categoryId">The ID of the desired category.</param>
+        public void GetBudgetDictionaryByCategoryAndMonth(DateTime? start, DateTime? end, bool filterFlag, int categoryId)
+        {
+            List<Dictionary<string, object>> budgetItems = budget.GetBudgetDictionaryByCategoryAndMonth(start, end, filterFlag, categoryId);
+            string displayType = displayable.GetDisplayType();
+            if (displayType == "Pie Chart")
+            {
+                List<Category> categories = GetCategories();
+                List<string> categoryNames = new List<string>();
+                foreach (Category category in categories)
+                {
+                    categoryNames.Add(category.Description);
+                }
+                displayable.InitializeByCategoryAndMonthDisplay(categoryNames);
+                displayable.DisplayToChart(budgetItems.Cast<object>().ToList());
+            }
+            else if (displayable.isOrderedByMonthAndCategory())
+            {
+                displayable.DisplayToGrid(budgetItems);
+            }
+
+
+        }
+
+        /// <summary>
+        /// Updates the View's display with a list of budget items.
+        /// </summary>
+        /// <remarks>
+        /// Does so in one of four ways, based on the combination of the values of the boolean parameters "orderByCategory" and "orderByMonth".
+        /// 
+        /// Other parameters are used to filter the list of budget items by time frame, by category, or both.
+        /// </remarks>
+        /// <param name="start">The beginning of the desired time frame. Can be null.</param>
+        /// <param name="end">The end of the desired time frame. Can be null.</param>
+        /// <param name="filterFlag">True if the results are to be filtered by category, false otherwise.</param>
+        /// <param name="categoryId">The ID of the desired category.</param>
+        /// <param name="orderByCategory">True if the budget is to be summarized by Category, false otherwise.</param>
+        /// <param name="orderByMonth">True if the budget is to be summarized by Month, false otherwise.</param>
+        public void UpdateDisplay(DateTime? start, DateTime? end, bool filterFlag, int categoryId, bool orderByCategory, bool orderByMonth)
+        {
+            // If both variables are true, send back a list of Budget dictionaries by Category and Month.
+            if (orderByCategory && orderByMonth)
+                GetBudgetDictionaryByCategoryAndMonth(start, end, filterFlag, categoryId);
+
+            // If only orderByCategory is true, send back a list of BudgetItemsByCategory.
+            else if (orderByCategory && !orderByMonth)
+                GetBudgetItemsByCategory(start, end, filterFlag, categoryId);
+
+            // If only orderByMonth is true, send back a list of BudgetItemsByMonth.
+            else if (!orderByCategory && orderByMonth)
+                GetBudgetItemsByMonth(start, end, filterFlag, categoryId);
+
+            // If both variables are false, send back a list of regular BudgetItems.
+            else
+                GetBudgetItems(start, end, filterFlag, categoryId);
+        }
+
+        public void Search(string text, List<int> indexes, List<string> items, List<string> amounts)
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (items[i].Contains(text))
+                {
+                    indexes.Add(i);
+                }
+                else if (amounts[i].Contains(text))
+                {
+                    indexes.Add(i);
+                }
+            }
+
+            if (selectCount == indexes.Count)
+            {
+                selectCount = 0;
+            }
+
+            if (indexes.Count == 0)
+            {
+                viewable.ShowError("No matching items were found");
+            }
+            else if (indexes.Count == 1)
+            {
+                viewable.Select(indexes[0]);
+            }
+            else
+            {
+                viewable.Select(indexes[selectCount++]);
+            }
+        }
+    }
 }

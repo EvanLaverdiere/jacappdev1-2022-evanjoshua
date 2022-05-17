@@ -78,7 +78,6 @@ namespace EnterpriseBudget.ChairpersonControl
         /// <param name="error">The error encountered.</param>
         public void ShowError(string error)
         {
-            //throw new NotImplementedException();
             MessageBox.Show(error, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
@@ -98,7 +97,6 @@ namespace EnterpriseBudget.ChairpersonControl
 
         public void ShowSuccess(string message)
         {
-            //throw new NotImplementedException();
             MessageBox.Show(message, "SUCCESS", MessageBoxButton.OK);
         }
 
@@ -239,18 +237,18 @@ namespace EnterpriseBudget.ChairpersonControl
         /// </summary>
         private void UpdateView()
         {
-            //// These variables have fixed values at the moment because the UI elements needed to set them have not been implemented yet.
-            //DateTime? start = startDate.SelectedDate; // Specified by a DatePicker.
-            //DateTime? end = endDate.SelectedDate;   // Specified by a second DatePicker.
-            //bool filterFlag = (bool)chk_FilterCategories.IsChecked;    // Specified by a checkbox, or by picking a value from the list of categories?
-            //int categoryId = cmb_Categories.SelectedIndex + 1;     // Specified by a drop-down list of categories. Offset is necessary, as indices start from 0 while the Category IDs start from 1.
+            // These variables have fixed values at the moment because the UI elements needed to set them have not been implemented yet.
+            DateTime? start = startDate.SelectedDate; // Specified by a DatePicker.
+            DateTime? end = endDate.SelectedDate;   // Specified by a second DatePicker.
+            bool filterFlag = (bool)chk_FilterCategories.IsChecked;    // Specified by a checkbox, or by picking a value from the list of categories?
+            int categoryId = cmb_Categories.SelectedIndex + 1;     // Specified by a drop-down list of categories. Offset is necessary, as indices start from 0 while the Category IDs start from 1.
 
-            //bool orderByCategory = (bool)chk_OrderByCategory.IsChecked;
-            //bool orderByMonth = (bool)chk_OrderByMonth.IsChecked;
+            bool orderByCategory = (bool)chk_OrderByCategory.IsChecked;
+            bool orderByMonth = (bool)chk_OrderByMonth.IsChecked;
 
-            //ToggleMenuItems();
+            ToggleMenuItems();
 
-            //presenter.UpdateDisplay(start, end, filterFlag, categoryId, orderByCategory, orderByMonth);
+            presenter.UpdateDisplay(start, end, filterFlag, categoryId, orderByCategory, orderByMonth);
         }
 
         /// <summary>
@@ -337,22 +335,22 @@ namespace EnterpriseBudget.ChairpersonControl
 
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
-            //string text = searchBox.Text;
-            //List<int> indexes = new List<int>();
-            //List<string> items = new List<string>();
-            //List<string> amounts = new List<string>();
+            string text = searchBox.Text;
+            List<int> indexes = new List<int>();
+            List<string> items = new List<string>();
+            List<string> amounts = new List<string>();
 
-            //if (!mainDisplayGrid.Items.IsEmpty)
-            //{
-            //    for (int i = 0; i < mainDisplayGrid.Items.Count; i++)
-            //    {
-            //        BudgetItem item = mainDisplayGrid.Items[i] as BudgetItem;
-            //        items.Add(item.ShortDescription);
-            //        amounts.Add(item.Amount.ToString());
-            //    }
+            if (!mainDisplayGrid.Items.IsEmpty)
+            {
+                for (int i = 0; i < mainDisplayGrid.Items.Count; i++)
+                {
+                    BudgetItem item = mainDisplayGrid.Items[i] as BudgetItem;
+                    items.Add(item.ShortDescription);
+                    amounts.Add(item.Amount.ToString());
+                }
 
-            //    presenter.Search(text, indexes, items, amounts);
-            //}
+                presenter.Search(text, indexes, items, amounts);
+            }
         }
 
         public string GetDisplayType()
@@ -369,128 +367,127 @@ namespace EnterpriseBudget.ChairpersonControl
             return (bool)chk_OrderByCategory.IsChecked && (bool)chk_OrderByMonth.IsChecked;
         }
 
-        //void IDisplayable.DisplayToGrid<T>(List<T> budgetItems)
-        //{
-        //    //throw new NotImplementedException();
-        //    mainDisplayGrid.ItemsSource = budgetItems;
-        //    // Clear out the existing columns.
-        //    mainDisplayGrid.Columns.Clear();
+        void IDisplayable.DisplayToGrid<T>(List<T> budgetItems)
+        {
+            //throw new NotImplementedException();
+            mainDisplayGrid.ItemsSource = budgetItems;
+            // Clear out the existing columns.
+            mainDisplayGrid.Columns.Clear();
 
-        //    // Create a right-aligned style to be applied to any columns containing a monetary amount.
-        //    Style rightAligned = new Style();
-        //    rightAligned.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Right));
+            // Create a right-aligned style to be applied to any columns containing a monetary amount.
+            Style rightAligned = new Style();
+            rightAligned.Setters.Add(new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Right));
 
 
-        //    // If passed list is a list of BudgetItems, configure the grid's columns as follows.
-        //    if (typeof(T) == typeof(Budget.BudgetItem))
-        //    {
-        //        var idColumn = new DataGridTextColumn();
-        //        idColumn.Header = "Expense ID";
-        //        //idColumn.Binding = new Binding("ExpenseId");
-        //        idColumn.Binding = new Binding("ExpenseID");
-        //        mainDisplayGrid.Columns.Add(idColumn);
+            // If passed list is a list of BudgetItems, configure the grid's columns as follows.
+            if (typeof(T) == typeof(Budget.BudgetItem))
+            {
+                var idColumn = new DataGridTextColumn();
+                idColumn.Header = "Expense ID";
+                //idColumn.Binding = new Binding("ExpenseId");
+                idColumn.Binding = new Binding("ExpenseID");
+                mainDisplayGrid.Columns.Add(idColumn);
 
-        //        var dateColumn = new DataGridTextColumn();
-        //        dateColumn.Header = "Date";
-        //        dateColumn.Binding = new Binding("Date");
-        //        mainDisplayGrid.Columns.Add(dateColumn);
+                var dateColumn = new DataGridTextColumn();
+                dateColumn.Header = "Date";
+                dateColumn.Binding = new Binding("Date");
+                mainDisplayGrid.Columns.Add(dateColumn);
 
-        //        var categoryColumn = new DataGridTextColumn();
-        //        categoryColumn.Header = "Category";
-        //        categoryColumn.Binding = new Binding("Category");
-        //        mainDisplayGrid.Columns.Add(categoryColumn);
+                var categoryColumn = new DataGridTextColumn();
+                categoryColumn.Header = "Category";
+                categoryColumn.Binding = new Binding("Category");
+                mainDisplayGrid.Columns.Add(categoryColumn);
 
-        //        var descriptionColumn = new DataGridTextColumn();
-        //        descriptionColumn.Header = "Description";
-        //        descriptionColumn.Binding = new Binding("ShortDescription");
-        //        mainDisplayGrid.Columns.Add(descriptionColumn);
+                var descriptionColumn = new DataGridTextColumn();
+                descriptionColumn.Header = "Description";
+                descriptionColumn.Binding = new Binding("ShortDescription");
+                mainDisplayGrid.Columns.Add(descriptionColumn);
 
-        //        var amountColumn = new DataGridTextColumn();
-        //        amountColumn.Header = "Amount";
-        //        amountColumn.Binding = new Binding("Amount");
-        //        amountColumn.Binding.StringFormat = "C";
-        //        mainDisplayGrid.Columns.Add(amountColumn);
+                var amountColumn = new DataGridTextColumn();
+                amountColumn.Header = "Amount";
+                amountColumn.Binding = new Binding("Amount");
+                amountColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(amountColumn);
 
-        //        var balanceColumn = new DataGridTextColumn();
-        //        balanceColumn.Header = "Budget Balance";
-        //        balanceColumn.Binding = new Binding("Balance");
-        //        balanceColumn.Binding.StringFormat = "C";
-        //        mainDisplayGrid.Columns.Add(balanceColumn);
+                var balanceColumn = new DataGridTextColumn();
+                balanceColumn.Header = "Budget Balance";
+                balanceColumn.Binding = new Binding("Balance");
+                balanceColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(balanceColumn);
 
-        //        amountColumn.CellStyle = rightAligned;
-        //        balanceColumn.CellStyle = rightAligned;
-        //    }
-        //    // If passed list is a list of BudgetItemsByCategory, display each category and the total for each.
-        //    else if (typeof(T) == typeof(Budget.BudgetItemsByCategory))
-        //    {
-        //        // do something
-        //        var categoryColumn = new DataGridTextColumn();
-        //        categoryColumn.Header = "Category";
-        //        categoryColumn.Binding = new Binding("Category");
-        //        mainDisplayGrid.Columns.Add(categoryColumn);
+                amountColumn.CellStyle = rightAligned;
+                balanceColumn.CellStyle = rightAligned;
+            }
+            // If passed list is a list of BudgetItemsByCategory, display each category and the total for each.
+            else if (typeof(T) == typeof(Budget.BudgetItemsByCategory))
+            {
+                // do something
+                var categoryColumn = new DataGridTextColumn();
+                categoryColumn.Header = "Category";
+                categoryColumn.Binding = new Binding("Category");
+                mainDisplayGrid.Columns.Add(categoryColumn);
 
-        //        var totalsColumn = new DataGridTextColumn();
-        //        totalsColumn.Header = "Total";
-        //        totalsColumn.Binding = new Binding("Total");
-        //        totalsColumn.Binding.StringFormat = "C";
-        //        mainDisplayGrid.Columns.Add(totalsColumn);
+                var totalsColumn = new DataGridTextColumn();
+                totalsColumn.Header = "Total";
+                totalsColumn.Binding = new Binding("Total");
+                totalsColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(totalsColumn);
 
-        //        totalsColumn.CellStyle = rightAligned;
-        //    }
+                totalsColumn.CellStyle = rightAligned;
+            }
 
-        //    // If The list is a list of BudgetItemsByMonth, display the totals earned for each month.
-        //    else if (typeof(T) == typeof(Budget.BudgetItemsByMonth))
-        //    {
-        //        // format the display 
-        //        var monthColumn = new DataGridTextColumn();
-        //        monthColumn.Header = "Month";
-        //        monthColumn.Binding = new Binding("Month");
-        //        mainDisplayGrid.Columns.Add(monthColumn);
+            // If The list is a list of BudgetItemsByMonth, display the totals earned for each month.
+            else if (typeof(T) == typeof(Budget.BudgetItemsByMonth))
+            {
+                // format the display 
+                var monthColumn = new DataGridTextColumn();
+                monthColumn.Header = "Month";
+                monthColumn.Binding = new Binding("Month");
+                mainDisplayGrid.Columns.Add(monthColumn);
 
-        //        var totalsColumn = new DataGridTextColumn();
-        //        totalsColumn.Header = "Total";
-        //        totalsColumn.Binding = new Binding("Total");
-        //        totalsColumn.Binding.StringFormat = "C";
-        //        mainDisplayGrid.Columns.Add(totalsColumn);
+                var totalsColumn = new DataGridTextColumn();
+                totalsColumn.Header = "Total";
+                totalsColumn.Binding = new Binding("Total");
+                totalsColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(totalsColumn);
 
-        //        totalsColumn.CellStyle = rightAligned;
-        //    }
+                totalsColumn.CellStyle = rightAligned;
+            }
 
-        //    // If the list is a list of dictionaries, create a column for "Months", a column for each Category,
-        //    // and a column for "Totals".
-        //    else if (typeof(T) == typeof(Dictionary<string, object>))
-        //    {
-        //        List<Budget.Category> categories = presenter.GetCategories();
+            // If the list is a list of dictionaries, create a column for "Months", a column for each Category,
+            // and a column for "Totals".
+            else if (typeof(T) == typeof(Dictionary<string, object>))
+            {
+                List<Budget.Category> categories = presenter.GetCategories();
 
-        //        List<Dictionary<string, object>> dictionaries = budgetItems as List<Dictionary<string, object>>;
+                List<Dictionary<string, object>> dictionaries = budgetItems as List<Dictionary<string, object>>;
 
-        //        var monthColumn = new DataGridTextColumn();
-        //        monthColumn.Header = "Month";
-        //        monthColumn.Binding = new Binding("[Month]");
-        //        mainDisplayGrid.Columns.Add(monthColumn);
+                var monthColumn = new DataGridTextColumn();
+                monthColumn.Header = "Month";
+                monthColumn.Binding = new Binding("[Month]");
+                mainDisplayGrid.Columns.Add(monthColumn);
 
-        //        foreach (Category category in categories)
-        //        {
-        //            string header = category.Description;
-        //            var column = new DataGridTextColumn();
-        //            column.Header = header;
-        //            column.Binding = new Binding($"[{header}]");
-        //            column.Binding.StringFormat = "C";
-        //            mainDisplayGrid.Columns.Add(column);
+                foreach (Category category in categories)
+                {
+                    string header = category.Description;
+                    var column = new DataGridTextColumn();
+                    column.Header = header;
+                    column.Binding = new Binding($"[{header}]");
+                    column.Binding.StringFormat = "C";
+                    mainDisplayGrid.Columns.Add(column);
 
-        //            column.CellStyle = rightAligned;
-        //        }
+                    column.CellStyle = rightAligned;
+                }
 
-        //        var totalsColumn = new DataGridTextColumn();
-        //        totalsColumn.Header = "Total";
-        //        totalsColumn.Binding = new Binding("[Total]");
-        //        totalsColumn.Binding.StringFormat = "C";
-        //        mainDisplayGrid.Columns.Add(totalsColumn);
+                var totalsColumn = new DataGridTextColumn();
+                totalsColumn.Header = "Total";
+                totalsColumn.Binding = new Binding("[Total]");
+                totalsColumn.Binding.StringFormat = "C";
+                mainDisplayGrid.Columns.Add(totalsColumn);
 
-        //        totalsColumn.CellStyle = rightAligned;
-        //    }
-        //}
-
+                totalsColumn.CellStyle = rightAligned;
+            }
+        }
         public void DisplayToChart(List<object> budgetItems)
         {
             DataSource = budgetItems;
