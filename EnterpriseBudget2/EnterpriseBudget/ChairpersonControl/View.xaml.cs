@@ -40,30 +40,10 @@ namespace EnterpriseBudget.ChairpersonControl
         {
             InitializeComponent();
             presenter = new Presenter(this, this);
-
-            // Get the current user of the app
-            var user = DeptBudgets.ReadWriteView.Employee;
-
-            // Create an enterprise presenter
-            //enterprisePresenter = new DeptBudgets.Presenter(this, user.deptartmentID);
-            // Load the data inside the enterprise db
-            //enterprisePresenter.LoadData();
-            //// Get the file location for the db file
-            //String dbPath = enterprisePresenter.Budget.Path;
-
-            //presenter.CreateBudget(dbPath, false);
-            
-            //UpdateView();
-
-            //cmb_Categories.ItemsSource = presenter.GetCategories();
-
-            //txtStatusBar.Text = dbPath;
         }
 
         public void InitializeBudget(DeptBudgets.Presenter deptPresenter)
         {
-            //enterprisePresenter.LoadData();
-
             enterprisePresenter = deptPresenter;
 
             string dbPath = enterprisePresenter.Budget.Path;
@@ -86,8 +66,6 @@ namespace EnterpriseBudget.ChairpersonControl
         {
             AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
             expenseWindow.ShowDialog();
-            // The presenter should update the view after an expense is added.
-            //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
             UpdateView();
         }
 
@@ -98,20 +76,6 @@ namespace EnterpriseBudget.ChairpersonControl
         public void ShowError(string error)
         {
             MessageBox.Show(error, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
-        /// <summary>
-        /// Creates and opens a window for adding new categories to the budget.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void addCategory(object sender, RoutedEventArgs e)
-        {
-            //AddCategoryWindow categoryWindow = new AddCategoryWindow(presenter);
-            //categoryWindow.ShowDialog();
-            //// Tell the presenter to update the view after a successful operation.
-            ////presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
-            //UpdateView();
         }
 
         public void ShowSuccess(string message)
@@ -265,8 +229,6 @@ namespace EnterpriseBudget.ChairpersonControl
             bool orderByCategory = (bool)chk_OrderByCategory.IsChecked;
             bool orderByMonth = (bool)chk_OrderByMonth.IsChecked;
 
-            ToggleMenuItems();
-
             presenter.UpdateDisplay(start, end, filterFlag, categoryId, orderByCategory, orderByMonth);
         }
 
@@ -288,55 +250,6 @@ namespace EnterpriseBudget.ChairpersonControl
         private void chk_FilterCategories_Checked(object sender, RoutedEventArgs e)
         {
             UpdateView();
-        }
-
-        private void editItem_Click(object sender, RoutedEventArgs e)
-        {
-            //var selected = mainDisplayGrid.SelectedItem as BudgetItem;
-            //int index = mainDisplayGrid.SelectedIndex;
-
-            //EditExpenseWindow editExpenseWindow = new EditExpenseWindow(presenter, selected);
-            //editExpenseWindow.ShowDialog();
-
-            //UpdateView();
-            //Select(index);
-        }
-
-        private void deleteItem_Click(object sender, RoutedEventArgs e)
-        {
-            //var selected = mainDisplayGrid.SelectedItem as BudgetItem;
-            //int index = mainDisplayGrid.SelectedIndex;
-
-            //if (MessageBox.Show(this, "Are you sure you want to delete this expense?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            //{
-            //    presenter.DeleteExpense(selected.ExpenseID);
-            //}
-
-            //UpdateView();
-            //Select(index);
-        }
-
-        /// <summary>
-        /// Enables or disables the main display grid's ContextMenu items, based on whether user has chosen to 
-        /// summarize results by category and/or month.
-        /// </summary>
-        private void ToggleMenuItems()
-        {
-            bool orderByCategory = (bool)chk_OrderByCategory.IsChecked;
-            bool orderByMonth = (bool)chk_OrderByMonth.IsChecked;
-
-            // If either or both controls are checked, disable the menu buttons.
-            if (orderByCategory || orderByMonth)
-            {
-                editItem.IsEnabled = false;
-                deleteItem.IsEnabled = false;
-            }
-            // If neither control is checked, re-enable the menu buttons.
-            else
-            {
-                editItem.IsEnabled = true;
-                deleteItem.IsEnabled = true;
-            }
         }
 
         /// <summary>
