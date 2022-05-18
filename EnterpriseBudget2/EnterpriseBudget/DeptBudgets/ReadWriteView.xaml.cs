@@ -19,6 +19,8 @@ namespace EnterpriseBudget.DeptBudgets
     /// </summary>
     public partial class ReadWriteView : Window, InterfaceView
     {
+        public static Model.Employee Employee { get; set; }
+
         /// <summary>
         /// presenter for the DeptBudgets.ReadWriteView
         /// </summary>
@@ -32,8 +34,9 @@ namespace EnterpriseBudget.DeptBudgets
         /// <summary>
         /// Standard Windows constructor
         /// </summary>
-        public ReadWriteView()
+        public ReadWriteView(Model.Employee employee)
         {
+            Employee = employee;
             InitializeComponent();
         }
 
@@ -68,7 +71,12 @@ namespace EnterpriseBudget.DeptBudgets
             {
                 if (presenter.LoadData())
                 {
-                    txtWait.Text = "Successfully created home budget... now YOU have to do the rest :)";
+                    // Hide the loading message
+                    txtWait.Visibility = Visibility.Collapsed;
+
+                    // Display the budget page for the chairperson
+                    theChairpersonView.Visibility = Visibility.Visible;
+                    theChairpersonView.InitializeBudget(presenter);
                 }
                 else
                 {
