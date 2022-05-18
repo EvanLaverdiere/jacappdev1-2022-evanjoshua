@@ -116,6 +116,15 @@
                 </Button>
 
             </Grid>
+
+            <!--Category Limit display-->
+            <Viewbox Grid.Column="2" Grid.Row="3">
+                <TextBlock Padding="2" Text="Limit for Category"/>
+            </Viewbox>
+
+            <Viewbox Grid.Column="2" Grid.Row="4">
+                <TextBlock Padding="2" x:Name="txtCatLimit"/>
+            </Viewbox>
         </Grid>
         <!--Buffer zone: row 2-->
     </Grid>
