@@ -25,8 +25,9 @@ namespace EnterpriseBudget.Model
         private String sqliteFileName = "deptBudget.db";
         private String appName = "EnterpriseBudget";
         private String sPath;
-        private HomeBudget homeBudget;
+        static private HomeBudget homeBudget;
         public String Path { get { return $"{sPath}\\{appName}\\{sqliteFileName}"; } }
+        static public HomeBudget HomeBudget { get { return homeBudget; } }
         /// <summary>
         /// Constructor
         /// </summary>

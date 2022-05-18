@@ -46,11 +46,11 @@ namespace EnterpriseBudget.ChairpersonControl
 
             // Create an enterprise presenter
             enterprisePresenter = new DeptBudgets.Presenter(this, user.deptartmentID);
+            // Load the data inside the enterprise db
+            enterprisePresenter.LoadData();
             // Get the file location for the db file
             String dbPath = enterprisePresenter.Budget.Path;
-            // Create a budget presenter
-            presenter.CreateBudget(dbPath, false);
-
+            
             UpdateView();
 
             cmb_Categories.ItemsSource = presenter.GetCategories();
