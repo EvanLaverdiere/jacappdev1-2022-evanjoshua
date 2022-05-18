@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -311,6 +312,47 @@ namespace EnterpriseBudget.ChairpersonControl
             {
                 viewable.Select(indexes[selectCount++]);
             }
+        }
+
+        public double getTotalForCategory(int categoryId)
+        {
+            double total = 0;
+            //SqlDataReader rdr;
+
+            //try
+            //{
+            //    SqlCommand getCatTotal = Model.Connection.cnn.CreateCommand();
+
+            //    getCatTotal.CommandText = "SELECT SUM(Amount) " +
+            //        "FROM expenses " +
+            //        "WHERE CategoryId = @categoryId";
+
+            //    getCatTotal.Parameters.AddWithValue("@categoryId", categoryId);
+
+            //    rdr = getCatTotal.ExecuteReader();
+
+            //    if (rdr.HasRows)
+            //    {
+            //        rdr.Read();
+
+            //        total = rdr.GetDouble(0);
+            //    }
+            //}
+            //catch (Exception)
+            //{
+
+            //    throw;
+            //}
+
+            List<Expense> expenses = budget.expenses.List();
+
+            foreach(Expense expense in expenses)
+            {
+                if (expense.Category == categoryId)
+                    total += expense.Amount;
+            }
+
+            return total;
         }
     }
 }
