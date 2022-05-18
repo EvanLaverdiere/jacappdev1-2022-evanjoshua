@@ -103,6 +103,14 @@ namespace EnterpriseBudget.ChairpersonControl
 
         }
 
+        private void cmbCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int category = cmbCategory.SelectedIndex + 1;
+            
+            // Get the limit for the selected Category from the enterprisePresenter.
+
+            // Get the current total for the selected Category from the other Presenter.
+        }
     }
 }
 

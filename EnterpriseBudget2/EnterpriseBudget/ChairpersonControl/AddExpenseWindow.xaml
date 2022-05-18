@@ -71,7 +71,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Categories: col 0-->
-                <ComboBox x:Name="cmbCategory" Margin="0,3,3,3" Grid.ColumnSpan="3"/>
+                <ComboBox x:Name="cmbCategory" Margin="0,3,3,3" Grid.ColumnSpan="3" SelectionChanged="cmbCategory_SelectionChanged"/>
 
                 <!-- New Category: col 1--><!--
                 <Button Grid.Column="2" x:Name="btnNewCategory" Margin="0,3,0,3" Cursor="Hand" Click="btnNewCategory_Click">
