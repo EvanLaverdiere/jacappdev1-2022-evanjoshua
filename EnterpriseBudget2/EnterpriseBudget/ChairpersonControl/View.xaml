@@ -144,12 +144,6 @@
                         <TabItem Header="Table">
                             <!-- Database view-->
                             <DataGrid x:Name="mainDisplayGrid" AutoGenerateColumns="False" IsReadOnly="True">
-                                <DataGrid.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem x:Name="editItem" Header="Edit" Click="editItem_Click"></MenuItem>
-                                        <MenuItem x:Name="deleteItem" Header="Delete" Click="deleteItem_Click"></MenuItem>
-                                    </ContextMenu>
-                                </DataGrid.ContextMenu>
                                 <DataGrid.Resources>
                                     <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"  Color="{x:Static SystemColors.HighlightColor}"/>
                                     <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"  Color="{x:Static SystemColors.HighlightTextColor}"/>
@@ -209,7 +203,6 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="3*" />
                             <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
 
                         <Grid.RowDefinitions>
@@ -231,13 +224,6 @@
                         <Button Grid.Column="1" Click="Button_Click" Margin="5">
                             <Viewbox>
                                 <TextBlock Padding="3" Text="New Expense"/>
-                            </Viewbox>
-                        </Button>
-
-                        <!-- New category: columm 2 -->
-                        <Button Grid.Column="2" Margin="5" Click="addCategory">
-                            <Viewbox>
-                                <TextBlock Padding="3" Text="New Category"/>
                             </Viewbox>
                         </Button>
                     </Grid>
