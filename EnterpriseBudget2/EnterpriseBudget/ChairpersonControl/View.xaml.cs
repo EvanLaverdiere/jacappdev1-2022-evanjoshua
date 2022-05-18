@@ -45,12 +45,31 @@ namespace EnterpriseBudget.ChairpersonControl
             var user = DeptBudgets.ReadWriteView.Employee;
 
             // Create an enterprise presenter
-            enterprisePresenter = new DeptBudgets.Presenter(this, user.deptartmentID);
+            //enterprisePresenter = new DeptBudgets.Presenter(this, user.deptartmentID);
             // Load the data inside the enterprise db
-            enterprisePresenter.LoadData();
-            // Get the file location for the db file
-            String dbPath = enterprisePresenter.Budget.Path;
+            //enterprisePresenter.LoadData();
+            //// Get the file location for the db file
+            //String dbPath = enterprisePresenter.Budget.Path;
+
+            //presenter.CreateBudget(dbPath, false);
             
+            //UpdateView();
+
+            //cmb_Categories.ItemsSource = presenter.GetCategories();
+
+            //txtStatusBar.Text = dbPath;
+        }
+
+        public void InitializeBudget(DeptBudgets.Presenter deptPresenter)
+        {
+            //enterprisePresenter.LoadData();
+
+            enterprisePresenter = deptPresenter;
+
+            string dbPath = enterprisePresenter.Budget.Path;
+
+            presenter.CreateBudget(dbPath, false);
+
             UpdateView();
 
             cmb_Categories.ItemsSource = presenter.GetCategories();

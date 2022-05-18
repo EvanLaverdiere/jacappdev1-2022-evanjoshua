@@ -76,6 +76,7 @@ namespace EnterpriseBudget.DeptBudgets
 
                     // Display the budget page for the chairperson
                     theChairpersonView.Visibility = Visibility.Visible;
+                    theChairpersonView.InitializeBudget(presenter);
                 }
                 else
                 {
