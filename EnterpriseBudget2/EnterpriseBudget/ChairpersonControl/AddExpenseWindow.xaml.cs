@@ -20,10 +20,12 @@ namespace EnterpriseBudget.ChairpersonControl
     public partial class AddExpenseWindow : Window
     {
         private Presenter presenter;
-        public AddExpenseWindow(Presenter presenter)
+        private DeptBudgets.Presenter enterprisePresenter;
+        public AddExpenseWindow(Presenter presenter, DeptBudgets.Presenter enterprisePresenter)
         {
             InitializeComponent();
             this.presenter = presenter;
+            this.enterprisePresenter = enterprisePresenter;
             cmbCategory.ItemsSource = presenter.GetCategories();
             dateExpDate.SelectedDate = DateTime.Today;
             Closing += ConfirmExit;

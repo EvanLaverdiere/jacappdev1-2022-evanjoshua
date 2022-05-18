@@ -84,7 +84,7 @@ namespace EnterpriseBudget.ChairpersonControl
         /// <param name="e"></param>
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter);
+            AddExpenseWindow expenseWindow = new AddExpenseWindow(presenter, enterprisePresenter);
             expenseWindow.ShowDialog();
             // The presenter should update the view after an expense is added.
             //presenter.GetBudgetItemsv2(start, end, filterFlag, categoryId);
