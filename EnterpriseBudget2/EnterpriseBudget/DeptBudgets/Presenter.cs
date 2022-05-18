@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,6 +49,44 @@ namespace EnterpriseBudget.DeptBudgets
             {
                 budget.Close();
             }
+        }
+
+        public double getCategoryLimit(int categoryId)
+        {
+            SqlDataReader rdr;
+            double limit = 0;
+            try
+            {
+                SqlCommand getLimit = Model.Connection.cnn.CreateCommand();
+
+                getLimit.CommandText = "SELECT limit FROM budgetCategoryLimits " +
+                    "WHERE catId = @catId " +
+                    "AND deptId = @deptId";
+
+                getLimit.Parameters.AddWithValue("@catId", categoryId);
+                getLimit.Parameters.AddWithValue("@deptId", deptId);
+
+                rdr = getLimit.ExecuteReader();
+
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+
+                    //float floatLimit = rdr.GetDouble(0);
+
+                    //limit = (double)floatLimit;
+
+                    limit = rdr.GetDouble(0);
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+            if(rdr != null)
+                try { rdr.Close(); } catch { }
+            return limit;
         }
     }
 
