@@ -71,14 +71,14 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Categories: col 0-->
-                <ComboBox x:Name="cmbCategory" Margin="0,3,3,3" Grid.ColumnSpan="2"/>
+                <ComboBox x:Name="cmbCategory" Margin="0,3,3,3" Grid.ColumnSpan="3"/>
 
-                <!-- New Category: col 1-->
+                <!-- New Category: col 1--><!--
                 <Button Grid.Column="2" x:Name="btnNewCategory" Margin="0,3,0,3" Cursor="Hand" Click="btnNewCategory_Click">
                     <Viewbox>
                         <TextBlock Padding="3" Text="Add New Category"/>
                     </Viewbox>
-                </Button>
+                </Button>-->
             </Grid>
 
             <!-- label 3: row 5-->
