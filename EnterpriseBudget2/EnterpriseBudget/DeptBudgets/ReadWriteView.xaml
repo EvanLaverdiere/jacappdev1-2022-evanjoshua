@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         WindowStartupLocation="CenterScreen" 
         xmlns:local="clr-namespace:EnterpriseBudget.DeptBudgets"
+        xmlns:view="clr-namespace:EnterpriseBudget.ChairpersonControl"
         mc:Ignorable="d"
         Title="ReadWriteDataView" Height="450" Width="800" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
-        <TextBlock x:Name="txtWait" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18">Getting data from the database, please wait</TextBlock>
-        
+        <TextBlock x:Name="txtWait" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Visibility="Visible">Getting data from the database, please wait</TextBlock>
+        <view:View x:Name="theChairpersonView" Visibility="Collapsed"></view:View>
     </Grid>
 </Window>

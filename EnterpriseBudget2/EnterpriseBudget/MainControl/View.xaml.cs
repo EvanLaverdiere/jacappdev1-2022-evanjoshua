@@ -73,7 +73,7 @@ namespace EnterpriseBudget.MainControl
 
             // get employee
             var employee = _mainViewPresenter.GetEmployeeForSpecifiedView(txtUserName.Text, txtPassword.Password, ViewType.ReadOnly);
-            
+
             // user has permission
             if (employee != null)
             {
@@ -81,7 +81,7 @@ namespace EnterpriseBudget.MainControl
                 var readOnlyDataView = new DeptBudgets.ReadOnlyView();
                 readOnlyDataView.presenter = new DeptBudgets.Presenter((DeptBudgets.InterfaceView)readOnlyDataView, employee.deptartmentID);
                 readOnlyDataView.mainControl = this;
-                
+
                 // Show the view
                 this.GoAway();
                 readOnlyDataView.ShowDialog();
@@ -103,7 +103,7 @@ namespace EnterpriseBudget.MainControl
             if (employee != null)
             {
                 // define view and presenters
-                var readWriteView = new DeptBudgets.ReadWriteView();
+                var readWriteView = new DeptBudgets.ReadWriteView(employee);
                 readWriteView.presenter = new DeptBudgets.Presenter((DeptBudgets.InterfaceView)readWriteView, employee.deptartmentID);
                 readWriteView.mainControl = this;
 
@@ -127,13 +127,13 @@ namespace EnterpriseBudget.MainControl
             var employee = _mainViewPresenter.GetEmployeeForSpecifiedView(txtUserName.Text, txtPassword.Password, ViewType.Manage);
 
             // if the employee has Manage ViewType
-            if(employee != null)
+            if (employee != null)
             {
                 // define view and presenter
                 var manageAllBudgetsView = new ManageAllBudgets.View();
-                manageAllBudgetsView.presenter = new ManageAllBudgets.Presenter((ManageAllBudgets.InterfaceView) manageAllBudgetsView);
+                manageAllBudgetsView.presenter = new ManageAllBudgets.Presenter((ManageAllBudgets.InterfaceView)manageAllBudgetsView);
                 manageAllBudgetsView.mainControl = this;
-            
+
                 // show view
                 this.GoAway();
                 manageAllBudgetsView.ShowDialog();
