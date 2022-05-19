@@ -115,6 +115,7 @@ namespace EnterpriseBudget.ChairpersonControl
 
             // Get the current total for the selected Category from the other Presenter.
             double total = presenter.getTotalForCategory(category);
+            txtCatTotal.Text = total.ToString("C");
         }
     }
 }
