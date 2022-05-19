@@ -46,18 +46,25 @@ namespace EnterpriseBudget.ChairpersonControl
         /// <param name="category">The ID of the Expense's corresponding Category.</param>
         /// <param name="amount">The monetary amount of the Expense. Must be a number that can be parsed as a double.</param>
         /// <param name="description">A brief description of the Expense.</param>
-        public void CreateNewExpense(DateTime? date, int category, string amount, string description)
+        public void CreateNewExpense(DateTime? date, int category, string amount, string description, double limit)
         {
             if (ValidateExpenseInput(date, category, amount, description))
             {
                 try
                 {
-                    budget.expenses.Add(date.Value, category, double.Parse(amount), description);
+                    if(isWithinBudget(limit, double.Parse(amount), category)){
+                        budget.expenses.Add(date.Value, category, double.Parse(amount), description);
 
-                    // Display some kind of message indicating the Expense was successfully added.
-                    viewable.ShowSuccess($"Successfully added \'{description}\' expense to the database.");
-                    //// Clear the form afterward.
-                    //viewable.ClearForm();
+                        // Display some kind of message indicating the Expense was successfully added.
+                        viewable.ShowSuccess($"Successfully added \'{description}\' expense to the database.");
+                        //// Clear the form afterward.
+                        //viewable.ClearForm();
+
+                    }
+                    else
+                    {
+                        viewable.ShowError("Cannot add this Expense! It will exceed the budget limit for this category.");
+                    }
                 }
                 catch (Exception e)
                 {
@@ -353,6 +360,14 @@ namespace EnterpriseBudget.ChairpersonControl
             }
 
             return total;
+        }
+
+        private bool isWithinBudget(double limit, double amount, int categoryId)
+        {
+            double currentTotal = getTotalForCategory(categoryId);
+            double projectedTotal = amount + currentTotal;
+
+            return projectedTotal <= limit;
         }
     }
 }

@@ -37,9 +37,10 @@ namespace EnterpriseBudget.ChairpersonControl
             int categoryId = cmbCategory.SelectedIndex + 1;
             string amount = txtExpAmount.Text;
             string description = txtExpDescription.Text;
+            double limit = enterprisePresenter.getCategoryLimit(categoryId);
             // Must wait until view interface has been implemented in the main window before more can be done with this.
             // [Program will crash here because the HomeBudget has not been initialized yet.] [04/04/2022: Disregard. Program does not crash thanks to try-catch block.]
-            presenter.CreateNewExpense(date, categoryId, amount, description);
+            presenter.CreateNewExpense(date, categoryId, amount, description, limit);
             ClearExpenseForm();
         }
 
