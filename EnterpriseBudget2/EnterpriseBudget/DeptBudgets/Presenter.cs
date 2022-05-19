@@ -51,6 +51,11 @@ namespace EnterpriseBudget.DeptBudgets
             }
         }
 
+        /// <summary>
+        /// Gets the department's budget limit for a passed Category.
+        /// </summary>
+        /// <param name="categoryId">The ID of the desired Category.</param>
+        /// <returns>The budget limit for this Category.</returns>
         public double getCategoryLimit(int categoryId)
         {
             SqlDataReader rdr;

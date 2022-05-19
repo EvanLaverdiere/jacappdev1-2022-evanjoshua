@@ -106,6 +106,11 @@ namespace EnterpriseBudget.ChairpersonControl
 
         }
 
+        /// <summary>
+        /// Event handler which displays the budget limit and current total for the currently selected Category.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int category = cmbCategory.SelectedIndex + 1;
