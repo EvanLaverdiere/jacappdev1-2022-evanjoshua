@@ -20,10 +20,12 @@ namespace EnterpriseBudget.ChairpersonControl
     public partial class AddExpenseWindow : Window
     {
         private Presenter presenter;
-        public AddExpenseWindow(Presenter presenter)
+        private DeptBudgets.Presenter enterprisePresenter;
+        public AddExpenseWindow(Presenter presenter, DeptBudgets.Presenter enterprisePresenter)
         {
             InitializeComponent();
             this.presenter = presenter;
+            this.enterprisePresenter = enterprisePresenter;
             cmbCategory.ItemsSource = presenter.GetCategories();
             dateExpDate.SelectedDate = DateTime.Today;
             Closing += ConfirmExit;
@@ -35,9 +37,10 @@ namespace EnterpriseBudget.ChairpersonControl
             int categoryId = cmbCategory.SelectedIndex + 1;
             string amount = txtExpAmount.Text;
             string description = txtExpDescription.Text;
+            double limit = enterprisePresenter.getCategoryLimit(categoryId);
             // Must wait until view interface has been implemented in the main window before more can be done with this.
             // [Program will crash here because the HomeBudget has not been initialized yet.] [04/04/2022: Disregard. Program does not crash thanks to try-catch block.]
-            presenter.CreateNewExpense(date, categoryId, amount, description);
+            presenter.CreateNewExpense(date, categoryId, amount, description, limit);
             ClearExpenseForm();
         }
 
@@ -103,6 +106,23 @@ namespace EnterpriseBudget.ChairpersonControl
 
         }
 
+        /// <summary>
+        /// Event handler which displays the budget limit and current total for the currently selected Category.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cmbCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int category = cmbCategory.SelectedIndex + 1;
+
+            // Get the limit for the selected Category from the enterprisePresenter.
+            double limit = enterprisePresenter.getCategoryLimit(category);
+            txtCatLimit.Text = limit.ToString("C");
+
+            // Get the current total for the selected Category from the other Presenter.
+            double total = presenter.getTotalForCategory(category);
+            txtCatTotal.Text = total.ToString("C");
+        }
     }
 }
 

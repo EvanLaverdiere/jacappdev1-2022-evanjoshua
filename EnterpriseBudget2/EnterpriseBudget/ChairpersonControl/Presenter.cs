@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,23 +41,32 @@ namespace EnterpriseBudget.ChairpersonControl
         /// <remarks>
         /// Database is updated only if the passed data is valid. 
         /// If any data is invalid, the View will display an error message.
+        /// If creating this Expense would put the user over-budget, the View will display an error message.
         /// </remarks>
         /// <param name="date">The date of the Expense.</param>
         /// <param name="category">The ID of the Expense's corresponding Category.</param>
         /// <param name="amount">The monetary amount of the Expense. Must be a number that can be parsed as a double.</param>
         /// <param name="description">A brief description of the Expense.</param>
-        public void CreateNewExpense(DateTime? date, int category, string amount, string description)
+        /// <param name="limit">The budget limit for the selected Category. Used to verify that an Expense won't go over-budget.</param>
+        public void CreateNewExpense(DateTime? date, int category, string amount, string description, double limit)
         {
             if (ValidateExpenseInput(date, category, amount, description))
             {
                 try
                 {
-                    budget.expenses.Add(date.Value, category, double.Parse(amount), description);
+                    // Will we go overbudget if we add this expense?
+                    if(isWithinBudget(limit, double.Parse(amount), category)){
+                        // If not, the expense can safely be added to the database.
+                        budget.expenses.Add(date.Value, category, double.Parse(amount), description);
 
-                    // Display some kind of message indicating the Expense was successfully added.
-                    viewable.ShowSuccess($"Successfully added \'{description}\' expense to the database.");
-                    //// Clear the form afterward.
-                    //viewable.ClearForm();
+                        // Display a message indicating the Expense was successfully added.
+                        viewable.ShowSuccess($"Successfully added \'{description}\' expense to the database.");
+                    }
+                    else
+                    {
+                        // Otherwise, display an error message stating that this Expense cannot be added.
+                        viewable.ShowError("Cannot add this Expense! It will exceed the budget limit for this category.");
+                    }
                 }
                 catch (Exception e)
                 {
@@ -311,6 +321,75 @@ namespace EnterpriseBudget.ChairpersonControl
             {
                 viewable.Select(indexes[selectCount++]);
             }
+        }
+
+        /// <summary>
+        /// Retrieves the total amounts for all Expenses belonging to a specified Category.
+        /// </summary>
+        /// <param name="categoryId">The ID of the desired Category.</param>
+        /// <returns></returns>
+        public double getTotalForCategory(int categoryId)
+        {
+            double total = 0;
+            //SqlDataReader rdr;
+
+            //try
+            //{
+            //    SqlCommand getCatTotal = Model.Connection.cnn.CreateCommand();
+
+            //    getCatTotal.CommandText = "SELECT SUM(Amount) " +
+            //        "FROM expenses " +
+            //        "WHERE CategoryId = @categoryId";
+
+            //    getCatTotal.Parameters.AddWithValue("@categoryId", categoryId);
+
+            //    rdr = getCatTotal.ExecuteReader();
+
+            //    if (rdr.HasRows)
+            //    {
+            //        rdr.Read();
+
+            //        total = rdr.GetDouble(0);
+            //    }
+            //}
+            //catch (Exception)
+            //{
+
+            //    throw;
+            //}
+
+            // Retrieve a list of Expenses from the budget, since we can't directly query the database without revamping the model.
+            List<Expense> expenses = budget.expenses.List();
+
+            // Cycle through these Expenses.
+            foreach(Expense expense in expenses)
+            {
+                // Add the Amount of each Expense that matches the passed Category to the total.
+                if (expense.Category == categoryId)
+                    total += expense.Amount;
+            }
+
+            // Return the total.
+            return total;
+        }
+
+        /// <summary>
+        /// Verifies that a passed amount will not exceed the budget for a specified Category.
+        /// </summary>
+        /// <param name="limit">The budget limit for the specified Category.</param>
+        /// <param name="amount">The amount of an Expense to be created.</param>
+        /// <param name="categoryId">The ID of the desired Category.</param>
+        /// <returns>True if adding this amount will keep the total expenses within the budget, or false otherwise.</returns>
+        private bool isWithinBudget(double limit, double amount, int categoryId)
+        {
+            // Get the current total of all expenses belonging to this Category.
+            double currentTotal = getTotalForCategory(categoryId);
+
+            // Add the passed amount to this total.
+            double projectedTotal = amount + currentTotal;
+
+            // Return true if the projected total is within the limit, or false otherwise.
+            return projectedTotal <= limit;
         }
     }
 }

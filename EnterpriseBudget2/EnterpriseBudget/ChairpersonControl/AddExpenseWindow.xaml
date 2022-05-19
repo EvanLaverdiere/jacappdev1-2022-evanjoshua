@@ -25,8 +25,9 @@
         <!--Content: row 1-->
         <Grid Grid.Row="1" Grid.Column="1" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="16*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="8*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
@@ -71,14 +72,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Categories: col 0-->
-                <ComboBox x:Name="cmbCategory" Margin="0,3,3,3" Grid.ColumnSpan="2"/>
-
-                <!-- New Category: col 1-->
-                <Button Grid.Column="2" x:Name="btnNewCategory" Margin="0,3,0,3" Cursor="Hand" Click="btnNewCategory_Click">
-                    <Viewbox>
-                        <TextBlock Padding="3" Text="Add New Category"/>
-                    </Viewbox>
-                </Button>
+                <ComboBox x:Name="cmbCategory" Margin="0,3,3,3" Grid.ColumnSpan="3" SelectionChanged="cmbCategory_SelectionChanged"/>
             </Grid>
 
             <!-- label 3: row 5-->
@@ -98,7 +92,7 @@
             <TextBox Padding="10" x:Name="txtExpDescription" Grid.Row="8" TextWrapping="Wrap" VerticalContentAlignment="Center"/>
 
             <!-- next and cancel button: row 6 col1-->
-            <Grid Grid.Row="10" Grid.Column="1">
+            <Grid Grid.Row="10" Grid.Column="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="2*"/>
@@ -116,6 +110,26 @@
                 </Button>
 
             </Grid>
+
+            <!--Category Limit label-->
+            <Viewbox Grid.Column="2" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Padding="2" Text="Limit for Category"/>
+            </Viewbox>
+
+            <!--Category Limit text-->
+            <Viewbox Grid.Column="2" Grid.Row="2">
+                <TextBlock Padding="2" x:Name="txtCatLimit" Text=" - " HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Viewbox>
+
+            <!-- Category total label-->
+            <Viewbox Grid.Column="2" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Padding="2" Text="Current Total"/>
+            </Viewbox>
+
+            <!-- Category total text-->
+            <Viewbox Grid.Column="2" Grid.Row="4">
+                <TextBlock x:Name="txtCatTotal" Text=" - "/>
+            </Viewbox>
         </Grid>
         <!--Buffer zone: row 2-->
     </Grid>
