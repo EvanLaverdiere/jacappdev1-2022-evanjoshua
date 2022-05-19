@@ -7,7 +7,11 @@
         xmlns:local="clr-namespace:EnterpriseBudget.DeptBudgets"
         xmlns:view="clr-namespace:EnterpriseBudget.ChairpersonControl"
         mc:Ignorable="d"
-        Title="ReadWriteDataView" Height="450" Width="800" Loaded="Window_Loaded" Closing="Window_Closing">
+        MinWidth="500" MinHeight="600"
+        WindowState="Maximized"
+        Title="BudgetApplication"
+        Loaded="Window_Loaded" 
+        Closing="Window_Closing">
     <Grid>
         <TextBlock x:Name="txtWait" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Visibility="Visible">Getting data from the database, please wait</TextBlock>
         <view:View x:Name="theChairpersonView" Visibility="Collapsed"></view:View>
