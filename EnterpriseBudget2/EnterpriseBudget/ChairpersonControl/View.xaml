@@ -54,6 +54,7 @@
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
                             <RowDefinition Height="10*"/>
                         </Grid.RowDefinitions>
 
@@ -130,6 +131,11 @@
                             <Viewbox Grid.Column="2">
                                 <CheckBox x:Name="chk_OrderByMonth" Checked="chk_FilterCategories_Checked" Unchecked="chk_FilterCategories_Checked"/>
                             </Viewbox>
+                        </Grid>
+
+                        <!-- Save to SQLServer Button -->
+                        <Grid Grid.Row="11">
+                            <Button x:Name="savebtn" Click="savebtn_Click">Save</Button>
                         </Grid>
 
                     </Grid>
