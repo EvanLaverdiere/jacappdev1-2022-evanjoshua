@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +17,7 @@ namespace EnterpriseBudget.ChairpersonControl
         private HomeBudget budget;
         private bool modified = false;
         private int selectCount = 0;
+        private string filePath = Environment.ExpandEnvironmentVariables(@"%APPDATA%\\EnterpriseBudget\\deptBudget.db");
 
         public Presenter(IDisplayable view, IDisplayable display)
         {
@@ -55,7 +59,8 @@ namespace EnterpriseBudget.ChairpersonControl
                 try
                 {
                     // Will we go overbudget if we add this expense?
-                    if(isWithinBudget(limit, double.Parse(amount), category)){
+                    if (isWithinBudget(limit, double.Parse(amount), category))
+                    {
                         // If not, the expense can safely be added to the database.
                         budget.expenses.Add(date.Value, category, double.Parse(amount), description);
 
@@ -362,7 +367,7 @@ namespace EnterpriseBudget.ChairpersonControl
             List<Expense> expenses = budget.expenses.List();
 
             // Cycle through these Expenses.
-            foreach(Expense expense in expenses)
+            foreach (Expense expense in expenses)
             {
                 // Add the Amount of each Expense that matches the passed Category to the total.
                 if (expense.Category == categoryId)
@@ -390,6 +395,44 @@ namespace EnterpriseBudget.ChairpersonControl
 
             // Return true if the projected total is within the limit, or false otherwise.
             return projectedTotal <= limit;
+        }
+
+        public void SaveBudget(List<BudgetItem> items)
+        {
+            try
+            {
+                using var con = new SQLiteConnection("Data source=" + filePath);
+                con.Open();
+                using var cmd = new SQLiteCommand(con);
+
+                cmd.CommandText = "DELETE FROM expenses;";
+                cmd.ExecuteNonQuery();
+
+                for (int i = 0; i < items.Count; i++)
+                {
+                    cmd.CommandText = "INSERT INTO expenses(Id, Date, Amount, Description, CategoryId) VALUES(@Id, @Date, @Amount, @Description, @CategoryId);";
+                    cmd.Parameters.AddWithValue("@Id", items[i].ExpenseID);
+                    cmd.Parameters.AddWithValue("@Date", items[i].Date.ToString());
+                    cmd.Parameters.AddWithValue("@Amount", items[i].Amount);
+                    cmd.Parameters.AddWithValue("@Description", items[i].ShortDescription);
+                    cmd.Parameters.AddWithValue("@CategoryId", items[i].CategoryID);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                }
+
+                con.Close();
+
+                SqlCommand saveToSqlServer = Model.Connection.cnn.CreateCommand();
+                saveToSqlServer.CommandText = "UPDATE deptBudgets SET sqlitefile = @sqlitefile WHERE deptId = @deptId";
+                saveToSqlServer.Parameters.Add("@deptId", SqlDbType.Int).Value = 1;
+                saveToSqlServer.Parameters.Add("@sqlitefile", SqlDbType.Binary).Value = File.ReadAllBytes(filePath);
+                saveToSqlServer.ExecuteNonQuery();
+            }
+            catch
+            {
+
+            }
+
         }
     }
 }

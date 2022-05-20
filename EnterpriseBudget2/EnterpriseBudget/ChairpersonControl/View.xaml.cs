@@ -429,5 +429,21 @@ namespace EnterpriseBudget.ChairpersonControl
         {
             throw new NotImplementedException();
         }
+
+        private void savebtn_Click(object sender, RoutedEventArgs e)
+        {
+            List<BudgetItem> items = new List<BudgetItem>();
+
+            if (!mainDisplayGrid.Items.IsEmpty)
+            {
+                for (int i = 0; i < mainDisplayGrid.Items.Count; i++)
+                {
+                    BudgetItem item = mainDisplayGrid.Items[i] as BudgetItem;
+                    items.Add(item);
+                }
+
+                presenter.SaveBudget(items);
+            }
+        }
     }
 }
